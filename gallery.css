@@ -1,0 +1,60 @@
+body, .spoilertop, .thumbnail {
+  background: black;
+}
+
+div {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+}
+
+.background {
+  position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
+}
+
+.spoilertop, .thumbnail {
+  display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
+}
+.spoilertop:hover, .thumbnail:hover {
+  border-color: red; border-style: solid; opacity: 1 !important;
+}
+
+.spoilertop > img, .thumbnail > img {
+  position: relative; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+}
+
+.spoilerbox {
+  display: none; height: 100%;
+}
+
+.centered {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; display: none; max-width: 90% !important; max-height: 90% !important; object-fit: contain;
+}
+
+img.centered {
+  height: 100%; width: 100%;
+}
+
+.thumbnail > img, .centered {
+  -webkit-backface-visibility: hidden;
+}
+
+.centered:-webkit-full-screen {
+  top: 0px; left: 0px; transform: translate(0px, 0px);
+}
+.centered:-moz-full-screen {
+  top: 0px; left: 0px; transform: translate(0px, 0px);
+}
+.centered:-ms-fullscreen {
+  top: 0px; left: 0px; transform: translate(0px, 0px);
+}
+.centered:fullscreen {
+  top: 0px; left: 0px; transform: translate(0px, 0px);
+}
+
+.wallpaper {
+  position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
+}
