@@ -58,3 +58,7 @@ img.centered {
 .wallpaper {
   position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
 }
+
+.minimized {
+  position: absolute; right: 20px; bottom: 20px; top: initial; left: initial; transform: initial; width: 441px !important; height: 248px !important;
+}
