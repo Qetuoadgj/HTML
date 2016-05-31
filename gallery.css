@@ -60,5 +60,10 @@ img.centered {
 }
 
 .minimized {
-  position: absolute; right: 20px; bottom: 20px; top: initial; left: initial; transform: initial; width: 441px !important; height: 248px !important;
+  position: fixed; right: 15px; bottom: 15px; top: initial; left: initial; transform: initial; width: 441px !important; height: 248px !important;
+}
+
+img.minimized {
+  width: inherit !important; height: inherit !important;
+  max-width: 441px !important; max-height: 248px !important;
 }
