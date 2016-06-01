@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <title>HTML GALLERY TEST (AJAX) v0.4 - 2.0.2</title>
-    <script src="../JavaScript/HTML GALLERY TEST (AJAX) v0.4.user.js"></script>
+    <!-- <script src="../JavaScript/HTML GALLERY TEST (AJAX) v0.4.user.js"></script> -->
     <link rel="stylesheet" type="text/css" href="gallery.css" media="screen"/>
   </head>
   <body>
@@ -11,8 +11,8 @@
     <!-- <script>var video = document.getElementById("wallpapers"); video.playbackRate = 1.0;</script> -->
     <div id="galleries">
       <div class="spoilertop" spoiler="gallery_01" title="Music" image="https://musicrowgirl.files.wordpress.com/2014/11/music-videos.png"></div>
-      <div class="spoilertop" spoiler="gallery_02" title="Documental" image="http://www.enterthemoviezone.com/uploads/1/2/5/2/12525217/8364703_orig.jpg"></div>
-      <div class="spoilertop" spoiler="gallery_03" title="" image="http://file.mobilmusic.ru/67/d2/60/744432.jpg"></div>
+      <div class="spoilertop" spoiler="gallery_02" title="Documentary" image="http://www.enterthemoviezone.com/uploads/1/2/5/2/12525217/8364703_orig.jpg"></div>
+      <div class="spoilertop" spoiler="gallery_03" title="Music" image="http://file.mobilmusic.ru/67/d2/60/744432.jpg"></div>
       <div class="spoilertop" spoiler="gallery_04" title="" image="http://manual.ucoz.net/img/konstr-no.png"></div>
       <div class="spoilertop" spoiler="movies" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
     </div>
@@ -50,12 +50,21 @@
       <div class="spoilerbox" id="movies" css="min-width: 150px; height: 90px;" background="no">
         <!-- <div class="thumbnail" title="Zootopia" image="http://46.102.154.54/i/01/00000/ps4k8r3q19gp.jpg" content="http://46.102.154.54/fkz7om65svdkrpalgzpqlpeg3j7cbjkuary7vnf7dsmgvgp2xz4gr26af4ra/v.mp4" url="http://worldmoviesfree.com/watch-zootopia-2016-movie-online-video-778655626.html"></div> -->
         <!-- <div class="thumbnail" title="Zootopia" image="http://89.46.102.186/i/01/00070/pjlrfxodqv0d.jpg" content="http://89.46.102.186/kj2vy4k5ey6vtaw52akj4l64gpasjjsjrcihoqdyfzhbxlqeoib3wv4ngj5q/v.mp4" url="http://watchitvideos.tv/zootopia-2016-free-online65-putlocker2/"></div> -->
+        <div class="thumbnail" title="Zootopia" image="http://img.dotua.org/fsua_items/screen/00/18/44/2/00184430.jpg" content="http://fs.to/get/playvideo/6jw5v7qqcsmgr7zsay5ix3z0m.mp4?Zootopia.2016.1080p.BluRay.Eng.mp4" url="http://fs.to/video/cartoons/i4FElOb381GlssqWAQtfZpC-zveropolis.html"></div>
+        <div class="thumbnail" title="ATR" image="http://a4.mzstatic.com/us/r30/Purple/v4/84/b0/36/84b036cb-ea03-2254-d128-f6e4e5015160/icon_256.png" content="rtmp://stream.atr.ua:1937/atr/live" url="http://atr.ua/"></div>
       </div>
     </div>
     <div id="content">
       <iframe class="centered" id="content_iframe" width="882px" height="496px" src="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
       <video class="centered" id="content_video" width="882px" height="496px" controls autoplay name="media"><source src="" type="video/mp4"></video>
-      <object class="centered" id="content_object" width="882px" height="496px" data="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></object>
+      <!-- <object class="centered" id="content_object" width="882px" height="496px" data="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></object> -->
+      <object class="centered" id="content_object" width="882px" height="496px" data="" type="application/x-shockwave-flash">
+        <param name="allowScriptAccess" value="always"/>
+        <param name="allowFullScreen" value="true"/>
+        <param name="quality" value="high" />
+        <param name="bgcolor" value="#000000" /> 
+        <param name="movie" value=""/>
+      </object>
       <img class="centered" id="content_img" width="auto" height="90%" src="">
     </div>
   </body>
@@ -63,21 +72,21 @@
 
 <!--
   BACKGROUND
-    <div class="background"></div>
+  <div class="background"></div>
   
   SPOILER_BUTTONS
-    <img class="spoilertop" spoiler="gallery_01" title="" src="">
+  <img class="spoilertop" spoiler="gallery_01" title="" src="">
   
   SPOILERS
-    <div class="spoilerbox" id="gallery_01" css="min-width: 117px; height: 162px;" background="no">
+  <div class="spoilerbox" id="gallery_01" css="min-width: 117px; height: 162px;" background="no">
   
   THUMBNAILS
-    <div class="thumbnail" title="" image="" content="" url=""></div>
+  <div class="thumbnail" title="" image="" content="" url=""></div>
   
   CONTENT_OUTPUTS
-    <iframe class="centered" id="content_iframe" width="882px" height="496px" src="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-    <video class="centered" id="content_video" width="882px" height="496px" controls autoplay name="media"><source src="" type="video/mp4"></video>
-    <object class="centered" id="content_object" width="882px" height="496px" data="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></object>
-    <img class="centered" id="content_img" width="auto" height="90%" src="">
+  <iframe class="centered" id="content_iframe" width="882px" height="496px" src="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  <video class="centered" id="content_video" width="882px" height="496px" controls autoplay name="media"><source src="" type="video/mp4"></video>
+  <object class="centered" id="content_object" width="882px" height="496px" data="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></object>
+  <img class="centered" id="content_img" width="auto" height="90%" src="">
 -->
 
