@@ -38,9 +38,9 @@ img.centered {
   height: 100%; width: 100%;
 }
 
-.thumbnail > img, .centered {
+/* .thumbnail > img, .centered {
   -webkit-backface-visibility: hidden;
-}
+} */
 
 .centered:-webkit-full-screen {
   top: 0px; left: 0px; transform: translate(0px, 0px);
