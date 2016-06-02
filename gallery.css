@@ -73,3 +73,15 @@ img.minimized {
   width: inherit !important; height: inherit !important;
   max-width: 441px !important; max-height: 248px !important;
 }
+
+/* .thumbnail > img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100%;
+    width: 100%;
+    max-width: 90% !important;
+    max-height: 90% !important;
+    object-fit: contain;
+} */
