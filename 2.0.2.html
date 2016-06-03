@@ -83,9 +83,7 @@
     </div>
     <div id="content">
       <iframe class="centered" id="content_iframe" width="882px" height="496px" src="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-      <video class="centered" id="content_video" width="882px" height="496px" controls autoplay name="media"><source src="" type="video/mp4"></video>
-      <!-- <object class="centered" id="content_object" width="882px" height="496px" data="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></object> -->    
-      
+      <video class="centered" id="content_video" width="882px" height="496px" controls autoplay name="media"><source src="" type="video/mp4"></video>      
       <object class="centered" id="content_object" width="882px" height="496px" data="StrobeMediaPlayback.swf" type="application/x-shockwave-flash">
         <param name="bgcolor" value="#000000">
         <!-- <param name="wmode" value="transparent"> -->
@@ -95,8 +93,16 @@
         <param name="sourceKey" value="src">
         <param name="flashvars" value="">
       </object>  
-      
       <img class="centered" id="content_img" width="auto" height="90%" src="">
+    </div>
+    <div class="prompt" id="promptFrame">
+      <label style="color: red;">Адрес видео *:</label><input id="promptFrameContent" type="text" name="content"><br>
+      <label>Адрес картинки:</label><input id="promptFrameImage" type="text" name="image">
+      <label>Название:</label><input id="promptFrameTitle" type="text" name="image">
+      <label>Сайт-источник:</label><input id="promptFrameSourceURL" type="text" name="content"><br>
+      <label style="color: red;">HTML-Код:</label><textarea id="promptFrameCode" rows="6"></textarea>
+      <button id="promptFrameOkButton">OK</button>
+      <button id="promptFrameCancelButton">Отмена</button>
     </div>
   </body>
 </html>
