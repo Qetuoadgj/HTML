@@ -85,16 +85,3 @@ img.minimized {
   max-height: 90% !important;
   object-fit: contain;
 } */
-
-.prompt {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; border: 1px solid grey; width: 500px; height: auto; padding: 10px; background-color: white; display: none;
-}
-.prompt > input {
-  width: 495px; margin: 5px 0px; padding: 0px;
-}
-.prompt > textarea {
-  width: 497px; margin: 5px 0px; padding: 0px;
-}
-.prompt > button {
-  float: right; width: 80px; margin: 5px 0px 0px 10px; padding: 0px;
-}
