@@ -178,7 +178,7 @@
     function showContent(thisThumbnail, thumbnailsArray) {
       var output = thisThumbnail.getAttribute('output');
       var content = thisThumbnail.getAttribute('content') || thisThumbnail.getAttribute('image');
-      if (!output) {output = 'iframe';}
+      if (!output && content.match(/\.(jpg|gif|png|bmp|tga|webp)$/i)) {output = 'img';} else if (!output) {output = 'iframe';}
       buttonClicked(thisThumbnail, thumbnailsArray);
       var outputFrame = outputs.querySelector(output);
       var outputAttr = 'src';
