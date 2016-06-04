@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.2
+// @version      2.2.3
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -42,6 +42,7 @@
     clone.removeAttribute('style');
     forEach(spoilerButtonsArray, function(index, self) {
       self.removeAttribute('style');
+      var image = self.querySelector('img'); if (image) image.remove();
       var text = self.querySelector('p'); if (text) text.remove();
     });
     forEach(spoilersArray, function(index, self) {self.removeAttribute('style');});
@@ -50,7 +51,10 @@
       var image = self.querySelector('img'); if (image) image.remove();
       var text = self.querySelector('p'); if (text) text.remove();
     });
-    forEach(outputsArray, function(index, self) {self.removeAttribute('style');});
+    forEach(outputsArray, function(index, self) {
+      self.removeAttribute('style');
+      removeClass(self, 'minimized');
+    });
     forEach(temporary, function(index, self) {self.remove();});
     forEach(backgroundsArray, function(index, self) {self.remove();});
 
@@ -72,7 +76,7 @@
 
   function downloadCurrentDocument() {
     var pageURL = location.href; var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1'); pageTitle = pageTitle.replace('.html', '') + '.html';
-    var doc = getDoctype() + '\n' + resetAttributes(document.documentElement).outerHTML;
+    var doc = getDoctype() + '\n\n' + resetAttributes(document.documentElement).outerHTML;
     //noinspection JSDeprecatedSymbols
     var base64doc = btoa(unescape(encodeURIComponent(doc))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
     a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
