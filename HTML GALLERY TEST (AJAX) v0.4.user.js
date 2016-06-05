@@ -171,7 +171,7 @@
         });
       } else if (source.match('.m3u8')) {
         source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source;
-      } else if (source.match('rtmp://')) {
+      } else if (source.match('rtmp://') || info == 'swf') {
         source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
       }
       return source;
@@ -189,6 +189,7 @@
 
     function showContent(thisThumbnail, thumbnailsArray) {
       var output = thisThumbnail.getAttribute('output');
+      var type = thisThumbnail.getAttribute('type');
       var content = thisThumbnail.getAttribute('content') || thisThumbnail.getAttribute('image');
       if (!output && content.match(/\.(jpg|gif|png|bmp|tga|webp)$/i)) {output = 'img';} else if (!output) {output = 'iframe';}
       buttonClicked(thisThumbnail, thumbnailsArray);
@@ -198,7 +199,7 @@
       if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
         resetContentOutputs();
         outputFrame.style.display = 'block';
-        content = appendFlashVars(content);
+        content = appendFlashVars(content, type);
         setTimeout(function(){
           outputFrame.setAttribute(outputAttr, content);
         }, 10);
