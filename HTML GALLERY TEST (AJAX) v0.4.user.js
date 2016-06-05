@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.4
+// @version      2.2.5
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -11,6 +11,9 @@
 // @icon         http://rddnickel.com/images/HTML%20icon.png
 // @run-at       document-start
 // ==/UserScript==
+
+// Require chrome extension:
+// https://chrome.google.com/webstore/detail/native-hls-playback/emnphkkblegpebimobpbekeedfgemhof
 
 (function() {
   'use strict';
@@ -244,6 +247,229 @@
       }
     }
 
+    String.prototype.Num = function(){return this.match(/\d+/);};
+
+    function initPromptFrame(reset) {
+      var promptFrame = document.getElementById('promptFrame');
+      if (promptFrame) promptFrame.remove();
+
+      promptFrame = document.createElement('div');
+      promptFrame.style.position = 'fixed';
+      promptFrame.style.display = 'block';
+      promptFrame.style.maxWidth = '90%';
+      promptFrame.style.maxHeight = '90%';
+      promptFrame.style.width = '500px';
+      promptFrame.style.height = 'auto';
+      promptFrame.style.padding='10px';
+      promptFrame.style.backgroundColor = 'white';
+      promptFrame.style.zIndex='10';
+      promptFrame.style.bottom ='10px';
+      promptFrame.style.right ='10px';
+      // promptFrame.className = 'centered';
+      promptFrame.setAttribute('id', 'promptFrame');
+      document.body.appendChild(promptFrame);
+
+      var labelWidth = '20%';
+      var inputWidth = promptFrame.style.width.Num()*0.8 - 5 + 'px';
+
+      var label = document.createElement('label');
+      label.innerText = 'Адрес потока:';
+      label.style.width = labelWidth;
+      label.style.float = 'left';
+      label.style.margin='2px 0px';
+      label.style.color='black';
+      promptFrame.appendChild(label);
+
+      var promptFrameContent = document.createElement('input');
+      promptFrameContent.style.width = inputWidth;
+      promptFrameContent.style.float = 'right';
+      promptFrameContent.style.margin='2px 0px';
+      promptFrameContent.style.padding='0px';
+      promptFrameContent.type = 'text';
+      promptFrame.appendChild(promptFrameContent);
+
+      label = document.createElement('label');
+      label.innerText = 'Адрес иконки:';
+      label.style.width = labelWidth;
+      label.style.float = 'left';
+      label.style.margin='2px 0px';
+      label.style.color='#BFBFBF';
+      promptFrame.appendChild(label);
+
+      var promptFrameImage = document.createElement('input');
+      promptFrameImage.style.width = inputWidth;
+      promptFrameImage.style.float = 'right';
+      promptFrameImage.style.margin='2px 0px';
+      promptFrameImage.style.padding='0px';
+      promptFrameImage.type = 'text';
+      promptFrame.appendChild(promptFrameImage);
+
+      label = document.createElement('label');
+      label.innerText = 'Название:';
+      label.style.width = labelWidth;
+      label.style.float = 'left';
+      label.style.margin='2px 0px';
+      label.style.color='#BFBFBF';
+      promptFrame.appendChild(label);
+
+      var promptFrameTitle = document.createElement('input');
+      promptFrameTitle.style.width = inputWidth;
+      promptFrameTitle.style.float = 'right';
+      promptFrameTitle.style.margin='2px 0px';
+      promptFrameTitle.style.padding='0px';
+      promptFrameTitle.type = 'text';
+      promptFrame.appendChild(promptFrameTitle);
+
+      label = document.createElement('label');
+      label.innerText = 'Источник:';
+      label.style.width = labelWidth;
+      label.style.float = 'left';
+      label.style.margin='2px 0px';
+      label.style.color='#BFBFBF';
+      promptFrame.appendChild(label);
+
+      var promptFrameSourcePage = document.createElement('input');
+      promptFrameSourcePage.style.width = inputWidth;
+      promptFrameSourcePage.style.float = 'right';
+      promptFrameSourcePage.style.margin='2px 0px';
+      promptFrameSourcePage.style.padding='0px';
+      promptFrameSourcePage.type = 'text';
+      promptFrame.appendChild(promptFrameSourcePage);
+
+      label = document.createElement('label');
+      label.innerText = 'HTML-код:';
+      label.style.width = labelWidth;
+      label.style.float = 'left';
+      label.style.margin='2px 0px';
+      label.style.color='black';
+      label.style.display='block';
+      promptFrame.appendChild(label);
+
+      var promptFrameCode = document.createElement('textarea');
+      promptFrameCode.style.display='block';
+      promptFrameCode.style.width = '500px';
+      promptFrameCode.style.maxHeight = '100px';
+      promptFrameCode.style.resize = 'none';
+      promptFrameCode.style.float = 'right';
+      promptFrameCode.style.margin='2px 0px';
+      promptFrameCode.style.padding='0px';
+      promptFrameCode.rows = '7';
+      promptFrame.appendChild(promptFrameCode);
+
+      var okButton = document.createElement('button');
+      okButton.style.display='block';
+      okButton.style.width = '80px';
+      okButton.style.height = '20px';
+      okButton.style.float = 'right';
+      okButton.style.margin='10px 0px 0px 10px';
+      okButton.innerText = 'OK';
+      promptFrame.appendChild(okButton);
+
+      var cancelButton = document.createElement('button');
+      cancelButton.style.display='block';
+      cancelButton.style.width = '80px';
+      cancelButton.style.height = '20px';
+      cancelButton.style.float = 'right';
+      cancelButton.style.margin='10px 0px 0px 10px';
+      cancelButton.innerText = 'Отмена';
+      promptFrame.appendChild(cancelButton);
+
+      var content, thumbnail, pageURL, title, code;
+
+      var resetInputs = function() {
+        promptFrameContent.value = ''; promptFrameImage.value = ''; promptFrameTitle.value = ''; promptFrameSourcePage.value = '';
+        promptFrameCode.value = '<div class="thumbnail" title="" image="" content="" url=""></div>';
+      };
+
+      resetInputs();
+
+      var getEmbedCode = function() {
+        content = promptFrameContent.value.trim();
+        thumbnail = (promptFrameImage.value || '').trim();
+        pageURL = (promptFrameSourcePage.value || '').trim();
+        title = (promptFrameTitle.value || '').trim();
+        code = promptFrameCode.value.trim();
+
+        title = title.Capitalize();
+
+        var embedCode = '<div class="thumbnail"';
+        if (content !== pageURL) embedCode += ' title="'+title+'"';
+        if (thumbnail && thumbnail !== content) embedCode += ' image="'+thumbnail+'"';
+        embedCode += ' content="'+content+'"';
+        if (content !== pageURL) embedCode +=' url="'+pageURL+'"';
+        embedCode += '></div>';
+
+        return embedCode;
+      };
+
+      var onKeyPress = function(target, e) {
+        e = e || window.event;
+
+        var enterKey = 13;
+        // var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
+
+        if (e.keyCode == enterKey) {
+          promptFrameSubmit();
+          e.preventDefault();
+        } else {
+          if (target == promptFrameCode) {
+            // <div class="thumbnail" title="" image="" content="" url=""></div>
+            promptFrameContent.value = promptFrameCode.value.replace(/.*content="(.*?)".*/i, '$1');
+            promptFrameImage.value = promptFrameCode.value.replace(/.*image="(.*?)".*/i, '$1');
+            promptFrameSourcePage.value = promptFrameCode.value.replace(/.*url="(.*?)".*/i, '$1');
+            promptFrameTitle.value = promptFrameCode.value.replace(/.*title="(.*?)".*/i, '$1');
+          } else {
+            promptFrameCode.value = getEmbedCode();
+          }
+        }
+      };
+
+      // var eventList = ["keydown", "keyup"];
+      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode];
+
+      // eventList.forEach(function(event){
+      //   inputList.forEach(function(input){
+      //     input.addEventListener(event,function(){onKeyPress(input, event);},false);
+      //   });
+      // });
+
+      inputList.forEach(function(input){
+        input.onkeydown = function(e){onKeyPress(input, e);};
+        input.onkeyup = function(e){onKeyPress(input, e);};
+      });
+
+      var timesClicked = 0;
+      var promptFrameSubmit = function() {
+        if (!activeSpoiler || timesClicked > 0) return false;
+
+        var refreshSpoiler = function() {
+          thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
+          forEach(thumbnailsArray, function(index, self) {
+            self.addEventListener("click", function(){showContent(self, thumbnailsArray);}, false);
+          });
+          activeSpoilerButton.click(); activeSpoilerButton.click();
+        };
+
+        var embedCode = getEmbedCode();
+        if (content && content !== '' && code.match(/^<div.*<\/div>$/i)) {
+          var newElement = document.createElement('div');
+          activeSpoiler.appendChild(document.createTextNode("\n"));
+          activeSpoiler.appendChild(newElement);
+          newElement.outerHTML = embedCode;
+          promptFrame.remove();
+          timesClicked += 1;
+          refreshSpoiler();
+        }
+      };
+
+      var promptFrameCancel = function() {
+        promptFrame.remove();
+      };
+
+      okButton.addEventListener("click", promptFrameSubmit, false);
+      cancelButton.addEventListener("click", promptFrameCancel, false);
+    }
+
     function onKeyDown(e) {
       e = e || window.event;
       var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83, zKey = 90, fKey = 70, qKey = 81, gKey = 71;
@@ -273,12 +499,14 @@
           var buttonTextShow = document.head.querySelector('style.buttonTextShow');
           if (buttonTextShow) {buttonTextShow.remove();}
           else {addGlobalStyle('.spoilertop > p, .thumbnail > p {display: block;}', 'temporary buttonTextShow');}
+        } else if (activeSpoiler && e.keyCode == gKey) {
+          initPromptFrame();
         }
         e.preventDefault();
       }
     }
 
-    document.onkeydown =  function(e) {onKeyDown(e);};
+    document.onkeydown =  function(e){onKeyDown(e);};
 
     forEach(spoilerButtonsArray, function(index, self) {
       var spoiler_id = self.getAttribute('spoiler'); var spoiler = document.getElementById(spoiler_id);
