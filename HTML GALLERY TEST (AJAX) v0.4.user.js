@@ -476,7 +476,7 @@
         };
 
         var embedCode = getEmbedCode();
-        if (content && content !== '' && code.match(/^<div.*<\/div>$/i)) {
+        if (content && content.match(/:\/\//i) && code.match(/^<div.*<\/div>$/i)) {
           var newElement = document.createElement('div');
           activeSpoiler.appendChild(document.createTextNode("\n"));
           activeSpoiler.appendChild(newElement);
