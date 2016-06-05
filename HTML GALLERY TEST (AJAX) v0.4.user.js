@@ -376,6 +376,24 @@
       cancelButton.innerText = 'Отмена';
       promptFrame.appendChild(cancelButton);
 
+      label = document.createElement('label');
+      label.innerText = 'StrobeMediaPlayback.swf:';
+      label.style.width = 'auto';
+      label.style.float = 'left';
+      label.style.margin='10px 0px 0px 0px';
+      label.style.color='black';
+      label.style.display='block';
+      promptFrame.appendChild(label);
+
+      var promptFrameIsSWF = document.createElement('input');
+      promptFrameIsSWF.style.width = '20px';
+      promptFrameIsSWF.style.height = '20px';
+      promptFrameIsSWF.style.float = 'left';
+      promptFrameIsSWF.style.margin='10px 0px 0px 10px';
+      promptFrameIsSWF.style.padding='5px';
+      promptFrameIsSWF.type = 'checkbox';
+      promptFrame.appendChild(promptFrameIsSWF);
+
       var content, thumbnail, pageURL, title, code;
 
       var resetInputs = function() {
@@ -399,9 +417,18 @@
         if (thumbnail && thumbnail !== content) embedCode += ' image="'+thumbnail+'"';
         embedCode += ' content="'+content+'"';
         if (content !== pageURL) embedCode +=' url="'+pageURL+'"';
+        if (promptFrameIsSWF.checked) embedCode +=' type="swf"';
         embedCode += '></div>';
 
         return embedCode;
+      };
+
+      var fillFields = function() {
+        // <div class="thumbnail" title="" image="" content="" url=""></div>
+        promptFrameContent.value = promptFrameCode.value.replace(/.*content="(.*?)".*/i, '$1');
+        promptFrameImage.value = promptFrameCode.value.replace(/.*image="(.*?)".*/i, '$1');
+        promptFrameSourcePage.value = promptFrameCode.value.replace(/.*url="(.*?)".*/i, '$1');
+        promptFrameTitle.value = promptFrameCode.value.replace(/.*title="(.*?)".*/i, '$1');
       };
 
       var onKeyPress = function(target, e) {
@@ -415,11 +442,7 @@
           e.preventDefault();
         } else {
           if (target == promptFrameCode) {
-            // <div class="thumbnail" title="" image="" content="" url=""></div>
-            promptFrameContent.value = promptFrameCode.value.replace(/.*content="(.*?)".*/i, '$1');
-            promptFrameImage.value = promptFrameCode.value.replace(/.*image="(.*?)".*/i, '$1');
-            promptFrameSourcePage.value = promptFrameCode.value.replace(/.*url="(.*?)".*/i, '$1');
-            promptFrameTitle.value = promptFrameCode.value.replace(/.*title="(.*?)".*/i, '$1');
+            fillFields();
           } else {
             promptFrameCode.value = getEmbedCode();
           }
@@ -467,6 +490,8 @@
       var promptFrameCancel = function() {
         promptFrame.remove();
       };
+
+      promptFrameIsSWF.addEventListener("click", function(){promptFrameCode.value = getEmbedCode();}, false);
 
       okButton.addEventListener("click", promptFrameSubmit, false);
       cancelButton.addEventListener("click", promptFrameCancel, false);
