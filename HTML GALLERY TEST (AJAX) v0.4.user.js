@@ -260,6 +260,7 @@
       promptFrame.style.maxHeight = '90%';
       promptFrame.style.width = '500px';
       promptFrame.style.height = 'auto';
+      promptFrame.style.minHeight = '245px';
       promptFrame.style.padding='10px';
       promptFrame.style.backgroundColor = 'white';
       promptFrame.style.zIndex='10';
@@ -348,7 +349,7 @@
       var promptFrameCode = document.createElement('textarea');
       promptFrameCode.style.display='block';
       promptFrameCode.style.width = '500px';
-      promptFrameCode.style.maxHeight = '100px';
+      // promptFrameCode.style.maxHeight = '100px';
       promptFrameCode.style.resize = 'none';
       promptFrameCode.style.float = 'right';
       promptFrameCode.style.margin='2px 0px';
