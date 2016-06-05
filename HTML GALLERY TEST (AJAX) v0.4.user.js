@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.3
+// @version      2.2.4
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -148,7 +148,7 @@
 
     function appendFlashVars(source, info) {
       var i, flashvars, existingVars;
-      if (source.indexOf('https://www.youtube.com/embed/') == '0') {
+      if (source.match('https://www.youtube.com/embed/')) {
         flashvars = [
           'autoplay=1',       // Enable Autoplay
           'hd=1',             // Watch in HD
@@ -156,6 +156,7 @@
         ];
         existingVars = '';
         if (source.match(/[?].*/i)) {
+          // source.split("?")[1]
           existingVars += source.replace(/.*[?](.*)/i, '$1'); source = source.replace(/(.*)[?].*/i, '$1');
           flashvars.push(existingVars);
         }
@@ -165,6 +166,10 @@
           if (i < flashvars.length - 1) {flashvars[i] += '&';}
           source += flashvars[i]; i += 1;
         });
+      } else if (source.match('.m3u8')) {
+        source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source;
+      } else if (source.match('rtmp://')) {
+        source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
       }
       return source;
     }
@@ -191,7 +196,9 @@
         resetContentOutputs();
         outputFrame.style.display = 'block';
         content = appendFlashVars(content);
-        outputFrame.setAttribute(outputAttr, content);
+        setTimeout(function(){
+          outputFrame.setAttribute(outputAttr, content);
+        }, 10);
         activeThumbnail = thisThumbnail; activeOutput = outputFrame; activeContent = content;
       }
     }
