@@ -481,7 +481,7 @@
       };
 
       // var eventList = ["keydown", "keyup"];
-      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode];
+      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFrameIsSWF];
 
       // eventList.forEach(function(event){
       //   inputList.forEach(function(input){
