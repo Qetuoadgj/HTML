@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.5
+// @version      2.2.6
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -431,38 +431,6 @@
         promptFrameTitle.value = promptFrameCode.value.replace(/.*title="(.*?)".*/i, '$1');
       };
 
-      var onKeyPress = function(target, e) {
-        e = e || window.event;
-
-        var enterKey = 13;
-        // var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
-
-        if (e.keyCode == enterKey) {
-          promptFrameSubmit();
-          e.preventDefault();
-        } else {
-          if (target == promptFrameCode) {
-            fillFields();
-          } else {
-            promptFrameCode.value = getEmbedCode();
-          }
-        }
-      };
-
-      // var eventList = ["keydown", "keyup"];
-      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode];
-
-      // eventList.forEach(function(event){
-      //   inputList.forEach(function(input){
-      //     input.addEventListener(event,function(){onKeyPress(input, event);},false);
-      //   });
-      // });
-
-      inputList.forEach(function(input){
-        input.onkeydown = function(e){onKeyPress(input, e);};
-        input.onkeyup = function(e){onKeyPress(input, e);};
-      });
-
       var timesClicked = 0;
       var promptFrameSubmit = function() {
         if (!activeSpoiler || timesClicked > 0) return false;
@@ -491,10 +459,47 @@
         promptFrame.remove();
       };
 
+      var onKeyPress = function(target, e) {
+        e = e || window.event;
+
+        var enterKey = 13, escKey = 27;
+        // var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
+
+        if (e.keyCode == escKey) { // Escape
+          promptFrameCancel();
+          e.preventDefault();
+        } else if (e.keyCode == enterKey) {
+          promptFrameSubmit();
+          e.preventDefault();
+        } else {
+          if (target == promptFrameCode) {
+            fillFields();
+          } else {
+            promptFrameCode.value = getEmbedCode();
+          }
+        }
+      };
+
+      // var eventList = ["keydown", "keyup"];
+      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode];
+
+      // eventList.forEach(function(event){
+      //   inputList.forEach(function(input){
+      //     input.addEventListener(event,function(){onKeyPress(input, event);},false);
+      //   });
+      // });
+
+      inputList.forEach(function(input){
+        input.onkeydown = function(e){onKeyPress(input, e);};
+        input.onkeyup = function(e){onKeyPress(input, e);};
+      });
+
       promptFrameIsSWF.addEventListener("click", function(){promptFrameCode.value = getEmbedCode();}, false);
 
       okButton.addEventListener("click", promptFrameSubmit, false);
       cancelButton.addEventListener("click", promptFrameCancel, false);
+
+      promptFrameContent.focus();
     }
 
     function onKeyDown(e) {
