@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.6
+// @version      2.2.7
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -79,9 +79,11 @@
 
   function downloadCurrentDocument() {
     var pageURL = location.href; var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1'); pageTitle = pageTitle.replace('.html', '') + '.html';
-    var doc = getDoctype() + '\n\n' + resetAttributes(document.documentElement).outerHTML;
+    var documentClone = document.documentElement.cloneNode(true);
+    documentClone = resetAttributes(documentClone);
+    var documentString = getDoctype()+'\n\n'+documentClone.outerHTML;
     //noinspection JSDeprecatedSymbols
-    var base64doc = btoa(unescape(encodeURIComponent(doc))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
+    var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
     a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
   }
 
