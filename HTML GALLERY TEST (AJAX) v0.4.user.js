@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.7
+// @version      2.2.8
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -119,14 +119,14 @@
     var thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
     var outputs = document.getElementById('content');
     var outputsArray = [];
-    var iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img');
-    outputsArray.push(iframeOutput, imgOutput);
+    var iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
+    outputsArray.push(iframeOutput, imgOutput, objectOutput);
+    var objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
     var galleryList = [];
     var activeSpoilerButton, activeSpoiler, activeThumbnail, activeOutput;
     var backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
     var outputsMinimized;
     var activeContent;
-    var refreshDocument;
 
     // DOCUMENT FUNCTIONS
     function buttonClicked(button, buttonsArray, unclick) {
@@ -136,7 +136,7 @@
     }
 
     function resetContentOutputs() {
-      iframeOutput.src = ''; imgOutput.src = '';
+      iframeOutput.src = ''; imgOutput.src = ''; objectOutput.data = ''; objectFlashvars.value = '';
       forEach(outputsArray, function(index, self) {self.style.removeProperty('display');});
       activeOutput = false; activeThumbnail = false; activeContent = false;
     }
@@ -171,10 +171,13 @@
           if (i < flashvars.length - 1) {flashvars[i] += '&';}
           source += flashvars[i]; i += 1;
         });
-      } else if (source.match('.m3u8')) {
+      } else if (info && info.match('uppod.swf')) {
+        source = 'file=' + source + '&auto=play';
+      } else if (source.match('.m3u8') && !info) {
         source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source;
-      } else if (source.match('rtmp://') || info == 'swf') {
-        source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
+      } else if (source.match('rtmp://') || info.match('StrobeMediaPlayback.swf')) {
+        // source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
+        source = 'src=' + source +'&autoPlay=true';
       }
       return source;
     }
@@ -191,20 +194,39 @@
 
     function showContent(thisThumbnail, thumbnailsArray) {
       var output = thisThumbnail.getAttribute('output');
-      var type = thisThumbnail.getAttribute('type');
+
+      var player = thisThumbnail.getAttribute('player');
+      var outputAttr = thisThumbnail.getAttribute('attribute') || 'src';
+      var flashvars = thisThumbnail.getAttribute('flashvars') || '';
+
       var content = thisThumbnail.getAttribute('content') || thisThumbnail.getAttribute('image');
-      if (!output && content.match(/\.(jpg|gif|png|bmp|tga|webp)$/i)) {output = 'img';} else if (!output) {output = 'iframe';}
+      if (!output && (content.match(/^rtmp:\/\//i) || player)) {
+        output = 'object';
+      } else if (!output && content.match(/\.(jpg|gif|png|bmp|tga|webp)$/i)) {
+        output = 'img';
+      } else if (!output) {
+        output = 'iframe';
+      }
+
       buttonClicked(thisThumbnail, thumbnailsArray);
       var outputFrame = outputs.querySelector(output);
-      var outputAttr = 'src';
+
+      content = appendFlashVars(content, player);
+
       var active = (content == activeContent); // global
       if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
         resetContentOutputs();
-        outputFrame.style.display = 'block';
-        content = appendFlashVars(content, type);
         setTimeout(function(){
-          outputFrame.setAttribute(outputAttr, content);
+          if (output == 'object') {
+            objectOutput.data = player || 'StrobeMediaPlayback.swf';
+            objectFlashvars.value = flashvars + content;
+          } else {
+            outputFrame.setAttribute(outputAttr, content);
+          }
         }, 10);
+
+        setTimeout(function(){outputFrame.style.display = 'block';}, 10);
+
         activeThumbnail = thisThumbnail; activeOutput = outputFrame; activeContent = content;
       }
     }
@@ -378,6 +400,7 @@
       cancelButton.innerText = 'Отмена';
       promptFrame.appendChild(cancelButton);
 
+      /*
       label = document.createElement('label');
       label.innerText = 'StrobeMediaPlayback.swf:';
       label.style.width = 'auto';
@@ -395,6 +418,28 @@
       promptFrameIsSWF.style.padding='5px';
       promptFrameIsSWF.type = 'checkbox';
       promptFrame.appendChild(promptFrameIsSWF);
+      */
+
+      var promptFramePlayers = document.createElement('select');
+      promptFramePlayers.style.width = '200px';
+      promptFramePlayers.style.height = 'auto';
+      promptFramePlayers.style.float = 'left';
+      promptFramePlayers.style.margin='10px 0px 0px 0px';
+      promptFramePlayers.style.padding='5px';
+      promptFrame.appendChild(promptFramePlayers);
+
+      var selectOption = document.createElement('option');
+      selectOption.text = 'Проигрыватель';
+      selectOption.value = '';
+      promptFramePlayers.appendChild(selectOption);
+
+      selectOption = document.createElement('option');
+      selectOption.text = 'StrobeMediaPlayback.swf';
+      promptFramePlayers.appendChild(selectOption);
+
+      selectOption = document.createElement('option');
+      selectOption.text = 'uppod.swf';
+      promptFramePlayers.appendChild(selectOption);
 
       var content, thumbnail, pageURL, title, code;
 
@@ -414,12 +459,14 @@
 
         title = title.Capitalize();
 
+        var player = promptFramePlayers.value;
+
         var embedCode = '<div class="thumbnail"';
         if (content !== pageURL) embedCode += ' title="'+title+'"';
         if (thumbnail && thumbnail !== content) embedCode += ' image="'+thumbnail+'"';
         embedCode += ' content="'+content+'"';
         if (content !== pageURL) embedCode +=' url="'+pageURL+'"';
-        if (promptFrameIsSWF.checked) embedCode +=' type="swf"';
+        if (player && player !== '') embedCode +=' player="'+player+'"';
         embedCode += '></div>';
 
         return embedCode;
@@ -483,7 +530,7 @@
       };
 
       // var eventList = ["keydown", "keyup"];
-      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFrameIsSWF, okButton];
+      var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFramePlayers, okButton];
 
       // eventList.forEach(function(event){
       //   inputList.forEach(function(input){
@@ -496,7 +543,7 @@
         input.onkeyup = function(e){onKeyPress(input, e);};
       });
 
-      promptFrameIsSWF.addEventListener("click", function(){promptFrameCode.value = getEmbedCode();}, false);
+      promptFramePlayers.addEventListener("click", function(){promptFrameCode.value = getEmbedCode();}, false);
 
       okButton.addEventListener("click", promptFrameSubmit, false);
       cancelButton.addEventListener("click", promptFrameCancel, false);
