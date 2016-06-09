@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.8
+// @version      2.2.9
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -172,10 +172,10 @@
           source += flashvars[i]; i += 1;
         });
       } else if (info && info.match('uppod.swf')) {
-        source = 'file=' + source + '&auto=play';
+        source = 'm=video&file=' + source + '&auto=play';
       } else if (source.match('.m3u8') && !info) {
         source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source;
-      } else if (source.match('rtmp://') || info.match('StrobeMediaPlayback.swf')) {
+      } else if (source.match('rtmp://') || (info && info.match('StrobeMediaPlayback.swf'))) {
         // source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
         source = 'src=' + source +'&autoPlay=true';
       }
