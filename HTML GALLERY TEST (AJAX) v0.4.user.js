@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.2.9
+// @version      2.3.0
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -387,7 +387,7 @@
       okButton.style.width = '80px';
       okButton.style.height = '20px';
       okButton.style.float = 'right';
-      okButton.style.margin='10px 0px 0px 10px';
+      okButton.style.margin='15px 0px 0px 10px';
       okButton.innerText = 'OK';
       promptFrame.appendChild(okButton);
 
@@ -396,50 +396,25 @@
       cancelButton.style.width = '80px';
       cancelButton.style.height = '20px';
       cancelButton.style.float = 'right';
-      cancelButton.style.margin='10px 0px 0px 10px';
+      cancelButton.style.margin='15px 0px 0px 10px';
       cancelButton.innerText = 'Отмена';
       promptFrame.appendChild(cancelButton);
 
-      /*
-      label = document.createElement('label');
-      label.innerText = 'StrobeMediaPlayback.swf:';
-      label.style.width = 'auto';
-      label.style.float = 'left';
-      label.style.margin='10px 0px 0px 0px';
-      label.style.color='black';
-      label.style.display='block';
-      promptFrame.appendChild(label);
-
-      var promptFrameIsSWF = document.createElement('input');
-      promptFrameIsSWF.style.width = '20px';
-      promptFrameIsSWF.style.height = '20px';
-      promptFrameIsSWF.style.float = 'left';
-      promptFrameIsSWF.style.margin='10px 0px 0px 10px';
-      promptFrameIsSWF.style.padding='5px';
-      promptFrameIsSWF.type = 'checkbox';
-      promptFrame.appendChild(promptFrameIsSWF);
-      */
-
       var promptFramePlayers = document.createElement('select');
       promptFramePlayers.style.width = '200px';
-      promptFramePlayers.style.height = 'auto';
+      promptFramePlayers.style.height = '30px';
       promptFramePlayers.style.float = 'left';
       promptFramePlayers.style.margin='10px 0px 0px 0px';
       promptFramePlayers.style.padding='5px';
       promptFrame.appendChild(promptFramePlayers);
 
-      var selectOption = document.createElement('option');
-      selectOption.text = 'Проигрыватель';
-      selectOption.value = '';
-      promptFramePlayers.appendChild(selectOption);
-
-      selectOption = document.createElement('option');
-      selectOption.text = 'StrobeMediaPlayback.swf';
-      promptFramePlayers.appendChild(selectOption);
-
-      selectOption = document.createElement('option');
-      selectOption.text = 'uppod.swf';
-      promptFramePlayers.appendChild(selectOption);
+      var options = ['Проигрыватель', 'StrobeMediaPlayback.swf', 'uppod.swf'];
+      var num; for (num = 0; num < options.length; ++num) {
+        var selectOption = document.createElement('option');
+        selectOption.text = options[num];
+        if (num === 0) {selectOption.value = '';} else {selectOption.value = options[num];}
+        promptFramePlayers.appendChild(selectOption);
+      }
 
       var content, thumbnail, pageURL, title, code;
 
