@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.0
+// @version      2.3.1
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -528,7 +528,7 @@
 
     function onKeyDown(e) {
       e = e || window.event;
-      var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83, zKey = 90, fKey = 70, qKey = 81, gKey = 71;
+      var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83, zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75;
       var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
 
       var targetType = e.target.tagName.toLowerCase();
@@ -543,6 +543,9 @@
         } else if (e.keyCode == rArrowKey) {
           changeContent(galleryList); // Right Arrow
         } else if ((hovered || activeThumbnail) && e.keyCode == delKey) { // Delete
+          if (activeThumbnail) {activeThumbnail.remove(); changeContent(galleryList);} else if (hovered) {hovered.remove();}
+          galleryList = createGalleryList(activeSpoiler);
+        } else if ((hovered || activeThumbnail) && e.keyCode == kKey) { // Control + K
           if (activeThumbnail) {commentElement(activeThumbnail); changeContent(galleryList);} else if (hovered) {commentElement(hovered);}
           galleryList = createGalleryList(activeSpoiler);
         } else if (activeSpoiler && ctrlDown && e.keyCode == cKey) { // Control + C
