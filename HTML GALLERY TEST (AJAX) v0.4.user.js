@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.1
+// @version      2.3.2
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -528,7 +528,9 @@
 
     function onKeyDown(e) {
       e = e || window.event;
-      var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83, zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75;
+      var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83,
+          zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75, eKey = 69;
+
       var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
 
       var targetType = e.target.tagName.toLowerCase();
@@ -560,6 +562,9 @@
           else {addGlobalStyle('.spoilertop > p, .thumbnail > p {display: block;}', 'temporary buttonTextShow');}
         } else if (activeSpoiler && e.keyCode == gKey) {
           initPromptFrame();
+        } else if (activeSpoiler && hovered && ctrlDown && e.keyCode == eKey) {
+          var url = hovered.getAttribute('url');
+          if (url) window.open(url,'_blank');
         }
         e.preventDefault();
       }
