@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.2
+// @version      2.3.3
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -23,9 +23,17 @@
   //GLOBAL FUNCTIONS
   function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
   function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
-  function commentElement(element) {var code = element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
+  function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
 
   function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId?' PUBLIC "' +  document.doctype.publicId.toUpperCase() + '"':'') + (document.doctype.systemId?' "' + document.doctype.systemId.toUpperCase() + '"':'') + '>';}
+
+  String.prototype.replaceAll = function (find, replace) {
+    var str = this;
+    while( str.indexOf(find) > -1) {
+      str = str.replace(find, replace);
+    }
+    return str;
+  };
 
   function resetAttributes(node) {
     var clone = node.cloneNode(true);
@@ -62,6 +70,9 @@
     forEach(backgroundsArray, function(index, self) {self.remove();});
 
     if (outputs) {iframeOutput.src = ''; imgOutput.src = '';}
+
+    clone.innerHTML = clone.innerHTML.replace(/<!-- DELETED -->\n/g, '');
+    clone.innerHTML = clone.innerHTML.replace(/\s+<!-- DELETED -->/g, '\r\n');
 
     return clone;
   }
@@ -545,7 +556,8 @@
         } else if (e.keyCode == rArrowKey) {
           changeContent(galleryList); // Right Arrow
         } else if ((hovered || activeThumbnail) && e.keyCode == delKey) { // Delete
-          if (activeThumbnail) {activeThumbnail.remove(); changeContent(galleryList);} else if (hovered) {hovered.remove();}
+          // if (activeThumbnail) {activeThumbnail.remove(); changeContent(galleryList);} else if (hovered) {hovered.remove();}
+          if (activeThumbnail) {commentElement(activeThumbnail, 'DELETED'); changeContent(galleryList);} else if (hovered) {commentElement(hovered, 'DELETED');}
           galleryList = createGalleryList(activeSpoiler);
         } else if ((hovered || activeThumbnail) && e.keyCode == kKey) { // Control + K
           if (activeThumbnail) {commentElement(activeThumbnail); changeContent(galleryList);} else if (hovered) {commentElement(hovered);}
