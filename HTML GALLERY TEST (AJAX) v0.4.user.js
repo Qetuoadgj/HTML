@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.3
+// @version      2.3.4
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -23,17 +23,10 @@
   //GLOBAL FUNCTIONS
   function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
   function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
-  function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
+  // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
+  function disableElement(element, remove) {if (remove) {addClass(element, 'REMOVED');} else {addClass(element, 'COMMENTED');}}
 
   function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId?' PUBLIC "' +  document.doctype.publicId.toUpperCase() + '"':'') + (document.doctype.systemId?' "' + document.doctype.systemId.toUpperCase() + '"':'') + '>';}
-
-  String.prototype.replaceAll = function (find, replace) {
-    var str = this;
-    while( str.indexOf(find) > -1) {
-      str = str.replace(find, replace);
-    }
-    return str;
-  };
 
   function resetAttributes(node) {
     var clone = node.cloneNode(true);
@@ -71,8 +64,13 @@
 
     if (outputs) {iframeOutput.src = ''; imgOutput.src = '';}
 
-    clone.innerHTML = clone.innerHTML.replace(/<!-- DELETED -->\n/g, '');
-    clone.innerHTML = clone.innerHTML.replace(/\s+<!-- DELETED -->/g, '\r\n');
+    var removed = clone.querySelectorAll('.REMOVED');
+    var commented = clone.querySelectorAll('.COMMENTED');
+    forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
+    forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
+
+    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\s+|<!-- DELETED -->\s+/g, '');
+    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
 
     return clone;
   }
@@ -122,6 +120,24 @@
     function capFirst(str) {return str.length === 0 ? str : str[0].toUpperCase() + str.substr(1);}
     return this.split(' ').map(capFirst).join(' ');
   };
+
+  String.prototype.replaceAll = function (find, replace) {
+    var str = this; while( str.indexOf(find) > -1) {str = str.replace(find, replace);}
+    return str;
+  };
+
+  var undoElementsBuffer = []; // var undoChangesBuffer = [];
+  function regUndoAction(element) {
+    undoElementsBuffer.push(element); // undoChangesBuffer.push(element.outerHTML);
+  }
+  function undoAction() {
+    var num = undoElementsBuffer.length - 1; if (num > -1) {
+      // undoElementsBuffer[num].outerHTML = undoChangesBuffer[num];
+      removeClass(undoElementsBuffer[num], 'REMOVED');
+      removeClass(undoElementsBuffer[num], 'COMMENTED');
+      undoElementsBuffer.splice(num, 1); // undoChangesBuffer.splice(num, 1);
+    }
+  }
 
   document.addEventListener("DOMContentLoaded", function() {
     // GLOBAL VARIABLES
@@ -245,7 +261,7 @@
     function createGalleryList(gallery) {
       var galleryList = [];
       var thumbnails = gallery.querySelectorAll('.thumbnail');
-      forEach(thumbnails, function(index, self) {var content = self.getAttribute('content'); content = appendFlashVars(content); galleryList.push(content);});
+      forEach(thumbnails, function(index, self) {if (isVisible(self)) {var content = self.getAttribute('content'); content = appendFlashVars(content); galleryList.push(content);}});
       return galleryList;
     }
 
@@ -557,16 +573,16 @@
           changeContent(galleryList); // Right Arrow
         } else if ((hovered || activeThumbnail) && e.keyCode == delKey) { // Delete
           // if (activeThumbnail) {activeThumbnail.remove(); changeContent(galleryList);} else if (hovered) {hovered.remove();}
-          if (activeThumbnail) {commentElement(activeThumbnail, 'DELETED'); changeContent(galleryList);} else if (hovered) {commentElement(hovered, 'DELETED');}
+          if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true); changeContent(galleryList);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true);}
           galleryList = createGalleryList(activeSpoiler);
         } else if ((hovered || activeThumbnail) && e.keyCode == kKey) { // Control + K
-          if (activeThumbnail) {commentElement(activeThumbnail); changeContent(galleryList);} else if (hovered) {commentElement(hovered);}
+          if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false); changeContent(galleryList);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false);}
           galleryList = createGalleryList(activeSpoiler);
         } else if (activeSpoiler && ctrlDown && e.keyCode == cKey) { // Control + C
           copyToClipboard(activeSpoiler);
         } else if (ctrlDown && e.keyCode == sKey) { // Control + S
           downloadCurrentDocument(document.documentElement);
-        } else if (activeOutput && e.keyCode == zKey) {
+        } else if (activeOutput && e.keyCode == zKey && !ctrlDown) {
           minimizeContentOutputs();
         } else if (e.keyCode == qKey) {
           var buttonTextShow = document.head.querySelector('style.buttonTextShow');
@@ -577,6 +593,9 @@
         } else if (activeSpoiler && hovered && ctrlDown && e.keyCode == eKey) {
           var url = hovered.getAttribute('url');
           if (url) window.open(url,'_blank');
+        } else if (activeSpoiler && e.keyCode == zKey && ctrlDown) {
+          undoAction();
+          galleryList = createGalleryList(activeSpoiler);
         }
         e.preventDefault();
       }
