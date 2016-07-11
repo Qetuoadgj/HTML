@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.7
+// @version      2.3.8
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -279,9 +279,26 @@
       }
     }
 
-    function showSpoiler(thisButton, spoiler) {
+    function findDuplicates(activeThumbnails) {
       var contentsList = [];
       var duplicatesList = [];
+      forEach(activeThumbnails, function(index, self) {removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');});
+      forEach(activeThumbnails, function(index, self) {
+        if (isVisible(self)) {
+          var imageSrc = self.getAttribute('image'); var contentSrc = self.getAttribute('content'); var img = contentSrc || imageSrc;
+          if (contentsList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_2'); duplicatesList.push(img);}
+          if (contentSrc) contentsList.push(img); // to find duplicates
+        }
+      });
+      forEach(activeThumbnails, function(index, self) {
+        if (isVisible(self)) {
+          var imageSrc = self.getAttribute('image'); var contentSrc = self.getAttribute('content'); var img = contentSrc || imageSrc;
+          if (duplicatesList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_1');}
+        }
+      });
+    }
+
+    function showSpoiler(thisButton, spoiler) {
       var active = isVisible(spoiler);
       buttonClicked(thisButton, spoilerButtonsArray);
       forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
@@ -296,17 +313,10 @@
             var text, type;
             //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
             var title = self.getAttribute('title'); if (title) {text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
-
-            var img = contentSrc || imageSrc;
-            if (contentsList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_2'); duplicatesList.push(img);}
-            if (contentSrc) contentsList.push(img);
           }
         });
 
-        forEach(activeThumbnails, function(index, self) {
-          var imageSrc = self.getAttribute('image'); var contentSrc = self.getAttribute('content'); var img = contentSrc || imageSrc;
-          if (duplicatesList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_1');}
-        });
+        findDuplicates(activeThumbnails);
 
         galleryList = createGalleryList(spoiler);
         activeSpoiler = spoiler;
@@ -590,9 +600,11 @@
           // if (activeThumbnail) {activeThumbnail.remove(); changeContent(galleryList);} else if (hovered) {hovered.remove();}
           if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true); changeContent(galleryList);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true);}
           galleryList = createGalleryList(activeSpoiler);
+          findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
         } else if ((hovered || activeThumbnail) && e.keyCode == kKey) { // Control + K
           if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false); changeContent(galleryList);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false);}
           galleryList = createGalleryList(activeSpoiler);
+          findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
         } else if (activeSpoiler && ctrlDown && e.keyCode == cKey) { // Control + C
           copyToClipboard(activeSpoiler);
         } else if (ctrlDown && e.keyCode == sKey) { // Control + S
@@ -611,6 +623,7 @@
         } else if (activeSpoiler && e.keyCode == zKey && ctrlDown) {
           undoAction();
           galleryList = createGalleryList(activeSpoiler);
+          findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
         }
         e.preventDefault();
       }
