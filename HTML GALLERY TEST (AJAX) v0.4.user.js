@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.4
+// @version      2.3.6
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -69,7 +69,7 @@
     forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
     forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
 
-    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\s+|<!-- DELETED -->\s+/g, '');
+    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\s+|<!-- DELETED -->\n/g, '');
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
 
     return clone;
@@ -138,6 +138,8 @@
       undoElementsBuffer.splice(num, 1); // undoChangesBuffer.splice(num, 1);
     }
   }
+
+  Array.prototype.contains = function(obj) {var i = this.length; while (i--) {if (this[i] === obj) {return true;}} return false;};
 
   document.addEventListener("DOMContentLoaded", function() {
     // GLOBAL VARIABLES
@@ -277,6 +279,8 @@
     }
 
     function showSpoiler(thisButton, spoiler) {
+      var contentsList = [];
+      var duplicatesList = [];
       var active = isVisible(spoiler);
       buttonClicked(thisButton, spoilerButtonsArray);
       forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
@@ -291,8 +295,18 @@
             var text, type;
             //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
             var title = self.getAttribute('title'); if (title) {text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
+
+            var img = contentSrc || imageSrc;
+            if (contentsList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_2'); duplicatesList.push(img);}
+            if (contentSrc) contentsList.push(img);
           }
         });
+
+        forEach(activeThumbnails, function(index, self) {
+          var imageSrc = self.getAttribute('image'); var contentSrc = self.getAttribute('content'); var img = contentSrc || imageSrc;
+          if (duplicatesList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_1');}
+        });
+
         galleryList = createGalleryList(spoiler);
         activeSpoiler = spoiler;
         activeSpoilerButton = thisButton;
