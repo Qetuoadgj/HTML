@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.6
+// @version      2.3.7
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -54,6 +54,7 @@
       self.removeAttribute('style');
       var image = self.querySelector('img'); if (image) image.remove();
       var text = self.querySelector('p'); if (text) text.remove();
+      removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');
     });
     forEach(outputsArray, function(index, self) {
       self.removeAttribute('style');
@@ -69,7 +70,7 @@
     forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
     forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
 
-    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\s+|<!-- DELETED -->\n/g, '');
+    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\n|<!-- DELETED -->\n/g, '');
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
 
     return clone;
