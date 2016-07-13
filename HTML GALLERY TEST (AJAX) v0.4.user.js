@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.8
+// @version      2.3.9
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -73,12 +73,15 @@
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\n|<!-- DELETED -->\n/g, '');
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
 
-    return clone;
+    var whitespace = clone.outerHTML.match(/([ \t])+<\/.*>/g);
+
+    return [clone, whitespace];
   }
 
   function copyToClipboard(element) {
-    var clone = resetAttributes(element);
-    var code = clone.outerHTML;
+    var variables = resetAttributes(element);
+    var clone = variables[0], whitespace = variables[1] || '';
+    var code = (whitespace || '') + clone.outerHTML;
     var clipboard = document.createElement('textarea');
     clipboard.style.position = 'fixed'; clipboard.style.top = '50%'; clipboard.style.left = '50%'; clipboard.style.transform = 'translate(-50%, -50%)'; clipboard.style['z-index'] = 10;
     clipboard.style.width = '90%'; clipboard.style.height = '90%';
@@ -90,7 +93,7 @@
   function downloadCurrentDocument() {
     var pageURL = location.href; var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1'); pageTitle = pageTitle.replace('.html', '') + '.html';
     var documentClone = document.documentElement.cloneNode(true);
-    documentClone = resetAttributes(documentClone);
+    documentClone = resetAttributes(documentClone)[0];
     var documentString = getDoctype()+'\n\n'+documentClone.outerHTML;
     //noinspection JSDeprecatedSymbols
     var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
