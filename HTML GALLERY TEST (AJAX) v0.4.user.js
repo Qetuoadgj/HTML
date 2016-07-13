@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.3.9
+// @version      2.4.0
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -73,15 +73,16 @@
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\n|<!-- DELETED -->\n/g, '');
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
 
-    var whitespace = clone.outerHTML.match(/([ \t])+<\/.*>/g);
+    var whitespace = clone.outerHTML.match(/([ \t]+)<\/.*>/g);
+    var spaces; if (whitespace) spaces = whitespace[0];
 
-    return [clone, whitespace];
+    return [clone, spaces];
   }
 
   function copyToClipboard(element) {
     var variables = resetAttributes(element);
-    var clone = variables[0], whitespace = variables[1] || '';
-    var code = (whitespace || '') + clone.outerHTML;
+    var clone = variables[0], spaces = variables[1] || '';
+    var code = spaces + clone.outerHTML;
     var clipboard = document.createElement('textarea');
     clipboard.style.position = 'fixed'; clipboard.style.top = '50%'; clipboard.style.left = '50%'; clipboard.style.transform = 'translate(-50%, -50%)'; clipboard.style['z-index'] = 10;
     clipboard.style.width = '90%'; clipboard.style.height = '90%';
