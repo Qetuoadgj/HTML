@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.4.1
+// @version      2.4.2
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -73,8 +73,8 @@
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\n|<!-- DELETED -->\n/g, '');
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
 
-    var whitespace = clone.outerHTML.match(new RegExp('[ \t]+</'+clone.tagName+'>', 'gi'));
-    var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces.replace(new RegExp('</'+clone.tagName+'>', 'gi'),'');}
+    var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi'));
+    var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
 
     return [clone, spaces];
   }
