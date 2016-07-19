@@ -5,7 +5,7 @@
 // @author       Ægir
 // @match        http://*.www.ex.ua/show/*
 // @grant        none
-// @updateURL    https://github.com/Qetuoadgj/JavaScript/raw/master/fs.to.user.jss
+// @updateURL    https://github.com/Qetuoadgj/HTML/raw/master/Video%20Controls.user.js
 // @icon         https://www.google.com/s2/favicons?domain=ex.ua
 // ==/UserScript==
 
