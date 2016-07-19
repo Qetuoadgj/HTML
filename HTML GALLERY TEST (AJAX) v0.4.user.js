@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.4.2
+// @version      2.4.3
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -161,6 +161,7 @@
     var backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
     var outputsMinimized;
     var activeContent;
+    var changeContentOffset;
 
     // DOCUMENT FUNCTIONS
     function buttonClicked(button, buttonsArray, unclick) {
@@ -585,7 +586,8 @@
     function onKeyDown(e) {
       e = e || window.event;
       var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83,
-          zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75, eKey = 69;
+          zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75, eKey = 69,
+          lBracket = 219, rBracket = 221;
 
       var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
 
@@ -597,16 +599,16 @@
         if (e.keyCode == escKey) { // Escape
           hideContent();
         } else if (e.keyCode == lArrowKey) {
-          changeContent(galleryList,-1); // Left Arrow
+          changeContent(galleryList, -1); // Left Arrow
         } else if (e.keyCode == rArrowKey) {
-          changeContent(galleryList); // Right Arrow
+          changeContent(galleryList, false); // Right Arrow
         } else if ((hovered || activeThumbnail) && e.keyCode == delKey) { // Delete
           // if (activeThumbnail) {activeThumbnail.remove(); changeContent(galleryList);} else if (hovered) {hovered.remove();}
-          if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true); changeContent(galleryList);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true);}
+          if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true);}
           galleryList = createGalleryList(activeSpoiler);
           findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
         } else if ((hovered || activeThumbnail) && e.keyCode == kKey) { // Control + K
-          if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false); changeContent(galleryList);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false);}
+          if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false);}
           galleryList = createGalleryList(activeSpoiler);
           findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
         } else if (activeSpoiler && ctrlDown && e.keyCode == cKey) { // Control + C
@@ -628,6 +630,10 @@
           undoAction();
           galleryList = createGalleryList(activeSpoiler);
           findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
+        } else if (e.keyCode == lBracket) {
+          changeContentOffset = -1;
+        } else if (e.keyCode == rBracket) {
+          changeContentOffset = false;
         }
         e.preventDefault();
       }
