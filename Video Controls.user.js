@@ -1,9 +1,16 @@
 // ==UserScript==
 // @name         Video Controls
-// @version      1.0.0
+// @version      1.0.1
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @match        http://*.www.ex.ua/show/*
+// @match        https://*.googlevideo.com/videoplayback?id=*
+// @match        http://*.spankbang.com/*/*/*-240p.mp4?*
+// @match        http://*.spankbang.com/*/*/*-360p.mp4?*
+// @match        http://*.spankbang.com/*/*/*-480p.mp4?*
+// @match        http://*.spankbang.com/*/*/*-720p.mp4?*
+// @match        http://*.spankbang.com/*/*/*-1080p.mp4?*
+// @match        http://*.porndoe.com/movie/*/*/*/*/*/*/*.mp4?*
 // @grant        none
 // @updateURL    https://github.com/Qetuoadgj/HTML/raw/master/Video%20Controls.user.js
 // @icon         https://www.google.com/s2/favicons?domain=ex.ua
@@ -45,7 +52,7 @@
     var volumeText = document.createElement('div');
     volumeText.style.color = 'yellow'; volumeText.style['font-size'] = '72px';
     volumeText.style.position = 'absolute'; volumeText.style['z-index'] = 2147483647; // Always on TOP
-    volumeText.style.top = '0px'; volumeText.style.left = '0px';
+    volumeText.style.top = '0px'; volumeText.style.left = '18px';
     media.parentNode.insertBefore(volumeText, media.nextSibling);
 
     var MouseWheelAudioHandler = function(e) {
@@ -88,7 +95,7 @@
   }
 
   var pageHost = location.hostname, pageURL = location.href, pageTitle = document.title;
-  if ( pageURL.match(/.*?www.ex.ua/i) ) {
-    waitForElement('body > video', false, ResizeVideo, 250, 30);
-  }
+  // if ( pageURL.match(/.*?www.ex.ua/i) ) {
+  waitForElement('body > video', false, ResizeVideo, 250, 30);
+  // }
 })();
