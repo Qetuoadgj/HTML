@@ -94,3 +94,14 @@ body {
   visibility: hidden;
   display: none;
 }
+
+.duplicate_1, .duplicate_2 {
+  border-style: dashed !important; border-width: 2px !important; 
+}
+.duplicate_1 {
+  border-color: antiquewhite;
+}
+.duplicate_2 {
+  border-color: lime;
+}
+
