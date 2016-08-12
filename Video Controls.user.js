@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Video Controls
-// @version      1.0.2
+// @version      1.0.3
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @match        http://*.www.ex.ua/show/*
@@ -12,6 +12,9 @@
 // @match        http://*.spankbang.com/*/*/*-1080p.mp4?*
 // @match        http://*.porndoe.com/movie/*/*/*/*/*/*/*.mp4?*
 // @match        http://*.porntrex.com/media/videos/*/*.mp4
+// @match        http://cdn-hw-hls.xvideos.com/*
+// @match        http://cdn3-l3-cdn.xvideos.com/*
+// @match        http://*.cdn.eporner.com/*/*/*-*p.mp4
 // @grant        none
 // @updateURL    https://github.com/Qetuoadgj/HTML/raw/master/Video%20Controls.user.js
 // @icon         https://www.google.com/s2/favicons?domain=ex.ua
