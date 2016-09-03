@@ -563,9 +563,9 @@
       // var eventList = ["keydown", "keyup"];
       var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFramePlayers, okButton];
 
-      // eventList.forEach(function(event){
-      //   inputList.forEach(function(input){
-      //     input.addEventListener(event,function(){onKeyPress(input, event);},false);
+      // inputList.forEach(function(input){
+      //   eventList.forEach(function(event){
+      //     input.addEventListener(event,function(e){onKeyPress(input, e);},false);
       //   });
       // });
 
