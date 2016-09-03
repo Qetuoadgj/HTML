@@ -560,19 +560,19 @@
         }
       };
 
-      // var eventList = ["keydown", "keyup"];
+      var eventList = ["keydown", "keyup"];
       var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFramePlayers, okButton];
 
-      // inputList.forEach(function(input){
-      //   eventList.forEach(function(event){
-      //     input.addEventListener(event,function(e){onKeyPress(input, e);},false);
-      //   });
-      // });
-
       inputList.forEach(function(input){
-        input.onkeydown = function(e){onKeyPress(input, e);};
-        input.onkeyup = function(e){onKeyPress(input, e);};
+        eventList.forEach(function(event){
+          input.addEventListener(event,function(e){onKeyPress(input, e);},false);
+        });
       });
+
+      // inputList.forEach(function(input){
+      //   input.onkeydown = function(e){onKeyPress(input, e);};
+      //   input.onkeyup = function(e){onKeyPress(input, e);};
+      // });
 
       promptFramePlayers.addEventListener("click", function(){promptFrameCode.value = getEmbedCode();}, false);
 
