@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>SearchEngine.html</title>
+    <!-- <script src=""></script> -->
+    <style>
+      _body, .spoilertop {
+        background: black;
+      }
+
+      div {
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none;   /* Chrome/Safari/Opera */
+        -khtml-user-select: none;    /* Konqueror */
+        -moz-user-select: none;      /* Firefox */
+        -ms-user-select: none;       /* Internet Explorer/Edge */
+        user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+      }
+
+      .background {
+        position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
+      }
+
+      .spoilertop {
+        display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
+      }
+
+      .spoilertop > p {
+        margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
+        display: block;
+        position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+      }
+
+      .spoilertop:hover {
+        border-color: red; border-style: solid; opacity: 1 !important;
+      }
+
+      .spoilertop > img {
+        position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+        z-index: -1;
+        display: none;
+      }
+
+      .spoilerbox {
+        display: none; height: 100%;
+      }
+
+      .wallpaper {
+        position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
+      }
+
+      body {
+        font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
+      }
+    </style>
+    <!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
+    <script>
+    //GLOBAL FUNCTIONS
+    function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
+    Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
+    
+    document.addEventListener("DOMContentLoaded", function() {
+      // GLOBAL VARIABLES
+      var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+      var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+      var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
+      var activeSpoilerButton, activeSpoiler;
+      var activeLinksList = [], activeQueriesList = [];
+      
+      // DOCUMENT FUNCTIONS
+      function buttonClicked(button, buttonsArray, unclick) {
+        if (unclick) {
+          forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
+        } else {
+          forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
+          button.style.removeProperty('opacity');
+        }
+      }
+      function showSpoiler(thisButton, spoiler) {
+        var active = spoiler.isVisible();
+        buttonClicked(thisButton, spoilerButtonsArray);
+        forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
+        if (active) {
+          buttonClicked(thisButton, spoilerButtonsArray, true);
+          activeSpoiler = false;
+          activeLinksList = [];
+          activeQueriesList = [];
+        } else {
+          spoiler.style.display = 'block';
+          activeLinksList = spoiler.querySelectorAll('a');
+          activeQueriesList = [];
+          forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
+          activeSpoiler = spoiler;
+          activeSpoilerButton = thisButton;
+        }
+      }
+      forEach(spoilerButtonsArray, function(index, self) {
+        var spoiler_id = self.getAttribute('spoiler');
+        var spoiler = document.getElementById(spoiler_id);
+        if (spoiler) self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);
+        var image = self.querySelector('img');
+        /*if (!image) {
+          image = document.createElement('img');
+          var imageSrc = self.getAttribute('image');
+          image.setAttribute('src', imageSrc);
+          self.appendChild(image);
+        }*/
+        var title = self.getAttribute('title');
+        if (title) {
+          var text = document.createElement('p');
+          text.innerHTML += title; self.appendChild(text);
+        }
+      });
+      
+      var fontSize = 16;
+      var margin = '5px 0px 0px 0px';
+      var searchField = document.querySelector('#searchField');
+      var linksList = [];
+      var queriesList = [];
+           
+      forEach(searchesArray, function(index, self) {
+        var spoilerbox = self.parentNode;
+        var query = self.text;
+      
+        var d = document.createElement('div');
+        d.style.margin = margin;
+        d.style.display = 'table';
+
+        // d.style['border-color'] = 'grey';
+        // d.style['border-width'] = '1px';
+        // d.style['border-style'] = 'solid';
+
+        d.style.position = 'relative';
+        d.style.height = Math.ceil(fontSize*2)+'px';
+        spoilerbox.appendChild(d);
+
+        var i = document.createElement('img');
+        i.style.position = 'absolute';
+        i.style.top = '0';
+        i.style.bottom = '0';
+        i.style.left = '0';
+        i.style.right = '0';
+        // i.style.width = '50%';
+        i.style.height = '50%';
+        i.style.margin = 'auto 0px';
+        i.src = 'https://www.google.com/s2/favicons?domain=' + query.replace(/^.*?\/\/(.+?\..+?)\/.*/i, '$1');
+        d.appendChild(i);
+
+        var a = self; //document.createElement('a');
+        a.style.display = 'table-cell';
+        a.style["vertical-align"] = 'middle';
+        a.style["padding-left"] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
+        a.style['font-size'] = fontSize+'px';
+        a.style.color = '#086081';
+        a.style.width = 'auto';
+        a.setAttribute('target', '_blank'); // Open in new tab
+        a.setAttribute('href', query);
+        a.text = query;
+        d.appendChild(a);
+
+        linksList.push(a);
+        queriesList.push(query)
+      });           
+      
+      var enterKey = 13, escKey = 27;
+      
+      var onKeyPress = function(e) {
+        e = e || window.event;
+
+        var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
+
+        var query = searchField.value;
+
+        if (e.keyCode == escKey) { // Escape
+        } else if (e.keyCode == enterKey) {
+          activeLinksList.forEach(function(link, index) {link.click();});
+        } else {
+          linksList.forEach(function(link, index) {
+            var ref = queriesList[index].replace('%s', query);
+            link.text = ref;
+            link.href = ref;
+          });
+        }
+      };
+      
+      var eventList = ['keydown', 'keyup', 'change'];
+      var inputList = [searchField];
+
+      inputList.forEach(function(input){
+        eventList.forEach(function(event){
+          input.addEventListener(event,function(e){onKeyPress(e);},false);
+        });
+      });
+    });
+    </script>
+  </head>
+  <body>
+    <!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
+    <div id="galleries">
+      <div class="spoilertop" spoiler="gallery_01" title="Videos" image="https://musicrowgirl.files.wordpress.com/2014/11/music-videos.png"></div>
+      <div class="spoilertop" spoiler="gallery_02" title="Images" image="http://www.enterthemoviezone.com/uploads/1/2/5/2/12525217/8364703_orig.jpg"></div>
+      <div class="spoilertop" spoiler="gallery_03" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
+    </div>
+    <div id="previews">
+      <input id="searchField" type="input" style="font-size: 16px; height: auto; width: 720px; margin: 5px 0px 0px;">
+      <div class="spoilerbox" id="gallery_01">
+        <a>http://sexix.net/?s=%s</a>
+        <a>http://hdpoz.com/?s=%s</a>
+        <a>http://www.porntrex.com/search?search_query=%s&search_type=videos</a>
+        <a>http://porndoe.com/search?keywords=%s</a>
+        <a>http://www.eporner.com/search/%s/</a>
+        <a>http://www.pornerbros.com/search?q=%s</a>
+        <a>http://wixvi.cc/?s=%s</a>
+      </div>
+      <div class="spoilerbox" id="gallery_02">
+        <a>http://www.babesandstars.com/search/?t=models&q=%s</a>
+      </div>
+      <div class="spoilerbox" id="gallery_03" css="min-width: 150px; height: 90px;">
+      </div>
+    </div>
+  </body>
+</html>
