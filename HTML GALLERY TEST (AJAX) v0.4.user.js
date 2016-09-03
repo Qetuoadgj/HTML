@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @namespace    none
-// @version      2.4.3
+// @version      2.4.4
 // @author       Æegir
 // @description  try to take over the world!
 // @match        file:///*/2.0.4.html
@@ -314,11 +314,10 @@
             image = document.createElement('img'); var imageSrc = self.getAttribute('image'); var contentSrc = self.getAttribute('content');
             image.setAttribute('src', imageSrc || contentSrc);
             self.appendChild(image);
-
-            var text, type;
-            //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
-            var title = self.getAttribute('title'); if (title) {text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
           }
+          var text, type;
+          //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
+          var title = self.getAttribute('title'); if (title) {text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
         });
 
         findDuplicates(activeThumbnails);
@@ -648,9 +647,8 @@
         image = document.createElement('img'); var imageSrc = self.getAttribute('image');
         image.setAttribute('src', imageSrc);
         self.appendChild(image);
-
-        var title = self.getAttribute('title'); if (title) {var text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
       }
+      var title = self.getAttribute('title'); if (title) {var text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
     });
     forEach(spoilersArray, function(index, self) {
       var spoiler_id = self.getAttribute('id');
