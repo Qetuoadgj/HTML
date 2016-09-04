@@ -315,7 +315,7 @@
             var imageSrc = self.getAttribute('image');
             var contentSrc = self.getAttribute('content');
             var title = self.getAttribute('title');
-            if (imageSrc) {
+            if (imageSrc || contentSrc) {
               image = document.createElement('img');
               image.setAttribute('src', imageSrc || contentSrc);
               self.appendChild(image);
@@ -324,7 +324,7 @@
               //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
               var text = document.createElement('p');
               text.innerHTML += title; self.appendChild(text);
-              if (!imageSrc) text.setAttribute('class', 'forced');
+              if (!image) text.setAttribute('class', 'forced');
             }
           }
         });
@@ -664,7 +664,7 @@
         if (title) {
           var text = document.createElement('p');
           text.innerHTML += title; self.appendChild(text);
-          if (!imageSrc) text.setAttribute('class', 'forced');
+          if (!image) text.setAttribute('class', 'forced');
         }
       }
     });
