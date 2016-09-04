@@ -3,65 +3,66 @@
   <head>
     <meta charset="UTF-8">
     <title>SearchEngine.html</title>
+    <link rel="icon" type="image/png" href="http://iconspot.ru/files/87916.png"/>
     <!-- <script src=""></script> -->
     <style>
-      .spoilertop {
-        background: black;
-      }
+    .spoilertop {
+      background: black;
+    }
 
-      div {
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none;   /* Chrome/Safari/Opera */
-        -khtml-user-select: none;    /* Konqueror */
-        -moz-user-select: none;      /* Firefox */
-        -ms-user-select: none;       /* Internet Explorer/Edge */
-        user-select: none;           /* Non-prefixed version, currently not supported by any browser */
-      }
+    div {
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none;   /* Chrome/Safari/Opera */
+      -khtml-user-select: none;    /* Konqueror */
+      -moz-user-select: none;      /* Firefox */
+      -ms-user-select: none;       /* Internet Explorer/Edge */
+      user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+    }
 
-      .background {
-        position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
-      }
+    .background {
+      position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
+    }
 
-      .spoilertop {
-        display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
-      }
+    .spoilertop {
+      display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
+    }
 
-      .spoilertop > p {
-        margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
-      }
-      
-      .spoilertop > p.forced {
-        display: block;
-        position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-      }
+    .spoilertop > p {
+      margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
+    }
 
-      .spoilertop:hover {
-        border-color: red; border-style: solid; opacity: 1 !important;
-      }
+    .spoilertop > p.forced {
+      display: block;
+      position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+    }
 
-      .spoilertop > img {
-        position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-        z-index: -1;
-      }
+    .spoilertop:hover {
+      border-color: red; border-style: solid; opacity: 1 !important;
+    }
 
-      .spoilerbox {
-        display: none; height: 100%;
-      }
+    .spoilertop > img {
+      position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+      z-index: -1;
+    }
 
-      .wallpaper {
-        position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
-      }
+    .spoilerbox {
+      display: none; height: 100%;
+    }
 
-      body {
-        font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
-      }
+    .wallpaper {
+      position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
+    }
+
+    body {
+      font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
+    }
     </style>
     <!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
     <script>
     //GLOBAL FUNCTIONS
     function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
     Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
-    
+
     document.addEventListener("DOMContentLoaded", function() {
       // GLOBAL VARIABLES
       var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
@@ -69,7 +70,7 @@
       var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
       var activeSpoilerButton, activeSpoiler;
       var activeLinksList = [], activeQueriesList = [];
-      
+
       // DOCUMENT FUNCTIONS
       function buttonClicked(button, buttonsArray, unclick) {
         if (unclick) {
@@ -117,17 +118,17 @@
           }
         }
       });
-      
+
       var fontSize = 16;
       var margin = '5px 0px 0px 0px';
       var searchField = document.querySelector('#searchField');
       var linksList = [];
       var queriesList = [];
-           
+
       forEach(searchesArray, function(index, self) {
         var spoilerbox = self.parentNode;
         var query = self.text;
-      
+
         var d = document.createElement('div');
         d.style.margin = margin;
         d.style.display = 'table';
@@ -166,10 +167,10 @@
 
         linksList.push(a);
         queriesList.push(query)
-      });           
-      
+      });
+
       var enterKey = 13, escKey = 27;
-      
+
       var onKeyPress = function(e) {
         e = e || window.event;
 
@@ -188,7 +189,7 @@
           });
         }
       };
-      
+
       var eventList = ['keydown', 'keyup', 'change'];
       var inputList = [searchField];
 
