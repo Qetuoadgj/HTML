@@ -21,7 +21,11 @@ div {
 
 .spoilertop > p, .thumbnail > p {
   margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
-  /* position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%); */
+}
+
+.spoilertop > p.forced, .thumbnail > p.forced  {
+  display: block;
+  position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
 }
 
 .spoilertop:hover, .thumbnail:hover {

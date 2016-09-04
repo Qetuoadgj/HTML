@@ -310,14 +310,23 @@
       if (active) {buttonClicked(thisButton, spoilerButtonsArray, true); activeSpoiler = false;} else {
         spoiler.style.display = 'block';
         var activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
-          var image = self.querySelector('img'); if (!image) {
-            image = document.createElement('img'); var imageSrc = self.getAttribute('image'); var contentSrc = self.getAttribute('content');
-            image.setAttribute('src', imageSrc || contentSrc);
-            self.appendChild(image);
+          var image = self.querySelector('img');
+          if (!image) {
+            var imageSrc = self.getAttribute('image');
+            var contentSrc = self.getAttribute('content');
+            var title = self.getAttribute('title');
+            if (imageSrc) {
+              image = document.createElement('img');
+              image.setAttribute('src', imageSrc || contentSrc);
+              self.appendChild(image);
+            }
+            if (title) {
+              //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
+              var text = document.createElement('p');
+              text.innerHTML += title; self.appendChild(text);
+              if (!imageSrc) text.setAttribute('class', 'forced');
+            }
           }
-          var text, type;
-          //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
-          var title = self.getAttribute('title'); if (title) {text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
         });
 
         findDuplicates(activeThumbnails);
@@ -643,12 +652,21 @@
     forEach(spoilerButtonsArray, function(index, self) {
       var spoiler_id = self.getAttribute('spoiler'); var spoiler = document.getElementById(spoiler_id);
       if (spoiler) {self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);}
-      var image = self.querySelector('img'); if (!image) {
-        image = document.createElement('img'); var imageSrc = self.getAttribute('image');
-        image.setAttribute('src', imageSrc);
-        self.appendChild(image);
+      var image = self.querySelector('img');
+      if (!image) {
+        var imageSrc = self.getAttribute('image');
+        var title = self.getAttribute('title');
+        if (imageSrc) {
+          image = document.createElement('img');
+          image.setAttribute('src', imageSrc);
+          self.appendChild(image);
+        }
+        if (title) {
+          var text = document.createElement('p');
+          text.innerHTML += title; self.appendChild(text);
+          if (!imageSrc) text.setAttribute('class', 'forced');
+        }
       }
-      var title = self.getAttribute('title'); if (title) {var text = document.createElement('p'); text.innerHTML += title; self.appendChild(text);}
     });
     forEach(spoilersArray, function(index, self) {
       var spoiler_id = self.getAttribute('id');

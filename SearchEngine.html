@@ -28,6 +28,9 @@
 
       .spoilertop > p {
         margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
+      }
+      
+      .spoilertop > p.forced {
         display: block;
         position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
       }
@@ -39,7 +42,6 @@
       .spoilertop > img {
         position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
         z-index: -1;
-        display: none;
       }
 
       .spoilerbox {
@@ -100,16 +102,19 @@
         var spoiler = document.getElementById(spoiler_id);
         if (spoiler) self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);
         var image = self.querySelector('img');
-        /*if (!image) {
-          image = document.createElement('img');
+        if (!image) {
           var imageSrc = self.getAttribute('image');
-          image.setAttribute('src', imageSrc);
-          self.appendChild(image);
-        }*/
-        var title = self.getAttribute('title');
-        if (title) {
-          var text = document.createElement('p');
-          text.innerHTML += title; self.appendChild(text);
+          var title = self.getAttribute('title');
+          if (imageSrc) {
+            image = document.createElement('img');
+            image.setAttribute('src', imageSrc);
+            self.appendChild(image);
+          }
+          if (title) {
+            var text = document.createElement('p');
+            text.innerHTML += title; self.appendChild(text);
+            if (!imageSrc) text.setAttribute('class', 'forced');
+          }
         }
       });
       
@@ -198,9 +203,11 @@
   <body>
     <!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
     <div id="galleries">
-      <div class="spoilertop" spoiler="gallery_01" title="Videos" image="https://musicrowgirl.files.wordpress.com/2014/11/music-videos.png"></div>
-      <div class="spoilertop" spoiler="gallery_02" title="Images" image="http://www.enterthemoviezone.com/uploads/1/2/5/2/12525217/8364703_orig.jpg"></div>
+      <div class="spoilertop" spoiler="gallery_01" title="Videos" image=""></div>
+      <div class="spoilertop" spoiler="gallery_02" title="Images" image=""></div>
       <div class="spoilertop" spoiler="gallery_03" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
+      <div class="spoilertop" spoiler="gallery_04" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150"></div>
+      <div class="spoilertop" spoiler="gallery_05" title="Google" image="http://iconspot.ru/files/87916.png"></div>
     </div>
     <div id="previews">
       <input id="searchField" type="input" style="font-size: 16px; height: auto; width: 720px; margin: 5px 0px 0px;">
@@ -216,7 +223,15 @@
       <div class="spoilerbox" id="gallery_02">
         <a>http://www.babesandstars.com/search/?t=models&q=%s</a>
       </div>
-      <div class="spoilerbox" id="gallery_03" css="min-width: 150px; height: 90px;">
+      <div class="spoilerbox" id="gallery_03">
+        <a>http://fs.to/search.aspx?search=%s</a>
+        <a>http://www.ex.ua/search?s=%s</a>
+      </div>
+      <div class="spoilerbox" id="gallery_04">
+        <a>http://xrutor.org/search/%s/</a>
+      </div>
+      <div class="spoilerbox" id="gallery_05">
+        <a>https://encrypted.google.com/#q=%s</a>
       </div>
     </div>
   </body>
