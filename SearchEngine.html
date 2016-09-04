@@ -67,9 +67,25 @@
       // GLOBAL VARIABLES
       var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
       var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
-      var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
       var activeSpoilerButton, activeSpoiler;
       var activeLinksList = [], activeQueriesList = [];
+
+      forEach(spoilersArray, function(index, self) {
+        var spoiler = self;
+        var text = spoiler.innerText;
+        var queriesList = text.split("\n")
+        spoiler.innerHTML = '';
+        forEach(queriesList, function(index, self) {
+          var query = self.trim()
+          if (query !== '') {
+            var a = document.createElement('a');
+            a.text = query.replace('<a>', '').replace('</a>', '');
+            spoiler.appendChild(a);
+          }
+        });
+      });
+      
+      var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
 
       // DOCUMENT FUNCTIONS
       function buttonClicked(button, buttonsArray, unclick) {
@@ -213,26 +229,28 @@
     <div id="previews">
       <input id="searchField" type="input" style="font-size: 16px; height: auto; width: 720px; margin: 5px 0px 0px;">
       <div class="spoilerbox" id="gallery_01">
-        <a>http://sexix.net/?s=%s</a>
-        <a>http://hdpoz.com/?s=%s</a>
-        <a>http://www.porntrex.com/search?search_query=%s&search_type=videos</a>
-        <a>http://porndoe.com/search?keywords=%s</a>
-        <a>http://www.eporner.com/search/%s/</a>
-        <a>http://www.pornerbros.com/search?q=%s</a>
-        <a>http://wixvi.cc/?s=%s</a>
+        http://sexix.net/?s=%s
+        http://hdpoz.com/?s=%s
+        http://www.porntrex.com/search?search_query=%s&search_type=videos
+        http://porndoe.com/search?keywords=%s
+        http://www.eporner.com/search/%s/
+        http://www.pornerbros.com/search?q=%s
+        http://wixvi.cc/?s=%s
       </div>
       <div class="spoilerbox" id="gallery_02">
-        <a>http://www.babesandstars.com/search/?t=models&q=%s</a>
+        http://www.babesandstars.com/search/?t=models&q=%s
+        http://www.definebabe.com/search/?words=%s&search=&type=1
       </div>
       <div class="spoilerbox" id="gallery_03">
-        <a>http://fs.to/search.aspx?search=%s</a>
-        <a>http://www.ex.ua/search?s=%s</a>
+        http://fs.to/search.aspx?search=%s
+        http://www.ex.ua/search?s=%s
       </div>
       <div class="spoilerbox" id="gallery_04">
-        <a>http://xrutor.org/search/%s/</a>
+        http://xrutor.org/search/%s/
       </div>
       <div class="spoilerbox" id="gallery_05">
-        <a>https://encrypted.google.com/#q=%s</a>
+        https://encrypted.google.com/#q=%s
+        https://www.youtube.com/results?search_query=%s
       </div>
     </div>
   </body>
