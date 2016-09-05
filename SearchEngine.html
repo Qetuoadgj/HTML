@@ -84,7 +84,7 @@
           }
         });
       });
-      
+
       var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
 
       // DOCUMENT FUNCTIONS
@@ -140,13 +140,15 @@
       var searchField = document.querySelector('#searchField');
       var linksList = [];
       var queriesList = [];
-      
+
       var shortNames = true;
 
       forEach(searchesArray, function(index, self) {
         var spoilerbox = self.parentNode;
         var query = self.text;
-        var domain = query.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
+        var domain = query;
+        domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
+        domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
 
         var d = document.createElement('div');
         d.style.margin = margin;
