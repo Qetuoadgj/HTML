@@ -140,10 +140,13 @@
       var searchField = document.querySelector('#searchField');
       var linksList = [];
       var queriesList = [];
+      
+      var shortNames = true;
 
       forEach(searchesArray, function(index, self) {
         var spoilerbox = self.parentNode;
         var query = self.text;
+        var domain = query.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
 
         var d = document.createElement('div');
         d.style.margin = margin;
@@ -166,7 +169,7 @@
         // i.style.width = '50%';
         i.style.height = '50%';
         i.style.margin = 'auto 0px';
-        i.src = 'https://www.google.com/s2/favicons?domain=' + query.replace(/^.*?\/\/(.+?\..+?)\/.*/i, '$1');
+        i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
         d.appendChild(i);
 
         var a = self; //document.createElement('a');
@@ -177,8 +180,8 @@
         a.style.color = '#086081';
         a.style.width = 'auto';
         a.setAttribute('target', '_blank'); // Open in new tab
-        a.setAttribute('href', query);
-        a.text = query;
+        a.setAttribute('href', query.replace('%s', searchField.value));
+        a.text = shortNames ? domain : query;
         d.appendChild(a);
 
         linksList.push(a);
@@ -200,7 +203,7 @@
         } else {
           linksList.forEach(function(link, index) {
             var ref = queriesList[index].replace('%s', query);
-            link.text = ref;
+            if (!shortNames) link.text = ref;
             link.href = ref;
           });
         }
