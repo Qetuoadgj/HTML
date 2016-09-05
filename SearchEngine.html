@@ -135,13 +135,20 @@
         }
       });
 
-      var fontSize = 16;
+      var bodyStyle = window.getComputedStyle(document.body, null);
+      var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
       var margin = '5px 0px 0px 0px';
       var searchField = document.querySelector('#searchField');
       var linksList = [];
       var queriesList = [];
 
       var shortNames = true;
+      
+      searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
+      searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
+      searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
+      searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
+      // searchField.style.color = bodyStyle.getPropertyValue('color');
 
       forEach(searchesArray, function(index, self) {
         var spoilerbox = self.parentNode;
