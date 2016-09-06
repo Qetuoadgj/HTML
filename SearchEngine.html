@@ -6,231 +6,245 @@
     <link rel="icon" type="image/png" href="http://iconspot.ru/files/87916.png"/>
     <!-- <script src=""></script> -->
     <style>
-    .spoilertop {
+      .spoilertop {
       background: black;
-    }
-
-    div {
+      }
+      
+      div {
       -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none;   /* Chrome/Safari/Opera */
       -khtml-user-select: none;    /* Konqueror */
       -moz-user-select: none;      /* Firefox */
       -ms-user-select: none;       /* Internet Explorer/Edge */
       user-select: none;           /* Non-prefixed version, currently not supported by any browser */
-    }
-
-    .background {
+      }
+      
+      .background {
       position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
-    }
-
-    .spoilertop {
+      }
+      
+      .spoilertop {
       display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
-    }
-
-    .spoilertop > p {
+      }
+      
+      .spoilertop > p {
       margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
-    }
-
-    .spoilertop > p.forced {
+      }
+      
+      .spoilertop > p.forced {
       display: block;
       position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-    }
-
-    .spoilertop:hover {
+      }
+      
+      .spoilertop:hover {
       border-color: red; border-style: solid; opacity: 1 !important;
-    }
-
-    .spoilertop > img {
+      }
+      
+      .spoilertop > img {
       position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
       z-index: -1;
-    }
-
-    .spoilerbox {
+      }
+      
+      .spoilerbox {
       display: none; height: 100%;
-    }
-
-    .wallpaper {
+      }
+      
+      .wallpaper {
       position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
-    }
-
-    body {
+      }
+      
+      body {
       font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
-    }
-    
-    .spoilerbox > div > a:not(:hover) {
+      }
+      
+      .spoilerbox > div > a:not(:hover) {
       text-decoration: none;
-    }
+      }
     </style>
     <!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
     <script>
-    //GLOBAL FUNCTIONS
-    function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
-    Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
+      //GLOBAL FUNCTIONS
+      function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
+      Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
 
-    document.addEventListener("DOMContentLoaded", function() {
-      // GLOBAL VARIABLES
-      var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
-      var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
-      var activeSpoilerButton, activeSpoiler;
-      var activeLinksList = [], activeQueriesList = [];
+      document.addEventListener("DOMContentLoaded", function() {
+        // GLOBAL VARIABLES
+        var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+        var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+        var activeSpoilerButton, activeSpoiler;
+        var activeLinksList = [], activeQueriesList = [];
 
-      forEach(spoilersArray, function(index, self) {
-        var spoiler = self;
-        var text = spoiler.innerText;
-        var queriesList = text.split("\n")
-        spoiler.innerHTML = '';
-        forEach(queriesList, function(index, self) {
-          var query = self.trim()
-          if (query !== '') {
-            var a = document.createElement('a');
-            a.text = query.replace('<a>', '').replace('</a>', '');
-            spoiler.appendChild(a);
-          }
-        });
-      });
-
-      var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
-
-      // DOCUMENT FUNCTIONS
-      function buttonClicked(button, buttonsArray, unclick) {
-        if (unclick) {
-          forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
-        } else {
-          forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
-          button.style.removeProperty('opacity');
-        }
-      }
-      function showSpoiler(thisButton, spoiler) {
-        var active = spoiler.isVisible();
-        buttonClicked(thisButton, spoilerButtonsArray);
-        forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
-        if (active) {
-          buttonClicked(thisButton, spoilerButtonsArray, true);
-          activeSpoiler = false;
-          activeLinksList = [];
-          activeQueriesList = [];
-        } else {
-          spoiler.style.display = 'block';
-          activeLinksList = spoiler.querySelectorAll('a');
-          activeQueriesList = [];
-          forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
-          activeSpoiler = spoiler;
-          activeSpoilerButton = thisButton;
-        }
-      }
-      forEach(spoilerButtonsArray, function(index, self) {
-        var spoiler_id = self.getAttribute('spoiler');
-        var spoiler = document.getElementById(spoiler_id);
-        if (spoiler) self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);
-        var image = self.querySelector('img');
-        if (!image) {
-          var imageSrc = self.getAttribute('image');
-          var title = self.getAttribute('title');
-          if (imageSrc) {
-            image = document.createElement('img');
-            image.setAttribute('src', imageSrc);
-            self.appendChild(image);
-          }
-          if (title) {
-            var text = document.createElement('p');
-            text.innerHTML += title; self.appendChild(text);
-            if (!imageSrc) text.setAttribute('class', 'forced');
-          }
-        }
-      });
-
-      var bodyStyle = window.getComputedStyle(document.body, null);
-      var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
-      var margin = '5px 0px 0px 0px';
-      var searchField = document.querySelector('#searchField');
-      var linksList = [];
-      var queriesList = [];
-
-      var shortNames = true;
-      
-      searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
-      searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
-      searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
-      searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
-      // searchField.style.color = bodyStyle.getPropertyValue('color');
-
-      forEach(searchesArray, function(index, self) {
-        var spoilerbox = self.parentNode;
-        var query = self.text;
-        var domain = query;
-        domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
-        domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
-
-        var d = document.createElement('div');
-        d.style.margin = margin;
-        d.style.display = 'table';
-
-        // d.style['border-color'] = 'grey';
-        // d.style['border-width'] = '1px';
-        // d.style['border-style'] = 'solid';
-
-        d.style.position = 'relative';
-        d.style.height = Math.ceil(fontSize*2)+'px';
-        spoilerbox.appendChild(d);
-
-        var i = document.createElement('img');
-        i.style.position = 'absolute';
-        i.style.top = '0';
-        i.style.bottom = '0';
-        i.style.left = '0';
-        i.style.right = '0';
-        // i.style.width = '50%';
-        i.style.height = '50%';
-        i.style.margin = 'auto 0px';
-        i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
-        d.appendChild(i);
-
-        var a = self; //document.createElement('a');
-        a.style.display = 'table-cell';
-        a.style["vertical-align"] = 'middle';
-        a.style["padding-left"] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
-        a.style['font-size'] = fontSize+'px';
-        a.style.color = '#086081';
-        a.style.width = 'auto';
-        a.setAttribute('target', '_blank'); // Open in new tab
-        a.setAttribute('href', query.replace('%s', searchField.value));
-        a.text = shortNames ? domain : query;
-        d.appendChild(a);
-
-        linksList.push(a);
-        queriesList.push(query)
-      });
-
-      var enterKey = 13, escKey = 27;
-
-      var onKeyPress = function(e) {
-        e = e || window.event;
-
-        var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
-
-        var query = searchField.value;
-
-        if (e.keyCode == escKey) { // Escape
-        } else if (e.keyCode == enterKey) {
-          activeLinksList.forEach(function(link, index) {link.click();});
-        } else {
-          linksList.forEach(function(link, index) {
-            var ref = queriesList[index].replace('%s', query);
-            if (!shortNames) link.text = ref;
-            link.href = ref;
+        forEach(spoilersArray, function(index, self) {
+          var spoiler = self;
+          var text = spoiler.innerText;
+          var queriesList = text.split("\n");
+          spoiler.innerHTML = '';
+          forEach(queriesList, function(index, self) {
+            var query = self.trim();
+            if (query !== '') {
+              var a = document.createElement('a');
+              a.text = query.replace('<a>', '').replace('</a>', '');
+              spoiler.appendChild(a);
+            }
           });
+        });
+
+        var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
+
+        // DOCUMENT FUNCTIONS
+        function buttonClicked(button, buttonsArray, unclick) {
+          if (unclick) {
+            forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
+          } else {
+            forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
+            button.style.removeProperty('opacity');
+          }
         }
-      };
+        function showSpoiler(thisButton, spoiler) {
+          var active = spoiler.isVisible();
+          buttonClicked(thisButton, spoilerButtonsArray);
+          forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
+          if (active) {
+            buttonClicked(thisButton, spoilerButtonsArray, true);
+            activeSpoiler = false;
+            activeLinksList = [];
+            activeQueriesList = [];
+          } else {
+            spoiler.style.display = 'block';
+            activeLinksList = spoiler.querySelectorAll('a');
+            activeQueriesList = [];
+            forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
+            activeSpoiler = spoiler;
+            activeSpoilerButton = thisButton;
+          }
+          lastClicked = null;
+        }
+        forEach(spoilerButtonsArray, function(index, self) {
+          var spoiler_id = self.getAttribute('spoiler');
+          var spoiler = document.getElementById(spoiler_id);
+          if (spoiler) self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);
+          var image = self.querySelector('img');
+          if (!image) {
+            var imageSrc = self.getAttribute('image');
+            var title = self.getAttribute('title');
+            if (imageSrc) {
+              image = document.createElement('img');
+              image.setAttribute('src', imageSrc);
+              self.appendChild(image);
+            }
+            if (title) {
+              var text = document.createElement('p');
+              text.innerHTML += title; self.appendChild(text);
+              if (!imageSrc) text.setAttribute('class', 'forced');
+            }
+          }
+        });
 
-      var eventList = ['keydown', 'keyup', 'change'];
-      var inputList = [searchField];
+        var bodyStyle = window.getComputedStyle(document.body, null);
+        var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
+        var margin = '5px 0px 0px 0px';
+        var searchField = document.querySelector('#searchField');
+        var linksList = [];
+        var queriesList = [];
 
-      inputList.forEach(function(input){
-        eventList.forEach(function(event){
-          input.addEventListener(event,function(e){onKeyPress(e);},false);
+        var shortNames = true;
+
+        var lastClicked;
+
+        searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
+        searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
+        searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
+        searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
+        // searchField.style.color = bodyStyle.getPropertyValue('color');
+
+        forEach(searchesArray, function(index, self) {
+          var spoilerbox = self.parentNode;
+          var query = self.text;
+          var domain = query;
+          domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
+          domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
+
+          var d = document.createElement('div');
+          d.style.margin = margin;
+          d.style.display = 'table';
+
+          // d.style['border-color'] = 'grey';
+          // d.style['border-width'] = '1px';
+          // d.style['border-style'] = 'solid';
+
+          d.style.position = 'relative';
+          d.style.height = Math.ceil(fontSize*2)+'px';
+          spoilerbox.appendChild(d);
+
+          var i = document.createElement('img');
+          i.style.position = 'absolute';
+          i.style.top = '0';
+          i.style.bottom = '0';
+          i.style.left = '0';
+          i.style.right = '0';
+          // i.style.width = '50%';
+          i.style.height = '50%';
+          i.style.margin = 'auto 0px';
+          i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
+          d.appendChild(i);
+
+          var a = self; //document.createElement('a');
+          a.style.display = 'table-cell';
+          a.style["vertical-align"] = 'middle';
+          a.style["padding-left"] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
+          a.style['font-size'] = fontSize+'px';
+          a.style.color = '#086081';
+          a.style.width = 'auto';
+          a.setAttribute('target', '_blank'); // Open in new tab
+          a.setAttribute('href', query.replace('%s', searchField.value));
+          a.text = shortNames ? domain : query;
+          d.appendChild(a);
+
+          a.addEventListener('click',function(e){lastClicked = this;},false);
+
+          linksList.push(a);
+          queriesList.push(query);
+        });
+
+        var enterKey = 13, escKey = 27;
+
+        var onEvent = function(e) {
+          e = e || window.event;
+
+          var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
+
+          var query = searchField.value;
+
+          if (e.type == 'change') {
+            query = query.replace(/-/g, ' ');
+            searchField.value = query;
+          }
+
+          if (e.keyCode == escKey) { // Escape
+          } else if (e.keyCode == enterKey) {
+            if (ctrlDown) {
+              activeLinksList.forEach(function(link, index) {link.click();});
+            } else {
+              if (lastClicked) lastClicked.click();
+            }
+          } else {
+            linksList.forEach(function(link, index) {
+              var ref = queriesList[index].replace('%s', query);
+              if (!shortNames) link.text = ref;
+              link.href = ref;
+            });
+          }
+        };
+
+        var eventList = ['keydown', 'keyup', 'change'];
+        var inputList = [searchField];
+
+        inputList.forEach(function(input){
+          eventList.forEach(function(event){
+            input.addEventListener(event,function(e){onEvent(e);},false);
+          });
         });
       });
-    });
     </script>
   </head>
   <body>
@@ -265,11 +279,11 @@
       </div>
       <div class="spoilerbox" id="gallery_03">
         http://fs.to/search.aspx?search=%s
-        http://www.ex.ua/search?s=%s
-        http://www.ex.ua/search?s=md5:%s
       </div>
       <div class="spoilerbox" id="gallery_04">
         http://xrutor.org/search/%s/
+        http://www.ex.ua/search?s=%s
+        http://www.ex.ua/search?s=md5:%s
       </div>
       <div class="spoilerbox" id="gallery_05">
         https://encrypted.google.com/#q=%s
