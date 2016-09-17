@@ -51,6 +51,7 @@
       
       .wallpaper {
       position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
+      z-index: -1;
       }
       
       body {
@@ -59,6 +60,10 @@
       
       .spoilerbox > div > a:not(:hover) {
       text-decoration: none;
+      }
+      
+      .spoilerbox a {
+        color: #086081;
       }
     </style>
     <!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
@@ -192,8 +197,8 @@
           a.style.display = 'table-cell';
           a.style["vertical-align"] = 'middle';
           a.style["padding-left"] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
-          a.style['font-size'] = fontSize+'px';
-          a.style.color = '#086081';
+          //a.style['font-size'] = fontSize+'px'; // styles
+          //a.style.color = '#086081'; // styles
           a.style.width = 'auto';
           a.setAttribute('target', '_blank'); // Open in new tab
           a.setAttribute('href', query.replace('%s', searchField.value));
@@ -250,13 +255,39 @@
   <body>
     <!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
     <div id="galleries">
+      <div class="spoilertop" spoiler="videos" title="Videos" image=""></div>
+      <div class="spoilertop" spoiler="images" title="Images" image=""></div>
       <div class="spoilertop" spoiler="movies" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
       <div class="spoilertop" spoiler="torrents" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150"></div>
+      <div class="spoilertop" spoiler="software" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png"></div>
+      <div class="spoilertop" spoiler="handbooks" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png"></div>
       <div class="spoilertop" spoiler="global" title="Global" image="http://iconspot.ru/files/87916.png"></div>
       <div class="spoilertop" spoiler="wow" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png"></div>
     </div>
     <div id="previews">
       <input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
+      <div class="spoilerbox" id="videos">
+        http://sexix.net/?s=%s
+        http://hdpoz.com/?s=%s
+        http://www.porntrex.com/search?search_query=%s&search_type=videos
+        http://www.hdporncollections.com/?s=%s
+        http://www.eporner.com/search/%s/
+        http://porndoe.com/search?keywords=%s
+        http://www.pornerbros.com/search?q=%s
+        http://wixvi.cc/?s=%s
+        http://www.xvideos.com/?k=%s
+        http://www.pornhub.com/video/search?search=%s
+      </div>
+      <div class="spoilerbox" id="images">
+        http://www.babesandstars.com/search/?t=models&q=%s
+        http://www.definebabe.com/search/?words=%s&search=&type=1
+        http://www.pichunter.com/search/%s
+        http://www.imagefap.com/gallery.php?search=%s
+        http://webbabe.ws/search/?q=%s
+        http://www.sex.com/search/pictures?query=%s
+        http://juicygif.com/gallery/search?SearchText=%s
+        http://konachan.com/post?tags=%s
+      </div>
       <div class="spoilerbox" id="movies">
         http://fs.to/search.aspx?search=%s
       </div>
@@ -265,12 +296,16 @@
         http://www.ex.ua/search?s=%s
         http://www.ex.ua/search?s=md5:%s
       </div>
+      <div class="spoilerbox" id="software">
+        http://alternativeto.net/browse/search?q=%s
+      </div>
+      <div class="spoilerbox" id="handbooks">
+        http://google.com/search?q=%s&as_sitesearch=w3schools.com
+      </div>
       <div class="spoilerbox" id="global">
         https://encrypted.google.com/#q=%s
+        http://wikipedia.org/w/index.php?search=%s&title=Special%3ASearch
         https://www.youtube.com/results?search_query=%s
-        http://en.wikipedia.org/w/index.php?search=%s&title=Special%3ASearch
-        http://alternativeto.net/browse/search?q=%s
-        http://google.com/search?q=%s&as_sitesearch=w3schools.com
         http://www.liveleak.com/browse?q=%s&safe_mode=off
       </div>
       <div class="spoilerbox" id="wow">
