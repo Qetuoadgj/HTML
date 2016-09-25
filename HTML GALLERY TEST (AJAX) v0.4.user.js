@@ -1,15 +1,16 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
-// @namespace    none
+// @icon         http://rddnickel.com/images/HTML%20icon.png
 // @version      2.4.4
-// @author       Æegir
-// @description  try to take over the world!
+// @description  Pure JavaScript version.
+// @author       Ægir
+// @grant        unsafeWindow
+// @run-at       document-end
+// @noframes
+// @downloadURL  hhttps://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
+// @homepageURL  https://github.com/Qetuoadgj/HTML
 // @match        file:///*/2.0.4.html
 // @match        file:///*/2.0.2.html
-// @grant        unsafeWindow
-// updateURL     https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
-// @icon         http://rddnickel.com/images/HTML%20icon.png
-// @run-at       document-start
 // ==/UserScript==
 
 // Require chrome extension:
