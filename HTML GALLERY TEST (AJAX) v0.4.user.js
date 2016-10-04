@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.4.4
+// @version      2.4.5
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -161,7 +161,7 @@
     var activeSpoilerButton, activeSpoiler, activeThumbnail, activeOutput;
     var backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
     var outputsMinimized;
-    var activeContent;
+    // var activeContent;
     var changeContentOffset;
 
     // DOCUMENT FUNCTIONS
@@ -174,7 +174,7 @@
     function resetContentOutputs() {
       iframeOutput.src = ''; imgOutput.src = ''; objectOutput.data = ''; objectFlashvars.value = '';
       forEach(outputsArray, function(index, self) {self.style.removeProperty('display');});
-      activeOutput = false; activeThumbnail = false; activeContent = false;
+      activeOutput = false; activeThumbnail = false; // activeContent = false;
     }
 
     function minimizeContentOutputs() {
@@ -249,7 +249,7 @@
 
       content = appendFlashVars(content, player);
 
-      var active = (content == activeContent); // global
+      var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
       if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
         resetContentOutputs();
         setTimeout(function(){
@@ -263,25 +263,37 @@
 
         setTimeout(function(){outputFrame.style.display = 'block';}, 10);
 
-        activeThumbnail = thisThumbnail; activeOutput = outputFrame; activeContent = content;
+        activeThumbnail = thisThumbnail; activeOutput = outputFrame; // activeContent = content;
       }
     }
 
     function createGalleryList(gallery) {
       var galleryList = [];
       var thumbnails = gallery.querySelectorAll('.thumbnail');
-      forEach(thumbnails, function(index, self) {if (isVisible(self)) {var content = self.getAttribute('content'); content = appendFlashVars(content); galleryList.push(content);}});
+      // forEach(thumbnails, function(index, self) {if (isVisible(self)) {var content = self.getAttribute('content'); content = appendFlashVars(content); galleryList.push(content);}});
+      forEach(thumbnails, function(index, self) {if (isVisible(self)) galleryList.push(self);});
       return galleryList;
     }
 
     function changeContent(galleryList, delta) {
-      if (activeOutput) {
+      /*if (activeOutput) {
         // global activeContent
         var galleryContent = galleryList[galleryList.indexOf(activeContent) + (delta || 1)] || galleryList[delta ? galleryList.length - 1 : 0];
-        var activeThumbnailsArray = activeSpoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnailsArray, function(index, self) {
-          var content = self.getAttribute('content'); content = appendFlashVars(content);
-          if (content == galleryContent && self !== activeThumbnail) {self.click();}
+        var activeThumbnailsArray = activeSpoiler.querySelectorAll('.thumbnail');
+        var matched;
+        forEach(activeThumbnailsArray, function(index, self) {
+          if (!matched) {
+            var content = self.getAttribute('content');
+            content = appendFlashVars(content);
+            matched = (content == galleryContent && self !== activeThumbnail);
+            if (matched) self.click();
+          }
         });
+      }*/
+
+      if (activeOutput) {
+        var galleryThumbnail = galleryList[galleryList.indexOf(activeThumbnail) + (delta || 1)] || galleryList[delta ? galleryList.length - 1 : 0];
+        galleryThumbnail.click();
       }
     }
 
