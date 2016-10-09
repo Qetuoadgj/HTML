@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.4.5
+// @version      2.4.6
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -127,6 +127,10 @@
     return this.split(' ').map(capFirst).join(' ');
   };
 
+  String.prototype.toCamelCase = function() {
+    return this.replace(/\W+(.)/g, function(match, chr) {return chr.toUpperCase();});
+  };
+
   String.prototype.replaceAll = function (find, replace) {
     var str = this; while( str.indexOf(find) > -1) {str = str.replace(find, replace);}
     return str;
@@ -149,7 +153,7 @@
 
   document.addEventListener("DOMContentLoaded", function() {
     // GLOBAL VARIABLES
-    var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+    // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop'); // moved down
     var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
     var thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
     var outputs = document.getElementById('content');
@@ -163,6 +167,8 @@
     var outputsMinimized;
     // var activeContent;
     var changeContentOffset;
+
+    var galleries = document.querySelector('#galleries');
 
     // DOCUMENT FUNCTIONS
     function buttonClicked(button, buttonsArray, unclick) {
@@ -662,7 +668,7 @@
 
     document.onkeydown =  function(e){onKeyDown(e);};
 
-    forEach(spoilerButtonsArray, function(index, self) {
+    /*forEach(spoilerButtonsArray, function(index, self) {
       var spoiler_id = self.getAttribute('spoiler'); var spoiler = document.getElementById(spoiler_id);
       if (spoiler) {self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);}
       var image = self.querySelector('img');
@@ -680,12 +686,55 @@
           if (!image) text.setAttribute('class', 'forced');
         }
       }
-    });
+    });*/
     forEach(spoilersArray, function(index, self) {
+      var imageSrc = self.getAttribute('image');
+      var title = self.getAttribute('title');
+
       var spoiler_id = self.getAttribute('id');
+      if (!spoiler_id) {
+        spoiler_id = title ? title.toCamelCase() : null;
+        self.setAttribute('id', spoiler_id);
+      }
       var allowBackground = self.getAttribute('background'); if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild);backgroundsArray.push(background);}
       var thumbnailsStyle = self.getAttribute('css'); if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoiler_id+' > .thumbnail '+'{'+thumbnailsStyle+'}', 'temporary');}
+
+      var createButton = function() {
+        var spoiler = self;
+        var spoilerButton, image, text;
+        spoilerButton = document.createElement('div');
+        spoilerButton.setAttribute('class', 'spoilertop');
+        image = spoilerButton.querySelector('img');
+        if (!image) {
+          /*var imageSrc, title;
+          imageSrc = spoiler.getAttribute('image');
+          title = spoiler.getAttribute('title');*/
+          if (imageSrc) {
+            image = document.createElement('img');
+            image.setAttribute('src', imageSrc);
+            spoilerButton.appendChild(image);
+          }
+          if (title) {
+            text = document.createElement('p');
+            text.innerHTML += title;
+            spoilerButton.appendChild(text);
+            if (!imageSrc) text.setAttribute('class', 'forced');
+          }
+        }
+        if (image && text) {
+          image.onerror = function() {
+            // this.remove();
+            text.setAttribute('class', 'forced');
+          };
+        }
+        galleries.appendChild(spoilerButton);
+        galleries.appendChild(document.createTextNode("\n"));
+        spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
+      }();
     });
+
+    var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+
     forEach(thumbnailsArray, function(index, self) {
       self.addEventListener("click", function(){showContent(self, thumbnailsArray);}, false);
     });
