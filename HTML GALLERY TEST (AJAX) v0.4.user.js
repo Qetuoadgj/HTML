@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.4.6
+// @version      2.4.7
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
 // @run-at       document-end
 // @noframes
-// @downloadURL  hhttps://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
+// @downloadURL  https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
 // @homepageURL  https://github.com/Qetuoadgj/HTML
 // @match        file:///*/2.0.4.html
 // @match        file:///*/2.0.2.html
@@ -170,6 +170,8 @@
 
     var galleries = document.querySelector('#galleries');
 
+    var closeButton = document.querySelector('#closeButton');
+
     // DOCUMENT FUNCTIONS
     function buttonClicked(button, buttonsArray, unclick) {
       if (unclick) {forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});} else {
@@ -228,6 +230,7 @@
       if (activeOutput) {
         resetContentOutputs();
         buttonClicked(false, thumbnailsArray, true);
+        closeButton.style.removeProperty('display');
       } else if (activeSpoiler) {
         activeSpoiler.style.removeProperty('display');
         buttonClicked(false, spoilerButtonsArray, true);
@@ -270,6 +273,7 @@
         setTimeout(function(){outputFrame.style.display = 'block';}, 10);
 
         activeThumbnail = thisThumbnail; activeOutput = outputFrame; // activeContent = content;
+        closeButton.style.display = 'block';
       }
     }
 
@@ -743,5 +747,6 @@
         if (activeOutput) {resetContentOutputs(); buttonClicked(false, thumbnailsArray, true);}}, false);
     });
     imgOutput.addEventListener("click", hideContent, false);
+    closeButton.addEventListener("click", hideContent, false);
   });
 })();

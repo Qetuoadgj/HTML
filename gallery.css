@@ -110,3 +110,15 @@ body {
   border-color: lime;
 }
 
+#closeButton {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* background: white; */
+  display: none;
+  background-image: url(https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png);
+  background-size: contain;
+  border-color: grey; border-style: dotted; border-width: 1px;
+}
