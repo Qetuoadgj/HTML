@@ -1,23 +1,18 @@
 <!DOCTYPE HTML>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>HTML GALLERY TEST (AJAX) v0.4 - 2.0.1</title>
+    <title>HTML Gallery</title>
+    <link rel="icon" type="image/png" href="http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png"/>
     <!-- <script src="HTML GALLERY TEST (AJAX) v0.4.user.js"></script> -->
     <link rel="stylesheet" type="text/css" href="gallery.css" media="screen">
   </head>
-  <body style="font-family: Times New Roman; font-size: 16px; font-weight: normal; font-style: normal;">
+  <body style='font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;'>
     <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video>
     <!-- <script>var video = document.getElementById("wallpapers"); video.playbackRate = 1.0;</script> -->
-    <div id="galleries">
-      <div class="spoilertop" spoiler="gallery_01" title="Music" image="https://musicrowgirl.files.wordpress.com/2014/11/music-videos.png"></div>
-      <div class="spoilertop" spoiler="gallery_02" title="Documentary" image="http://www.enterthemoviezone.com/uploads/1/2/5/2/12525217/8364703_orig.jpg"></div>
-      <div class="spoilertop" spoiler="gallery_03" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
-      <div class="spoilertop" spoiler="gallery_04" title="LIVE" image=""></div>
-    </div>
+    <div id="galleries"></div>
     <div id="previews">
-      <div class="spoilerbox" id="gallery_01">
+      <div class="spoilerbox" title="Music" image="https://musicrowgirl.files.wordpress.com/2014/11/music-videos.png">
         <div class="thumbnail" title="Finnian McGurk - Spanish ladies" image="https://i.ytimg.com/vi/892ebSMyZH0/mqdefault.jpg" content="https://www.youtube.com/embed/892ebSMyZH0"></div>
         <div class="thumbnail" title="Finnian McGurk - Dark and Rolling Sea" image="https://i.ytimg.com/vi/Ol98uRnbaDY/mqdefault.jpg" content="https://www.youtube.com/embed/Ol98uRnbaDY"></div>
         <div class="thumbnail" title="LAST OF THE MOHICANS ~THE GAEL~Royal Scots Dragoon Guards" image="https://i.ytimg.com/vi/BR-csWS1bcM/mqdefault.jpg" content="https://www.youtube.com/embed/BR-csWS1bcM" url="https://www.youtube.com/watch?v=BR-csWS1bcM"></div>
@@ -25,45 +20,22 @@
         <div class="thumbnail" title="Celtic Symphony - YouTube" image="https://i.ytimg.com/vi/Z_MQswV-Q5A/mqdefault.jpg" content="https://www.youtube.com/embed/Z_MQswV-Q5A?start=0" url="https://www.youtube.com/watch?v=Z_MQswV-Q5A"></div>
         <div class="thumbnail" title="Celtic Battle Music - The King Of The Highlands - YouTube" image="https://i.ytimg.com/vi/3tzE98pQH08/mqdefault.jpg" content="https://www.youtube.com/embed/3tzE98pQH08?start=0" url="https://www.youtube.com/watch?v=3tzE98pQH08"></div>
         <div class="thumbnail" title="Fighting Men From CrossMaglen With Lyrics - YouTube" image="https://i.ytimg.com/vi/fLZq1VUSF_w/mqdefault.jpg" content="https://www.youtube.com/embed/fLZq1VUSF_w?start=0" url="https://www.youtube.com/watch?v=fLZq1VUSF_w"></div>
+        
       </div>
-      <div class="spoilerbox" id="gallery_02">
+      <div class="spoilerbox" title="Documentary" image="http://www.enterthemoviezone.com/uploads/1/2/5/2/12525217/8364703_orig.jpg">
         <div class="thumbnail" title="Ulfberht. Secrets of the Viking Sword HD" image="https://i.ytimg.com/vi/J6woycxQzA0/mqdefault.jpg" content="https://www.youtube.com/embed/lspB3QhrW_Q" url="https://www.youtube.com/watch?v=lspB3QhrW_Q"></div>
         <div class="thumbnail" title="the secret world of the japanese swordsmith - YouTube" image="https://i.ytimg.com/vi/gxwWf-MfZVk/mqdefault.jpg" content="https://www.youtube.com/embed/gxwWf-MfZVk?start=0" url="https://www.youtube.com/watch?v=gxwWf-MfZVk"></div>
       </div>
-      <div class="spoilerbox" id="gallery_03" css="min-width: 150px; height: 90px;">
+      <div class="spoilerbox" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg" css="min-width: 150px; height: 90px;">
         <div class="thumbnail" title="Zootopia" image="http://img.dotua.org/fsua_items/screen/00/18/44/2/00184430.jpg" content="http://fs.to/get/playvideo/6jw5v7qqcsmgr7zsay5ix3z0m.mp4?Zootopia.2016.1080p.BluRay.Eng.mp4" url="http://fs.to/video/cartoons/i4FElOb381GlssqWAQtfZpC-zveropolis.html"></div>
         <!-- <div class="thumbnail" title="Zootopia [mkv]" image="http://img.dotua.org/fsua_items/screen/00/18/44/2/00184430.jpg" content="http://fs.to/get/dl/6jw5v7qqcsmgr7zsay5ix3z0m/Zootopia.2016.1080p.BluRay.Eng.mkv" url="http://fs.to/video/cartoons/i4FElOb381GlssqWAQtfZpC-zveropolis.html" output="object"></div> -->
       </div>
-      <div class="spoilerbox" id="gallery_04" css="min-width: 150px; height: 90px;">
-        <div class="thumbnail" title="3S.tv" image="http://perevertajlo.com/bundles/prbackend/images/tv/3stv.png" content="http://play.lanet.tv/live/9086.m3u8" url="https://lanet.tv/3s/"></div>
-        <!-- <div class="thumbnail" title="Сонце" image="http://sonce.tv/sites/all/themes/sun/logo.png" content="https://kiev2-cdn.lanet.tv/tv/9063.m3u8?key=nRTKiMAXwsR6RH32" url="https://lanet.tv/3s/"></div> -->
-        <div class="thumbnail" title="Канал Наживо // 5 Channel LIVE - YouTube" image="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Logo_5_Channel.svg/220px-Logo_5_Channel.svg.png" content="https://www.youtube.com/embed/ntBxGznOML0?start=0" url="https://www.youtube.com/watch?v=ntBxGznOML0"></div>
-        <div class="thumbnail" title="Life" image="http://www.userlogos.org/files/logos/jumpordie/lifenews-iphone.png" content="http://tv.life.ru/lifetv/720p/index.m3u8" url="https://life.ru/t/%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8/live"></div>
-        <div class="thumbnail" title="ATR" image="http://job-sbu.org/wp-content/uploads/2014/09/logo.png" content="rtmp://stream.atr.ua:1937/atr/live" url="http://atr.ua/ru/live"></div>
-        <div class="thumbnail" title="К1" image="http://tivix.net/uploads/posts/2014-02/1392306593_k1.png" content="http://109.68.40.70:1935/castGeo/smil:k1.smil/playlist.m3u8" url="http://vsitv.org/k1.html" player="uppod.swf"></div>
-      </div>
     </div>
     <div id="content">
+      <div id="closeButton"></div>
       <iframe class="centered" id="content_iframe" width="882px" height="496px" src="" frameborder="0" scrolling="no" controls="" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
       <img class="centered" id="content_img" width="auto" height="90%" src="">
       <object class="centered" id="content_object" type="application/x-shockwave-flash" data="" width="882px" height="496px"><param name="bgcolor" value="#000000"><param name="allowFullScreen" value="true"><param name="allowScriptAccess" value="always"><param name="wmode" value="window"><param name="flashvars" value=""></object>
     </div>
-    <!--
-      BACKGROUND
-      <div class="background"></div>
-      
-      SPOILER_BUTTONS
-      <img class="spoilertop" spoiler="gallery_01" title="" src="">
-      
-      SPOILERS
-      <div class="spoilerbox" id="gallery_01" css="min-width: 117px; height: 162px;" background="no">
-      
-      THUMBNAILS
-      <div class="thumbnail" title="" image="" content="" url=""></div>
-      
-      CONTENT_OUTPUTS
-      <iframe class="centered" id="content_iframe" width="882px" height="496px" src="" frameborder="0" scrolling="no" controls webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-      <img class="centered" id="content_img" width="auto" height="90%" src="">
-    -->
   </body>
-</html>
+</html>                          
