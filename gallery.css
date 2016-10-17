@@ -120,6 +120,7 @@ body {
   right: 0;
   display: none;
   background-image: url(https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png);
+  /* background-image: url(https://github.com/Qetuoadgj/HTML/raw/master/button_close-128.png); */
   background-size: contain;
   border-color: black; border-style: solid; border-width: 1px;
 }
