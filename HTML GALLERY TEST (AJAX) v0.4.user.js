@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.4.7
+// @version      2.4.8
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -151,6 +151,45 @@
 
   Array.prototype.contains = function(obj) {var i = this.length; while (i--) {if (this[i] === obj) {return true;}} return false;};
 
+  function drawCloseButton(element, width, height, lineGaps, color) {
+    var getRealDimensions = function(element) {
+      var realWidth, realHeight;
+      var realDimensions = [];
+      var clone = element.cloneNode(true);
+      clone.style.visibility = 'hidden';
+      clone.style.display = 'inline';
+      document.body.appendChild(clone);
+      realWidth = clone.offsetWidth;
+      realHeight = clone.offsetHeight;
+      clone.remove();
+      realDimensions.width = realWidth;
+      realDimensions.height = realHeight;
+      return realDimensions;
+    };
+
+    var real = getRealDimensions(element);
+
+    width = width || real.width || 64;
+    height = height || width || real.height || 64;
+
+    if (width || height) element.setAttribute('width', width || height);
+    if (height || width) element.setAttribute('height', height || width);
+    var context = element.getContext("2d");
+    context.beginPath();
+    context.lineWidth = width / 10;
+
+    lineGaps = lineGaps || 0.15;
+    var lineLength = 1 - lineGaps;
+
+    context.moveTo(width * lineGaps, height * lineGaps);
+    context.lineTo(width * lineLength, height * lineLength);
+    context.moveTo(width * lineLength, height * lineGaps);
+    context.lineTo(width * lineGaps, height * lineLength);
+    if (color) context.strokeStyle = color;
+    context.stroke();
+    context.closePath();
+  }
+
   document.addEventListener("DOMContentLoaded", function() {
     // GLOBAL VARIABLES
     // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop'); // moved down
@@ -171,6 +210,7 @@
     var galleries = document.querySelector('#galleries');
 
     var closeButton = document.querySelector('#closeButton');
+    drawCloseButton(closeButton, null, null, null);
 
     // DOCUMENT FUNCTIONS
     function buttonClicked(button, buttonsArray, unclick) {

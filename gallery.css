@@ -1,4 +1,4 @@
-/* https://github.com/Qetuoadgj/HTML *//* version: 1.0.0 */
+/* https://github.com/Qetuoadgj/HTML *//* version: 1.0.1 */
 
 body, .spoilertop, .thumbnail {
   background: black;
@@ -113,14 +113,14 @@ body {
 }
 
 #closeButton {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   position: fixed;
   top: 0;
   right: 0;
   display: none;
-  background-image: url(https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png);
+  /* background-image: url(https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png); */
   /* background-image: url(https://github.com/Qetuoadgj/HTML/raw/master/button_close-128.png); */
-  background-size: contain;
+  /* background-size: contain; */
   border-color: black; border-style: solid; border-width: 1px;
 }
