@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.4.8
+// @version      2.4.9
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -270,11 +270,11 @@
       if (activeOutput) {
         resetContentOutputs();
         buttonClicked(false, thumbnailsArray, true);
-        closeButton.style.removeProperty('display');
       } else if (activeSpoiler) {
         activeSpoiler.style.removeProperty('display');
         buttonClicked(false, spoilerButtonsArray, true);
       }
+      closeButton.style.removeProperty('display');
     }
 
     function showContent(thisThumbnail, thumbnailsArray) {
