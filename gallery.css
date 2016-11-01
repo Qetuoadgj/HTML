@@ -123,4 +123,5 @@ body {
   /* background-image: url(https://github.com/Qetuoadgj/HTML/raw/master/button_close-128.png); */
   /* background-size: contain; */
   border-color: black; border-style: solid; border-width: 1px;
+  z-index: 10;
 }
