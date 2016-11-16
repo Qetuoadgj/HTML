@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.4.9
+// @version      2.5.0
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
-// @run-at       document-end
+// @run-at       document-start
 // @noframes
 // @downloadURL  https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
 // @homepageURL  https://github.com/Qetuoadgj/HTML
@@ -710,7 +710,7 @@
       }
     }
 
-    document.onkeydown =  function(e){onKeyDown(e);};
+    window.onkeydown =  function(e){onKeyDown(e);};
 
     /*forEach(spoilerButtonsArray, function(index, self) {
       var spoiler_id = self.getAttribute('spoiler'); var spoiler = document.getElementById(spoiler_id);
