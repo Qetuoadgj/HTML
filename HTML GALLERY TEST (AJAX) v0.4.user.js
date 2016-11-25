@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.0
+// @version      2.5.1
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -69,7 +69,10 @@
     var removed = clone.querySelectorAll('.REMOVED');
     var commented = clone.querySelectorAll('.COMMENTED');
     forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
-    forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
+    forEach(commented, function(index, self) {
+      removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';
+      console.log(self);
+    });
 
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\n|<!-- DELETED -->\n/g, '');
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
@@ -81,6 +84,7 @@
   }
 
   function copyToClipboard(element) {
+    var timeLimit = 250;
     var variables = resetAttributes(element);
     var clone = variables[0], spaces = variables[1] || '';
     var code = spaces + clone.outerHTML;
@@ -88,8 +92,26 @@
     clipboard.style.position = 'fixed'; clipboard.style.top = '50%'; clipboard.style.left = '50%'; clipboard.style.transform = 'translate(-50%, -50%)'; clipboard.style['z-index'] = 10;
     clipboard.style.width = '90%'; clipboard.style.height = '90%';
     document.body.appendChild(clipboard);
-    clipboard.value = code; clipboard.select(); document.execCommand('copy');
-    setTimeout(function(){clipboard.remove(); clone.remove();}, 200);
+    function removeTextarea(){setTimeout(function(){clipboard.remove(); clone.remove();}, timeLimit);}
+    function onKeyDown(e) {
+      e = e || window.event;
+      var escKey = 27;
+      if (e.keyCode == escKey) { // Escape
+        removeTextarea();
+      }
+      e.preventDefault();
+    }
+    clipboard.addEventListener('keyup', function(e){onKeyDown(e);}, false);
+    clipboard.value = code; clipboard.select(); // document.execCommand('copy');
+    var successful, msg;
+    try {
+      successful = document.execCommand('copy');
+      msg = successful ? 'successful' : 'unsuccessful';
+      console.log('Cutting text command was ' + msg);
+    } catch(err) {
+      console.log('Oops, unable to cut');
+    }
+    if (successful) removeTextarea();
   }
 
   function downloadCurrentDocument() {
