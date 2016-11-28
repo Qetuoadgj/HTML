@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.1
+// @version      2.5.2
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -22,6 +22,15 @@
   // Your code here...
 
   //GLOBAL FUNCTIONS
+  function download(text, filename, type) { // http://stackoverflow.com/a/40139881
+    var blob = new Blob([text], {type: (type || "text/plain")}); // http://www.freeformatter.com/mime-types-list.html
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+  }
+
   function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
   function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
   // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
@@ -44,13 +53,20 @@
     var backgroundsArray = clone.querySelectorAll('.background');
     var temporary = clone.querySelectorAll('.temporary');
 
+    var closeButton = clone.querySelector('#closeButton');
+    if (closeButton) {closeButton.removeAttribute('width'); closeButton.removeAttribute('height');}
+
     clone.removeAttribute('style');
     forEach(spoilerButtonsArray, function(index, self) {
-      self.removeAttribute('style');
-      var image = self.querySelector('img'); if (image) image.remove();
-      var text = self.querySelector('p'); if (text) text.remove();
+      // self.removeAttribute('style');
+      // var image = self.querySelector('img'); if (image) image.remove();
+      // var text = self.querySelector('p'); if (text) text.remove();
+      self.outerHTML = '<!-- DELETED -->';
     });
-    forEach(spoilersArray, function(index, self) {self.removeAttribute('style');});
+    forEach(spoilersArray, function(index, self) {
+      self.removeAttribute('style');
+      self.removeAttribute('id');
+    });
     forEach(thumbnailsArray, function(index, self) {
       self.removeAttribute('style');
       var image = self.querySelector('img'); if (image) image.remove();
@@ -74,8 +90,8 @@
       console.log(self);
     });
 
-    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->\n|<!-- DELETED -->\n/g, '');
-    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\r\n');
+    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
+    clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
 
     var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi'));
     var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
@@ -118,10 +134,16 @@
     var pageURL = location.href; var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1'); pageTitle = pageTitle.replace('.html', '') + '.html';
     var documentClone = document.documentElement.cloneNode(true);
     documentClone = resetAttributes(documentClone)[0];
-    var documentString = getDoctype()+'\n\n'+documentClone.outerHTML;
+    var documentString = getDoctype()+'\n'+documentClone.outerHTML+'\n';
+
     //noinspection JSDeprecatedSymbols
-    var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
-    a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
+    // var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
+    // a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
+
+    documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n<head>').replace(/[\s]+<\/body><\/html>/i, '\n</body>\n</html>');
+    documentString = documentString.replace(/\r\n/g, '\n').replace(/\n/g, '\r\n');
+
+    download(documentString, pageTitle, 'text/html');
   }
 
   function asArray(list) {return Array.prototype.slice.call(list);}
