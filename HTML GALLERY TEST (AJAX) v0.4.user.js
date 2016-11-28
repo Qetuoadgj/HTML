@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.2
+// @version      2.5.3
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -140,7 +140,7 @@
     // var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
     // a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
 
-    documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n<head>').replace(/[\s]+<\/body><\/html>/i, '\n</body>\n</html>');
+    documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n  <head>').replace(/[\s]+<\/body><\/html>/i, '\n  </body>\n</html>');
     documentString = documentString.replace(/\r\n/g, '\n').replace(/\n/g, '\r\n');
 
     download(documentString, pageTitle, 'text/html');
