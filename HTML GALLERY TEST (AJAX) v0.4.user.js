@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.3
+// @version      2.5.4
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -803,6 +803,7 @@
             spoilerButton.appendChild(image);
           }
           if (title) {
+            spoilerButton.setAttribute('title', title);
             text = document.createElement('p');
             text.innerHTML += title;
             spoilerButton.appendChild(text);
