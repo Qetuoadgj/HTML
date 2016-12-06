@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.4
+// @version      2.5.5
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -31,6 +31,12 @@
     a.click();
   }
 
+  Element.prototype.hasClass = function(cssClass) {
+    var re = new RegExp("(^|\\s)" + cssClass + "(\\s|$)", "g");
+    if (re.test(this.className)) return true;
+    return false;
+  };
+
   function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
   function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
   // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
@@ -43,6 +49,12 @@
     var spoilerButtonsArray = clone.querySelectorAll('.spoilertop');
     var spoilersArray = clone.querySelectorAll('.spoilerbox');
     var thumbnailsArray = clone.querySelectorAll('.thumbnail');
+
+    if (clone.hasClass('thumbnail')) {
+      console.log(clone);
+      thumbnailsArray = [clone];
+    }
+
     var outputs = clone.querySelector('div#content');
     var iframeOutput, imgOutput, outputsArray = [];
     if (outputs) {
@@ -727,7 +739,8 @@
           galleryList = createGalleryList(activeSpoiler);
           findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
         } else if (activeSpoiler && ctrlDown && e.keyCode == cKey) { // Control + C
-          copyToClipboard(activeSpoiler);
+          if (hovered) copyToClipboard(hovered);
+          else copyToClipboard(activeSpoiler);
         } else if (ctrlDown && e.keyCode == sKey) { // Control + S
           downloadCurrentDocument(document.documentElement);
         } else if (activeOutput && e.keyCode == zKey && !ctrlDown) {
