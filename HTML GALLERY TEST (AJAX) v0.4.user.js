@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.5
+// @version      2.5.6
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -51,7 +51,7 @@
     var thumbnailsArray = clone.querySelectorAll('.thumbnail');
 
     if (clone.hasClass('thumbnail')) {
-      console.log(clone);
+      // console.log(clone);
       thumbnailsArray = [clone];
     }
 
@@ -99,7 +99,7 @@
     forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
     forEach(commented, function(index, self) {
       removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';
-      console.log(self);
+      // console.log(self);
     });
 
     clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
@@ -129,13 +129,13 @@
       }
       e.preventDefault();
     }
-    clipboard.addEventListener('keyup', function(e){onKeyDown(e);}, false);
+    clipboard.addEventListener('keydown', function(e){onKeyDown(e);}, false);
     clipboard.value = code; clipboard.select(); // document.execCommand('copy');
     var successful, msg;
     try {
       successful = document.execCommand('copy');
-      msg = successful ? 'successful' : 'unsuccessful';
-      console.log('Cutting text command was ' + msg);
+      // msg = successful ? 'successful' : 'unsuccessful';
+      // console.log('Copy text command was ' + msg);
     } catch(err) {
       console.log('Oops, unable to cut');
     }
@@ -246,7 +246,7 @@
     context.closePath();
   }
 
-  document.addEventListener("DOMContentLoaded", function() {
+  function documentOnReady() {
     // GLOBAL VARIABLES
     // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop'); // moved down
     var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
@@ -767,7 +767,8 @@
       }
     }
 
-    window.onkeydown =  function(e){onKeyDown(e);};
+    // window.onkeydown =  function(e){onKeyDown(e);};
+    window.addEventListener('keydown', function(e){onKeyDown(e);}, false);
 
     /*forEach(spoilerButtonsArray, function(index, self) {
       var spoiler_id = self.getAttribute('spoiler'); var spoiler = document.getElementById(spoiler_id);
@@ -846,5 +847,7 @@
     });
     imgOutput.addEventListener("click", hideContent, false);
     closeButton.addEventListener("click", hideContent, false);
-  });
+  }
+
+  document.addEventListener("DOMContentLoaded", documentOnReady);
 })();
