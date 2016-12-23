@@ -123,11 +123,11 @@
             spoilerButton.setAttribute('class', 'spoilertop');
             var image = spoilerButton.querySelector('img');
             var text = spoilerButton.querySelector('p');
+            var imageSrc = spoiler.getAttribute('image');
+            var title = spoiler.getAttribute('title');
+            spoiler.removeAttribute('image');
+            spoiler.removeAttribute('title');        
             if (!image) {
-              var imageSrc = spoiler.getAttribute('image');
-              var title = spoiler.getAttribute('title');
-              spoiler.removeAttribute('image');
-              spoiler.removeAttribute('title');
               if (imageSrc) {
                 image = document.createElement('img');
                 image.setAttribute('src', imageSrc);
@@ -307,7 +307,7 @@
             input.addEventListener(event,function(e){onEvent(e);},false);
           });
         });
-        
+
         document.querySelector('.spoilertop').click();
       });
     </script>
