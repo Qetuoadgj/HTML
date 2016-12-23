@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8">
     <title>SearchEngine.html</title>
@@ -88,94 +88,96 @@
       function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
       Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
 
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener('DOMContentLoaded', function() {
         // GLOBAL VARIABLES
-        // var spoilerButtonsArray = document.querySelectorAll("#galleries > .spoilertop");
-        var spoilersArray = document.querySelectorAll("#previews > .spoilerbox");
+        // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+        var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
         var activeSpoilerButton, activeSpoiler;
         var activeLinksList = [], activeQueriesList = [];
 
         forEach(spoilersArray, function(index, self) {
           var spoiler = self;
           var text = spoiler.innerText;
-          var queriesList = text.split("\n");
-          spoiler.innerHTML = "";
+          var queriesList = text.split('\n');
+          spoiler.innerHTML = '';
 
           var sortLinks = true;
 
           if (sortLinks) queriesList.sort(function(a, b) {
-            a = a.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, "$1").replace(/^www[.]/, "").replace(/\/.*/, "");
-            b = b.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, "$1").replace(/^www[.]/, "").replace(/\/.*/, "");
+            a = a.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
+            b = b.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
             return a.localeCompare(b);
           });
 
           forEach(queriesList, function(index, self) {
             var query = self.trim();
-            if (query !== "") {
-              var a = document.createElement("a");
-              a.text = query.replace("<a>", "").replace("</a>", "");
+            if (query !== '') {
+              var a = document.createElement('a');
+              a.text = query.replace('<a>', '').replace('</a>', '');
               spoiler.appendChild(a);
             }
           });
 
           var createButton = function() {
-            var spoilerButton = document.createElement("div");
-            spoilerButton.setAttribute("class", "spoilertop");
-            var image = spoilerButton.querySelector("img");
-            var text = spoilerButton.querySelector("p");
+            var spoilerButton = document.createElement('div');
+            spoilerButton.setAttribute('class', 'spoilertop');
+            var image = spoilerButton.querySelector('img');
+            var text = spoilerButton.querySelector('p');
+            var imageSrc = spoiler.getAttribute('image');
+            var title = spoiler.getAttribute('title');
+            spoiler.removeAttribute('image');
+            spoiler.removeAttribute('title');        
             if (!image) {
-              var imageSrc = spoiler.getAttribute("image");
-              var title = spoiler.getAttribute("title");
-              spoiler.removeAttribute("title");
               if (imageSrc) {
-                image = document.createElement("img");
-                image.setAttribute("src", imageSrc);
+                image = document.createElement('img');
+                image.setAttribute('src', imageSrc);
                 spoilerButton.appendChild(image);
               }
               if (title) {
-                text = text || document.createElement("p");
+                text = text || document.createElement('p');
                 text.innerHTML += title;
                 spoilerButton.appendChild(text);
-                if (!imageSrc) text.setAttribute("class", "forced");
+                if (!imageSrc) text.setAttribute('class', 'forced');
               }
             }
             if (image && text) {
               image.onerror = function() {
                 // this.remove();
-                text.setAttribute("class", "forced");
+                text.setAttribute('class', 'forced');
               };
-              spoilerButton.setAttribute("title", title);
+              spoilerButton.setAttribute('title', title);
             }
             galleries.appendChild(spoilerButton);
-            spoilerButton.addEventListener("click", function(){showSpoiler(this, spoiler);}, false);
+            galleries.appendChild(document.createTextNode('\n'));
+            spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
           }();
         });
-        var spoilerButtonsArray = document.querySelectorAll("#galleries > .spoilertop");
+        var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
 
-        var searchesArray = document.querySelectorAll("#previews > .spoilerbox > a");
+        var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
 
         // DOCUMENT FUNCTIONS
         function buttonClicked(button, buttonsArray, unclick) {
           if (unclick) {
-            forEach(buttonsArray, function(index, self) {self.style.removeProperty("opacity");});
+            forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
           } else {
-            forEach(buttonsArray, function(index, self) {self.style.opacity = "0.125";});
-            button.style.removeProperty("opacity");
+            forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
+            button.style.removeProperty('opacity');
           }
         }
 
         function showSpoiler(thisButton, spoiler) {
           var active = spoiler.isVisible();
           buttonClicked(thisButton, spoilerButtonsArray);
-          forEach(spoilersArray, function(index, self) {self.style.removeProperty("display");});
+          forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
           if (active) {
             buttonClicked(thisButton, spoilerButtonsArray, true);
             activeSpoiler = false;
             activeLinksList = [];
             activeQueriesList = [];
           } else {
-            spoiler.style.display = "block";
-            activeLinksList = spoiler.querySelectorAll("a");
+            spoiler.style.display = 'block';
+            activeLinksList = spoiler.querySelectorAll('a');
             activeQueriesList = [];
             forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
             activeSpoiler = spoiler;
@@ -185,9 +187,9 @@
         }
 
         var bodyStyle = window.getComputedStyle(document.body, null);
-        var fontSize = bodyStyle.getPropertyValue("font-size").replace("px", "") || 16;
-        var margin = "5px 0px 0px 0px";
-        var searchField = document.querySelector("#searchField");
+        var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
+        var margin = '5px 0px 0px 0px';
+        var searchField = document.querySelector('#searchField');
         var linksList = [];
         var queriesList = [];
         var domainsList = [];
@@ -196,63 +198,63 @@
 
         var lastClicked;
 
-        searchField.style["font-size"] = bodyStyle.getPropertyValue("font-size");
-        searchField.style["font-family"] = bodyStyle.getPropertyValue("font-family");
-        searchField.style["font-weight"] = bodyStyle.getPropertyValue("font-weight");
-        searchField.style["font-style"] = bodyStyle.getPropertyValue("font-style");
-        // searchField.style.color = bodyStyle.getPropertyValue("color");
+        searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
+        searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
+        searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
+        searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
+        // searchField.style.color = bodyStyle.getPropertyValue('color');
 
         forEach(searchesArray, function(index, self) {
           var spoilerbox = self.parentNode;
           var query = self.text;
           var domain = query;
-          domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, "$1"); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
-          domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, "$2");
+          domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
+          domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
 
-          var d = document.createElement("div");
-          d.setAttribute("class","siteLink");
+          var d = document.createElement('div');
+          d.setAttribute('class','siteLink');
           d.style.margin = margin;
-          d.style.display = "table";
+          d.style.display = 'table';
 
-          // d.style["border-color"] = "grey";
-          // d.style["border-width"] = "1px";
-          // d.style["border-style"] = "solid";
+          // d.style['border-color'] = 'grey';
+          // d.style['border-width'] = '1px';
+          // d.style['border-style'] = 'solid';
 
-          d.style.position = "relative";
-          d.style.height = Math.ceil(fontSize*2)+"px";
+          d.style.position = 'relative';
+          d.style.height = Math.ceil(fontSize*2)+'px';
           spoilerbox.appendChild(d);
 
-          var i = document.createElement("img");
-          i.style.position = "absolute";
-          i.style.top = "0";
-          i.style.bottom = "0";
-          i.style.left = "0";
-          i.style.right = "0";
-          // i.style.width = "50%";
-          i.style.height = "50%";
-          i.style.margin = "auto 0px";
-          i.src = "https://www.google.com/s2/favicons?domain=" + domain;
+          var i = document.createElement('img');
+          i.style.position = 'absolute';
+          i.style.top = '0';
+          i.style.bottom = '0';
+          i.style.left = '0';
+          i.style.right = '0';
+          // i.style.width = '50%';
+          i.style.height = '50%';
+          i.style.margin = 'auto 0px';
+          i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
           d.appendChild(i);
 
           var linkURL, linkDomain;
           var searchValue = encodeURIComponent(searchField.value);
 
-          linkDomain = query.replace(/%s/g, "").replace(/^(http[s]?):\/\/(.*?)\/.*/g, "$1://$2");
-          linkURL = (searchValue !== "") ? query.replace(/%s/g, searchValue) : linkDomain;
+          linkDomain = query.replace(/%s/g, '').replace(/^(http[s]?):\/\/(.*?)\/.*/g, '$1://$2');
+          linkURL = (searchValue !== '') ? query.replace(/%s/g, searchValue) : linkDomain;
 
-          var a = self; //document.createElement("a");
-          a.style.display = "table-cell";
-          a.style["vertical-align"] = "middle";
-          a.style["padding-left"] = Math.ceil(fontSize*1.25)+"px";//i.offsetWidth + 5;
-          //a.style["font-size"] = fontSize+"px"; // styles
-          //a.style.color = "#086081"; // styles
-          a.style.width = "auto";
-          a.setAttribute("target", "_blank"); // Open in new tab
-          a.setAttribute("href", linkURL); // a.setAttribute("href", query.replace(/%s/g, searchField.value));
+          var a = self; //document.createElement('a');
+          a.style.display = 'table-cell';
+          a.style['vertical-align'] = 'middle';
+          a.style['padding-left'] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
+          //a.style['font-size'] = fontSize+'px'; // styles
+          //a.style.color = '#086081'; // styles
+          a.style.width = 'auto';
+          a.setAttribute('target', '_blank'); // Open in new tab
+          a.setAttribute('href', linkURL); // a.setAttribute('href', query.replace(/%s/g, searchField.value));
           a.text = shortNames ? domain : linkURL;
           d.appendChild(a);
 
-          a.addEventListener("click",function(e){lastClicked = this;},false);
+          a.addEventListener('click',function(e){lastClicked = this;},false);
 
           linksList.push(a);
 
@@ -269,8 +271,8 @@
 
           var query = searchField.value;
 
-          if (e.type == "change") {
-            query = query.replace(/-/g, " ");
+          if (e.type == 'change') {
+            query = query.replace(/-/g, ' ');
             searchField.value = query;
           }
 
@@ -287,17 +289,17 @@
               var searchValue = searchField.value;
 
               linkDomain = domainsList[index];
-              linkURL = (searchValue !== "") ? queriesList[index].replace(/%s/g, encodeURIComponent(query)) : linkDomain;
+              linkURL = (searchValue !== '') ? queriesList[index].replace(/%s/g, encodeURIComponent(query)) : linkDomain;
 
               var ref = linkURL; // queriesList[index].replace(/%s/g, query);
-              // var base64_ref = queriesList[index].replace("%s", encodeURIComponent(query));
+              // var base64_ref = queriesList[index].replace('%s', encodeURIComponent(query));
               if (!shortNames) link.text = ref;
               link.href = ref; // base64_ref;
             });
           }
         };
 
-        var eventList = ["keydown", "keyup", "change"];
+        var eventList = ['keydown', 'keyup', 'change'];
         var inputList = [searchField];
 
         inputList.forEach(function(input){
@@ -305,8 +307,8 @@
             input.addEventListener(event,function(e){onEvent(e);},false);
           });
         });
-        
-        // document.querySelector(".spoilertop").click();
+
+        // document.querySelector('.spoilertop').click();
       });
     </script>
   </head>
