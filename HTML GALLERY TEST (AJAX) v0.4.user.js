@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.6
+// @version      2.5.7
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -23,16 +23,16 @@
 
   //GLOBAL FUNCTIONS
   function download(text, filename, type) { // http://stackoverflow.com/a/40139881
-    var blob = new Blob([text], {type: (type || "text/plain")}); // http://www.freeformatter.com/mime-types-list.html
+    var blob = new Blob([text], {type: (type || 'text/plain')}); // http://www.freeformatter.com/mime-types-list.html
     var url = window.URL.createObjectURL(blob);
-    var a = document.createElement("a");
+    var a = document.createElement('a');
     a.href = url;
     a.download = filename;
     a.click();
   }
 
   Element.prototype.hasClass = function(cssClass) {
-    var re = new RegExp("(^|\\s)" + cssClass + "(\\s|$)", "g");
+    var re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
     if (re.test(this.className)) return true;
     return false;
   };
@@ -42,7 +42,7 @@
   // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
   function disableElement(element, remove) {if (remove) {addClass(element, 'REMOVED');} else {addClass(element, 'COMMENTED');}}
 
-  function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId?' PUBLIC "' +  document.doctype.publicId.toUpperCase() + '"':'') + (document.doctype.systemId?' "' + document.doctype.systemId.toUpperCase() + '"':'') + '>';}
+  function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId ? (' PUBLIC "' +  document.doctype.publicId.toUpperCase() + '"') : '') + (document.doctype.systemId ? (' "' + document.doctype.systemId.toUpperCase() + '"') : '') + '>';}
 
   function resetAttributes(node) {
     var clone = node.cloneNode(true);
@@ -149,7 +149,7 @@
     var documentString = getDoctype()+'\n'+documentClone.outerHTML+'\n';
 
     //noinspection JSDeprecatedSymbols
-    // var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent("HTMLEvents");
+    // var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent('HTMLEvents');
     // a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
 
     documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n  <head>').replace(/[\s]+<\/body><\/html>/i, '\n  </body>\n</html>');
@@ -168,14 +168,14 @@
   }
 
   function addClass(element, cssClass){
-    var re = new RegExp("(^|\\s)" + cssClass + "(\\s|$)", "g");
+    var re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
     if (re.test(element.className)) return;
-    element.className = (element.className + " " + cssClass).replace(/\s+/g, " ").replace(/(^ | $)/g, "");
+    element.className = (element.className + ' ' + cssClass).replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
   }
 
   function removeClass(element, cssClass){
-    var re = new RegExp("(^|\\s)" + cssClass + "(\\s|$)", "g");
-    element.className = element.className.replace(re, "$1").replace(/\s+/g, " ").replace(/(^ | $)/g, "");
+    var re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
+    element.className = element.className.replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
   }
 
   String.prototype.Capitalize = function() {
@@ -230,7 +230,7 @@
 
     if (width || height) element.setAttribute('width', width || height);
     if (height || width) element.setAttribute('height', height || width);
-    var context = element.getContext("2d");
+    var context = element.getContext('2d');
     context.beginPath();
     context.lineWidth = width / 10;
 
@@ -301,7 +301,7 @@
         ];
         existingVars = '';
         if (source.match(/[?].*/i)) {
-          // source.split("?")[1]
+          // source.split('?')[1]
           existingVars += source.replace(/.*[?](.*)/i, '$1'); source = source.replace(/(.*)[?].*/i, '$1');
           flashvars.push(existingVars);
         }
@@ -646,7 +646,7 @@
         var refreshSpoiler = function() {
           thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
           forEach(thumbnailsArray, function(index, self) {
-            self.addEventListener("click", function(){showContent(self, thumbnailsArray);}, false);
+            self.addEventListener('click', function(){showContent(self, thumbnailsArray);}, false);
           });
           activeSpoilerButton.click(); activeSpoilerButton.click();
         };
@@ -654,7 +654,7 @@
         var embedCode = getEmbedCode();
         if (content && content.match(/:\/\//i) && code.match(/^<div.*<\/div>$/i)) {
           var newElement = document.createElement('div');
-          activeSpoiler.appendChild(document.createTextNode("\n"));
+          activeSpoiler.appendChild(document.createTextNode('\n'));
           activeSpoiler.appendChild(newElement);
           newElement.outerHTML = embedCode;
           promptFrame.remove();
@@ -688,7 +688,7 @@
         }
       };
 
-      var eventList = ["keydown", "keyup"];
+      var eventList = ['keydown', 'keyup'];
       var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFramePlayers, okButton];
 
       inputList.forEach(function(input){
@@ -702,10 +702,10 @@
       //   input.onkeyup = function(e){onKeyPress(input, e);};
       // });
 
-      promptFramePlayers.addEventListener("click", function(){promptFrameCode.value = getEmbedCode();}, false);
+      promptFramePlayers.addEventListener('click', function(){promptFrameCode.value = getEmbedCode();}, false);
 
-      okButton.addEventListener("click", promptFrameSubmit, false);
-      cancelButton.addEventListener("click", promptFrameCancel, false);
+      okButton.addEventListener('click', promptFrameSubmit, false);
+      cancelButton.addEventListener('click', promptFrameCancel, false);
 
       promptFrameContent.focus();
     }
@@ -772,7 +772,7 @@
 
     /*forEach(spoilerButtonsArray, function(index, self) {
       var spoiler_id = self.getAttribute('spoiler'); var spoiler = document.getElementById(spoiler_id);
-      if (spoiler) {self.addEventListener("click", function(){showSpoiler(self, spoiler);}, false);}
+      if (spoiler) {self.addEventListener('click', function(){showSpoiler(self, spoiler);}, false);}
       var image = self.querySelector('img');
       if (!image) {
         var imageSrc = self.getAttribute('image');
@@ -803,14 +803,11 @@
 
       var createButton = function() {
         var spoiler = self;
-        var spoilerButton, image, text;
-        spoilerButton = document.createElement('div');
+        var spoilerButton = document.createElement('div');
         spoilerButton.setAttribute('class', 'spoilertop');
-        image = spoilerButton.querySelector('img');
+        var image = spoilerButton.querySelector('img');
+        var text = spoilerButton.querySelector('p');
         if (!image) {
-          /*var imageSrc, title;
-          imageSrc = spoiler.getAttribute('image');
-          title = spoiler.getAttribute('title');*/
           if (imageSrc) {
             image = document.createElement('img');
             image.setAttribute('src', imageSrc);
@@ -831,7 +828,7 @@
           };
         }
         galleries.appendChild(spoilerButton);
-        galleries.appendChild(document.createTextNode("\n"));
+        galleries.appendChild(document.createTextNode('\n'));
         spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
       }();
     });
@@ -839,15 +836,15 @@
     var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
 
     forEach(thumbnailsArray, function(index, self) {
-      self.addEventListener("click", function(){showContent(self, thumbnailsArray);}, false);
+      self.addEventListener('click', function(){showContent(self, thumbnailsArray);}, false);
     });
     forEach(backgroundsArray, function(index, self) {
-      self.addEventListener("click", function(){
+      self.addEventListener('click', function(){
         if (activeOutput) {resetContentOutputs(); buttonClicked(false, thumbnailsArray, true);}}, false);
     });
-    imgOutput.addEventListener("click", hideContent, false);
-    closeButton.addEventListener("click", hideContent, false);
+    imgOutput.addEventListener('click', hideContent, false);
+    closeButton.addEventListener('click', hideContent, false);
   }
 
-  document.addEventListener("DOMContentLoaded", documentOnReady);
+  document.addEventListener('DOMContentLoaded', documentOnReady);
 })();
