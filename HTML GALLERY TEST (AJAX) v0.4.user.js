@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.5.7
+// @version      2.5.8
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -11,6 +11,7 @@
 // @homepageURL  https://github.com/Qetuoadgj/HTML
 // @match        file:///*/2.0.4.html
 // @match        file:///*/2.0.2.html
+// @match        file:///*/HTML/tmp/html/*.html
 // ==/UserScript==
 
 // Require chrome extension:
@@ -721,7 +722,8 @@
       var targetType = e.target.tagName.toLowerCase();
 
       if (!(targetType == 'input' || targetType == 'textarea')) {
-        var hovered; if (activeSpoiler) hovered = activeSpoiler.querySelector('.thumbnail:hover');
+        // var hovered; if (activeSpoiler) hovered = activeSpoiler.querySelector('.thumbnail:hover');
+        var hovered = (activeSpoiler && activeThumbnail) ? activeThumbnail : activeSpoiler ?  activeSpoiler.querySelector('.thumbnail:hover') : null;
 
         if (e.keyCode == escKey) { // Escape
           hideContent();
