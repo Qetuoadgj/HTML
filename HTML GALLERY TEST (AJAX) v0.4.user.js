@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.7.0
+// @version      2.7.1
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -283,6 +283,7 @@
 	/* Changing src attr logic */
 	var echoSrc = function (img, callback) {
 		img.src = img.getAttribute('data-echo');
+		img.removeAttribute('data-echo');
 		if (callback) {
 			callback();
 		}
