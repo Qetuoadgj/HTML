@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.7.1
+// @version      2.7.2
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -282,7 +282,9 @@
 
 	/* Changing src attr logic */
 	var echoSrc = function (img, callback) {
-		img.src = img.getAttribute('data-echo');
+		var imgSrc = img.getAttribute('data-echo');
+		if (!imgSrc) return;
+		img.src = imgSrc;
 		img.removeAttribute('data-echo');
 		if (callback) {
 			callback();
@@ -291,6 +293,7 @@
 
 	/* Remove loaded item from array */
 	var removeEcho = function (element, index) {
+		if (!element.src) return;
 		if (echoStore.indexOf(element) !== -1) {
 			echoStore.splice(index, 1);
 		}
@@ -324,11 +327,13 @@
 	};
 
 	/* Initiate the plugin */
-	function initLazyLoad() {
-		var lazyImgs = document.querySelectorAll('img[data-echo]');
+	function initLazyLoad(lazyImgs) {
+		echoStore = [];
+		lazyImgs = lazyImgs || document.querySelectorAll('img[data-echo]');
 		for (var i = 0; i < lazyImgs.length; i++) {
 			new Echo(lazyImgs[i]).init();
 		}
+		echoImages();
 	}
 
 	// })(window, document);
@@ -526,6 +531,7 @@
 			forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
 			if (active) {buttonClicked(thisButton, spoilerButtonsArray, true); activeSpoiler = false;} else {
 				spoiler.style.display = 'block';
+				var lazyImagesArray = [];
 				var activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
 					var image = self.querySelector('img');
 					if (!image) {
@@ -544,6 +550,7 @@
 							if (!image) text.setAttribute('class', 'forced');
 						}
 					}
+					lazyImagesArray.push(image);
 				});
 
 				findDuplicates(activeThumbnails);
@@ -551,6 +558,8 @@
 				galleryList = createGalleryList(spoiler);
 				activeSpoiler = spoiler;
 				activeSpoilerButton = thisButton;
+
+				initLazyLoad(lazyImagesArray);
 			}
 		}
 
@@ -941,7 +950,7 @@
 				}
 				galleries.appendChild(spoilerButton);
 				galleries.appendChild(document.createTextNode('\n'));
-				spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler); initLazyLoad();}, false);
+				spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
 			}();
 		});
 
