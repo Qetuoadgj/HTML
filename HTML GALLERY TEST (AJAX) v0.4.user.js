@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://rddnickel.com/images/HTML%20icon.png
-// @version      2.7.2
+// @version      2.7.3
 // @description  Pure JavaScript version.
 // @author       Ægir
 // @grant        unsafeWindow
@@ -116,6 +116,10 @@
 
 		var linkText = clone.querySelector('#linkText');
 		if (linkText) linkText.remove();
+
+		var id = clone.getAttribute('id');
+		var title = clone.getAttribute('title');
+		if (id && id == title.toCamelCase()) clone.removeAttribute('id');
 
 		return [clone, spaces];
 	}
@@ -283,11 +287,22 @@
 	/* Changing src attr logic */
 	var echoSrc = function (img, callback) {
 		var imgSrc = img.getAttribute('data-echo');
-		if (!imgSrc) return;
+		if (!imgSrc) return callback();
 		img.src = imgSrc;
 		img.removeAttribute('data-echo');
 		if (callback) {
 			callback();
+		}
+	};
+
+	var setThumbnailImage = function (self) {
+		var image = self.querySelector('img');
+		if (image) {
+			var src = image.getAttribute('data-echo');
+			if (src) {
+				image.setAttribute('src', src);
+				image.removeAttribute('data-echo');
+			}
 		}
 	};
 
@@ -473,6 +488,8 @@
 				activeThumbnail = thisThumbnail; activeOutput = outputFrame; // activeContent = content;
 				closeButton.style.display = 'block';
 			}
+
+			setThumbnailImage(thisThumbnail);
 		}
 
 		function createGalleryList(gallery) {
