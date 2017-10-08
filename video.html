@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<style>
+		body {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			padding: 0px;
+			margin: 0px; top: 0px; left: 0px;
+		}
+		video {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			max-height: 100%;
+			max-width: 100%;
+			background: black;
+			padding: 0px;
+			margin: 0px;
+			top: 0px;
+			left: 0px;
+		}
+		</style>
+	</head>
+		<body>
+			<!-- https://s2-n5-nl-cdn.eporner.com/28fbeb7d149d7fff46d8abad2a69cc79/59d9a15f010600/1101004-480p.mp4 -->
+			<video id="cleaned_video" controls="" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></video>
+		</div>
+	</body>
+	<script>
+		var video = document.getElementById("cleaned_video");
+		
+	// -- GET VALUSE FROM URL [START]
+		var get_params = function(search_string) {
+			var parse = function(params, pairs) {
+				var pair = pairs[0];
+				var parts = pair.split("=");
+				var key = decodeURIComponent(parts[0]);
+				var value = decodeURIComponent(parts.slice(1).join("="));
+				// Handle multiple parameters of the same name
+				if (typeof params[key] === "undefined") {
+					params[key] = value;
+				} else {
+					params[key] = [].concat(params[key], value);
+				}
+				return pairs.length == 1 ? params : parse(params, pairs.slice(1));
+			};
+			// Get rid of leading ?
+			return search_string.length === 0 ? {} : parse({}, search_string.substr(1).split("&"));
+		};
+		var params = get_params(location.search);
+		// Finally, to get the param you want
+		// params["c"];
+		if (params.video_url) {
+			if (video) video.setAttribute("src", params.video_url);
+		}
+	</script>
+</html>
