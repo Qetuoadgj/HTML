@@ -1,127 +1,192 @@
 /* https://github.com/Qetuoadgj/HTML *//* version: 1.0.1 */
 
-body, .spoilertop, .thumbnail {
-  background: black;
+body, .spoilertop, .thumbnail
+{
+	background: black;
 }
 
-div {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* Non-prefixed version, currently not supported by any browser */
+div
+{
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none;	 /* Chrome/Safari/Opera */
+	-khtml-user-select: none;	 /* Konqueror */
+	-moz-user-select: none;		 /* Firefox */
+	-ms-user-select: none;		 /* Internet Explorer/Edge */
+	user-select: none;			 /* Non-prefixed version, currently not supported by any browser */
 }
 
-.background {
-  position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
+.background
+{
+	position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
 }
 
-.spoilertop, .thumbnail {
-  display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
+.spoilertop, .thumbnail
+{
+	display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
 }
 
-.spoilertop > p, .thumbnail > p {
-  margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
+.spoilertop > p, .thumbnail > p
+{
+	margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
 }
 
-.spoilertop > p.forced, .thumbnail > p.forced  {
-  display: block;
-  position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+.spoilertop > p.forced, .thumbnail > p.forced
+{
+	display: block;
+	position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
 }
 
-.spoilertop:hover, .thumbnail:hover {
-  border-color: red; border-style: solid; opacity: 1 !important;
+.spoilertop:hover, .thumbnail:hover
+{
+	border-color: red; border-style: solid; opacity: 1 !important;
 }
 
-.spoilertop > img, .thumbnail > img {
-  /*  position: relative; */ position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-  z-index: -1;
+.spoilertop > img, .thumbnail > img
+{
+	/*	position: relative; */ position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+	z-index: -1;
 }
 
-.spoilerbox {
-  display: none; height: 100%;
+.spoilerbox
+{
+	display: none; height: 100%;
 }
 
-.centered {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; display: none; max-width: 90% !important; max-height: 90% !important; object-fit: contain;
+.centered
+{
+	position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; display: none; max-width: 90% !important; max-height: 90% !important; object-fit: contain;
 }
 
-/* img.centered {
-  height: 100%; width: 100%;
+/* img.centered
+	{
+	height: 100%; width: 100%;
 } */
 
-/* .thumbnail > img, .centered {
-  -webkit-backface-visibility: hidden;
+/* .thumbnail > img, .centered
+	{
+	-webkit-backface-visibility: hidden;
 } */
 
-.centered:-webkit-full-screen {
-  top: 0px; left: 0px; transform: translate(0px, 0px);
+.centered:-webkit-full-screen
+{
+	top: 0px; left: 0px; transform: translate(0px, 0px);
 }
-.centered:-moz-full-screen {
-  top: 0px; left: 0px; transform: translate(0px, 0px);
+.centered:-moz-full-screen
+{
+	top: 0px; left: 0px; transform: translate(0px, 0px);
 }
-.centered:-ms-fullscreen {
-  top: 0px; left: 0px; transform: translate(0px, 0px);
+.centered:-ms-fullscreen
+{
+	top: 0px; left: 0px; transform: translate(0px, 0px);
 }
-.centered:fullscreen {
-  top: 0px; left: 0px; transform: translate(0px, 0px);
-}
-
-.wallpaper {
-  position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
-}
-
-.minimized {
-  position: fixed; right: 15px; bottom: 15px; top: initial; left: initial; transform: initial; width: 441px !important; height: 248px !important;
+.centered:fullscreen
+{
+	top: 0px; left: 0px; transform: translate(0px, 0px);
 }
 
-img.minimized {
-  width: inherit !important; height: inherit !important;
-  max-width: 441px !important; max-height: 248px !important;
+.wallpaper
+{
+	position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
 }
 
-/* .thumbnail > img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 100%;
-  width: 100%;
-  max-width: 90% !important;
-  max-height: 90% !important;
-  object-fit: contain;
+.minimized
+{
+	position: fixed; right: 15px; bottom: 15px; top: initial; left: initial; transform: initial; width: 441px !important; height: 248px !important;
+}
+
+img.minimized
+{
+	width: inherit !important; height: inherit !important;
+	max-width: 441px !important; max-height: 248px !important;
+}
+
+/* .thumbnail > img
+	{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	height: 100%;
+	width: 100%;
+	max-width: 90% !important;
+	max-height: 90% !important;
+	object-fit: contain;
 } */
 
-body {
-  font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
+body
+{
+	font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
 }
 
-.COMMENTED, .REMOVED {
-  visibility: hidden;
-  display: none;
+.COMMENTED, .REMOVED
+{
+	visibility: hidden;
+	display: none;
 }
 
-.duplicate_1, .duplicate_2 {
-  border-style: dashed !important; border-width: 2px !important; 
+.duplicate_1, .duplicate_2
+{
+	border-style: dashed !important; border-width: 2px !important;
 }
-.duplicate_1 {
-  border-color: antiquewhite;
+.duplicate_1
+{
+	border-color: antiquewhite;
 }
-.duplicate_2 {
-  border-color: lime;
+.duplicate_2
+{
+	border-color: lime;
 }
 
-#closeButton {
-  width: 32px;
-  height: 32px;
-  position: fixed;
-  top: 0;
-  right: 0;
-  display: none;
-  /* background-image: url(https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png); */
-  /* background-image: url(https://github.com/Qetuoadgj/HTML/raw/master/button_close-128.png); */
-  /* background-size: contain; */
-  border-color: black; border-style: solid; border-width: 1px;
-  z-index: 10;
+#buttons
+{
+	position: fixed;
+	top: 20%;
+	right: 0;
+	z-index: 11;
+}
+
+#closeButton, #nextButton, #prevButton, #delButton
+{
+	width: 32px;
+	height: 32px;
+	position: fixed;
+	top: 0;
+	right: 0;
+	display: none;
+	/* background-image: url(https://cdn3.iconfinder.com/data/icons/virtual-notebook/16/button_close-128.png); */
+	/* background-image: url(https://github.com/Qetuoadgj/HTML/raw/master/button_close-128.png); */
+	/* background-size: contain; */
+	border-color: black; border-style: solid; border-width: 1px;
+}
+
+#nextButton, #prevButton, #delButton
+{
+	width: 96px;
+	height: 96px;
+	opacity: 0.5;
+	margin: 10px;
+	position: relative;
+}
+
+#prevButton
+{
+	transform: scale(-1, 1);
+}
+
+#buttons canvas:hover
+{
+	background: rgba(255, 0, 0, 0.42);
+}
+
+#linkText
+{
+	position: fixed;
+	display: none;
+	/* height: 2.5%; */
+	bottom: 0;
+	left: 50%;
+	/* background: white; */
+	transform: translateX(-50%);
+	z-index: 100;
+	color: white;
 }

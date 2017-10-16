@@ -74,6 +74,13 @@
 		var closeButton = clone.querySelector('#closeButton');
 		if (closeButton) {closeButton.removeAttribute('width'); closeButton.removeAttribute('height');}
 
+		var nextButton = clone.querySelector('#nextButton');
+		if (nextButton) {nextButton.removeAttribute('width'); nextButton.removeAttribute('height');}
+		var delButton = clone.querySelector('#delButton');
+		if (delButton) {delButton.removeAttribute('width'); delButton.removeAttribute('height');}
+		var prevButton = clone.querySelector('#prevButton');
+		if (prevButton) {prevButton.removeAttribute('width'); prevButton.removeAttribute('height');}
+
 		clone.removeAttribute('style');
 		forEach(spoilerButtonsArray, function(index, self) {
 			// self.removeAttribute('style');
@@ -259,6 +266,45 @@
 		context.closePath();
 	}
 
+	function drawArrow(element, width, height, lineGaps, color, angle) {
+		var getRealDimensions = function(element) {
+			var realWidth, realHeight;
+			var realDimensions = [];
+			var clone = element.cloneNode(true);
+			clone.style.visibility = 'hidden';
+			clone.style.display = 'inline';
+			document.body.appendChild(clone);
+			realWidth = clone.offsetWidth;
+			realHeight = clone.offsetHeight;
+			clone.remove();
+			realDimensions.width = realWidth;
+			realDimensions.height = realHeight;
+			return realDimensions;
+		};
+
+		var real = getRealDimensions(element);
+
+		width = width || real.width || 64;
+		height = height || width || real.height || 64;
+
+		if (width || height) element.setAttribute('width', width || height);
+		if (height || width) element.setAttribute('height', height || width);
+		var context = element.getContext('2d');
+		context.beginPath();
+		context.lineWidth = width / 10;
+
+		lineGaps = lineGaps || 0.15;
+		var lineLength = 1 - lineGaps;
+
+		context.moveTo(width*2 * lineGaps, height * lineGaps);
+		context.lineTo(width*1.5 * 0.5, height * 0.5 + 3);
+		context.moveTo(width*1.5 * 0.5, height * 0.5 - 3);
+		context.lineTo(width*2 * lineGaps, height * lineLength);
+		if (color) context.strokeStyle = color;
+		context.stroke();
+		context.closePath();
+	}
+
 
 	// ==========================================================
 	// IMAGES LAZY LOAD
@@ -376,6 +422,13 @@
 		var closeButton = document.querySelector('#closeButton');
 		drawCloseButton(closeButton, null, null, null);
 
+		var nextButton = document.querySelector('#nextButton');
+		drawArrow(nextButton, null, null, null, 'white', null);
+		var delButton = document.querySelector('#delButton');
+		drawCloseButton(delButton, null, null, null, 'white', null);
+		var prevButton = document.querySelector('#prevButton');
+		drawArrow(prevButton, null, null, null, 'white', null);
+
 		var linkText = document.querySelector('#linkText');
 		if (!linkText) {
 			linkText = document.createElement('p');
@@ -446,6 +499,9 @@
 				buttonClicked(false, spoilerButtonsArray, true);
 			}
 			closeButton.style.removeProperty('display');
+			nextButton.style.removeProperty('display');
+			delButton.style.removeProperty('display');
+			prevButton.style.removeProperty('display');
 			linkText.innerText = null;
 		}
 
@@ -487,6 +543,9 @@
 
 				activeThumbnail = thisThumbnail; activeOutput = outputFrame; // activeContent = content;
 				closeButton.style.display = 'block';
+				nextButton.style.display = 'block';
+				delButton.style.display = 'block';
+				prevButton.style.display = 'block';
 			}
 
 			setThumbnailImage(thisThumbnail);
@@ -834,15 +893,21 @@
 			promptFrameContent.focus();
 		}
 
-		function onKeyDown(e) {
+		var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83,
+			zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75, eKey = 69,
+			lBracket = 219, rBracket = 221;
+
+		function onKeyDown(e, code) {
 			e = e || window.event;
-			var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83,
-				zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75, eKey = 69,
-				lBracket = 219, rBracket = 221;
+			// var cKey = 67, delKey = 46, lArrowKey = 37, rArrowKey = 39, escKey = 27, sKey = 83,
+			// 	zKey = 90, fKey = 70, qKey = 81, gKey = 71, kKey = 75, eKey = 69,
+			// 	lBracket = 219, rBracket = 221;
 
 			var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
 
 			var targetType = e.target.tagName.toLowerCase();
+
+			if (code) e.keyCode = code;
 
 			if (!(targetType == 'input' || targetType == 'textarea')) {
 				// var hovered; if (activeSpoiler) hovered = activeSpoiler.querySelector('.thumbnail:hover');
@@ -982,6 +1047,9 @@
 		});
 		imgOutput.addEventListener('click', hideContent, false);
 		closeButton.addEventListener('click', hideContent, false);
+		nextButton.addEventListener('click', function(e){onKeyDown(e, rArrowKey);}, false);
+		delButton.addEventListener('click', function(e){onKeyDown(e, delKey);}, false);
+		prevButton.addEventListener('click', function(e){onKeyDown(e, lArrowKey);}, false);
 	}
 
 	document.addEventListener('DOMContentLoaded', documentOnReady);
