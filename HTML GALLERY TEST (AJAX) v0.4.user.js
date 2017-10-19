@@ -333,12 +333,11 @@
 	/* Changing src attr logic */
 	var echoSrc = function (img, callback) {
 		var imgSrc = img.getAttribute('data-echo');
-		if (!imgSrc) return callback();
-		img.src = imgSrc;
-		img.removeAttribute('data-echo');
-		if (callback) {
-			callback();
+		if (imgSrc) {
+			img.src = imgSrc;
+			img.removeAttribute('data-echo');
 		}
+		if (typeof callback == 'function') callback();
 	};
 
 	var setThumbnailImage = function (self) {
