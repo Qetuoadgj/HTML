@@ -519,6 +519,7 @@
 				output = 'img';
 			} else if (!output) {
 				output = 'iframe';
+				content = content + '#autoplay=true';
 			}
 
 			buttonClicked(thisThumbnail, thumbnailsArray);
