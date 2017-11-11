@@ -378,18 +378,17 @@
         }
     }
 
-    function addHDtext(parentElement, qualityText, qualityPercent, textColor, backGroundAlpha, opactity) {
+    function addHDtext(parentElement, qualityText, backGroundColor, textColor, backGroundAlpha, opactity) {
         backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
         var mainDiv = document.createElement('div');
-        mainDiv.style.background = pickColourByScale(qualityPercent, 1, 100, 0, 100);
+        mainDiv.style.background = backGroundColor;
         mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
-        console.log(mainDiv.style.background);
         mainDiv.style.zIndex = 2147483647; // '10000';
         mainDiv.style.position = 'absolute'; // 'inherit'
         mainDiv.style.width = 'auto';
         mainDiv.style.height = '20px';
-        mainDiv.style.float = 'right';
-        mainDiv.style.right = '0';
+        mainDiv.style.float = 'left';
+        mainDiv.style.left = '0';
         if (textColor) mainDiv.style.color = textColor; // 'rgba(0, 253, 255, 0)';
         mainDiv.style.padding = '0px 2px';
         mainDiv.style.border = '1px solid rgba(255, 255, 255, 0.2)';
@@ -705,7 +704,8 @@
                     if (!image) {
                         var imageSrc = self.getAttribute('image');
                         var contentSrc = self.getAttribute('content');
-                        var title = self.getAttribute('title');
+                        var contentSize = self.getAttribute('quality');
+                        var text, title = self.getAttribute('title');
                         if (imageSrc || contentSrc) {
                             image = document.createElement('img');
                             image.setAttribute('data-echo', imageSrc || contentSrc); // src
@@ -713,16 +713,19 @@
                         }
                         if (title) {
                             //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
-                            var text = document.createElement('p');
+                            text = document.createElement('p');
                             text.innerHTML += title; self.appendChild(text);
                             if (!image) text.setAttribute('class', 'forced');
-                            var contentSize = title.match(/.*\[(\d+)x(\d+)\]$/i);
-                            // console.log('contentSize: ', contentSize);
-                            if (contentSize) {
-                                var quality = contentSize[1]*contentSize[2];
-                                text.style.color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
-                                // self.style['border-color'] = text.style.color;
-                                addHDtext(self, contentSize[2]+'p', quality/(1900*1080)*100, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
+                            contentSize = contentSize || title;
+                        }
+                        // console.log('contentSize: ', contentSize);
+                        if (contentSize) {
+                            contentSize = contentSize.match(/.*\[(\d+)x(\d+)\]$/i);
+                            var quality = contentSize ? contentSize[1]*contentSize[2] : null;
+                            if (quality) {
+                                var color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
+                                if (text) text.style.color = color;
+                                addHDtext(self, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                             }
                         }
                     }
@@ -1012,11 +1015,11 @@
             if (!(targetType == 'input' || targetType == 'textarea')) {
                 // var hovered; if (activeSpoiler) hovered = activeSpoiler.querySelector('.thumbnail:hover');
                 var hovered = null;
-                console.clear();
-                console.log('activeSpoiler: '+activeSpoiler);
-                console.log('activeThumbnail: '+activeSpoiler);
+                // console.clear();
+                // console.log('activeSpoiler: '+activeSpoiler);
+                // console.log('activeThumbnail: '+activeSpoiler);
                 hovered = (activeSpoiler && activeThumbnail) ? activeThumbnail : (activeSpoiler ?  activeSpoiler.querySelector('.thumbnail:hover') : null);
-                console.log('hovered: '+hovered);
+                // console.log('hovered: '+hovered);
 
                 if (e.keyCode == escKey) { // Escape
                     hideContent();
@@ -1119,11 +1122,17 @@
                         text.innerHTML += title;
                         spoilerButton.appendChild(text);
                         if (!imageSrc) text.setAttribute('class', 'forced');
-                        var contentSize = title.match(/.*\[(\d+)x(\d+)\]$/i);
-                        // console.log('contentSize: ', contentSize);
-                        if (contentSize) {
-                            var quality = contentSize[1]*contentSize[2];
-                            text.style.color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
+                    }
+                    var contentSize = spoilerButton.getAttribute('quality');
+                    if (title) contentSize = contentSize || title;
+                    // console.log('contentSize: ', contentSize);
+                    if (contentSize) {
+                        contentSize = contentSize.match(/.*\[(\d+)x(\d+)\]$/i);
+                        var quality = contentSize ? contentSize[1]*contentSize[2] : null;
+                        if (quality) {
+                            var color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
+                            if (text) text.style.color = color;
+                            addHDtext(spoilerButton, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                         }
                     }
                 }
