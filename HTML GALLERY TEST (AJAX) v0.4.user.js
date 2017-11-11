@@ -227,13 +227,6 @@
 
     Array.prototype.contains = function(obj) {var i = this.length; while (i--) {if (this[i] === obj) {return true;}} return false;};
 
-    function pickColourByScale(percent, clip, saturation, start, end) {
-        var a = (percent <= clip) ? 0 : (((percent - clip) / (100 - clip))),
-            b = Math.abs(end - start) * a,
-            c = (end > start) ? (start + b) : (start - b);
-        return 'hsl(' + c + ','+ saturation +'%,50%)';
-    }
-
     function drawCloseButton(element, width, height, lineGaps, color) {
         var getRealDimensions = function(element) {
             var realWidth, realHeight;
@@ -312,6 +305,98 @@
         context.closePath();
     }
 
+    // * Converts an HSL color value to RGB. Conversion formula
+    // * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+    // * Assumes h, s, and l are contained in the set [0, 1] and
+    // * returns r, g, and b in the set [0, 255].
+    // *
+    // * @param   {number}  h       The hue
+    // * @param   {number}  s       The saturation
+    // * @param   {number}  l       The lightness
+    // * @return  {Array}           The RGB representation
+    function hslToRgb(h, s, l){
+        var r, g, b;
+        if(s === 0){
+            r = g = b = l; // achromatic
+        }else{
+            var hue2rgb = function hue2rgb(p, q, t){
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            var p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+    // * Converts an RGB color value to HSL. Conversion formula
+    // * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+    // * Assumes r, g, and b are contained in the set [0, 255] and
+    // * returns h, s, and l in the set [0, 1].
+    // *
+    // * @param   {number}  r       The red color value
+    // * @param   {number}  g       The green color value
+    // * @param   {number}  b       The blue color value
+    // * @return  {Array}           The HSL representation
+    function rgbToHsl(r, g, b){
+        r /= 255; g /= 255; b /= 255;
+        var max = Math.max(r, g, b), min = Math.min(r, g, b);
+        var h, s, l = (max + min) / 2;
+        if(max == min){
+            h = s = 0; // achromatic
+        }else{
+            var d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max){
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+        return [h, s, l];
+    }
+
+    function pickColourByScale(percent, clip, saturation, start, end, format) {
+        format = format || 'hsl';
+        var a = (percent <= clip) ? 0 : (((percent - clip) / (100 - clip))),
+            b = Math.abs(end - start) * a,
+            c = (end > start) ? (start + b) : (start - b);
+        var h = c, s = saturation, l = '50%';
+        if (format=='hsl') {
+            return 'hsl(' + c + ','+ saturation +'%,50%)';
+        } else {
+            var rgb = hslToRgb(h, s, l);
+            return 'rgb('+rgb[1]+', '+rgb[2]+', '+rgb[3]+')';
+        }
+    }
+
+    function addHDtext(parentElement, qualityText, qualityPercent, textColor, backGroundAlpha, opactity) {
+        backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
+        var mainDiv = document.createElement('div');
+        mainDiv.style.background = pickColourByScale(qualityPercent, 1, 100, 0, 100);
+        mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
+        console.log(mainDiv.style.background);
+        mainDiv.style.zIndex = 2147483647; // '10000';
+        mainDiv.style.position = 'absolute'; // 'inherit'
+        mainDiv.style.width = 'auto';
+        mainDiv.style.height = '20px';
+        mainDiv.style.float = 'right';
+        mainDiv.style.right = '0';
+        if (textColor) mainDiv.style.color = textColor; // 'rgba(0, 253, 255, 0)';
+        mainDiv.style.padding = '0px 2px';
+        mainDiv.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+        mainDiv.innerText = qualityText;
+        mainDiv.style.opacity = opactity === 0 ? 0 : opactity ? opactity : 0.65;
+        parentElement.insertBefore(mainDiv, parentElement.firstChild);
+    }
 
     // ==========================================================
     // IMAGES LAZY LOAD
@@ -636,6 +721,8 @@
                             if (contentSize) {
                                 var quality = contentSize[1]*contentSize[2];
                                 text.style.color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
+                                // self.style['border-color'] = text.style.color;
+                                addHDtext(self, contentSize[2]+'p', quality/(1900*1080)*100, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                             }
                         }
                     }
