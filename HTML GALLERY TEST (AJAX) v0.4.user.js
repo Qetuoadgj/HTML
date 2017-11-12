@@ -720,7 +720,8 @@
                         }
                         // console.log('contentSize: ', contentSize);
                         if (contentSize) {
-                            contentSize = contentSize.match(/.*\[(\d+)x(\d+)\]$/i);
+                            contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
+                            console.log(contentSize);
                             var quality = contentSize ? contentSize[1]*contentSize[2] : null;
                             if (quality) {
                                 var color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
@@ -1127,7 +1128,7 @@
                     if (title) contentSize = contentSize || title;
                     // console.log('contentSize: ', contentSize);
                     if (contentSize) {
-                        contentSize = contentSize.match(/.*\[(\d+)x(\d+)\]$/i);
+                        contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
                         var quality = contentSize ? contentSize[1]*contentSize[2] : null;
                         if (quality) {
                             var color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
