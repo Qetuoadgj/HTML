@@ -129,6 +129,10 @@
         if (id && id == title.toCamelCase()) clone.removeAttribute('id');
 
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
+        forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
+
+        clone.innerHTML = clone.innerHTML.replace(/(\<\/div\>)(\<div )/g, '$1\n'+whitespace+'\t$2');
+        clone.innerHTML = clone.innerHTML.replace(/(\n[\t ]+){3,}/g, '$1$1');
 
         return [clone, spaces];
     }
@@ -643,6 +647,7 @@
             }
 
             setThumbnailImage(thisThumbnail);
+            galleryList = createGalleryList(activeSpoiler);
         }
 
         function createGalleryList(gallery) {
@@ -1169,6 +1174,14 @@
         nextButton.addEventListener('click', function(e){onKeyDown(e, rArrowKey);}, false);
         delButton.addEventListener('click', function(e){onKeyDown(e, delKey);}, false);
         prevButton.addEventListener('click', function(e){onKeyDown(e, lArrowKey);}, false);
+
+        /* $( '.spoilerbox' ).sortable({
+            beforeStop: function addGap( event, ui ) {
+                var item = event.target;
+                // console.log(event.target);
+                item.outerHTML = item.outerHTML; //.replace(/(<\/div>)(<div>)/g, '\1\n\2');
+            }
+        });*/
     }
 
     document.addEventListener('DOMContentLoaded', documentOnReady);
