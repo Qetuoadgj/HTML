@@ -128,6 +128,8 @@
         var title = clone.getAttribute('title');
         if (id && id == title.toCamelCase()) clone.removeAttribute('id');
 
+        forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
+
         return [clone, spaces];
     }
 
@@ -381,6 +383,7 @@
     function addHDtext(parentElement, qualityText, backGroundColor, textColor, backGroundAlpha, opactity) {
         backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
         var mainDiv = document.createElement('div');
+        mainDiv.setAttribute('class', 'qualityText');
         mainDiv.style.background = backGroundColor;
         mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
         mainDiv.style.zIndex = 2147483647; // '10000';
