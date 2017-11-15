@@ -497,7 +497,7 @@
     // })(window, document);
     // ==========================================================
 
-    function addMouseWheelHandler(element, onF, onB, preventDefaultF, preventDefaultB) {
+    function addMouseWheelHandler(element, onB, onF, preventDefaultB, preventDefaultF) {
         var mouseScroll = (e) => {
             // cross-browser wheel delta
             e = window.event || e; // old IE support
