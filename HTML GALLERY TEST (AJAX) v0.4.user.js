@@ -131,7 +131,7 @@
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
         forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
 
-        clone.innerHTML = clone.innerHTML.replace(/(\<\/div\>)(\<div )/g, '$1\n'+whitespace+'\t$2');
+        clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
         clone.innerHTML = clone.innerHTML.replace(/(\n[\t ]+){3,}/g, '$1$1');
 
         return [clone, spaces];
@@ -496,6 +496,28 @@
 
     // })(window, document);
     // ==========================================================
+
+    function addMouseWheelHandler(element, onF, onB, preventDefaultF, preventDefaultB) {
+        var mouseScroll = (e) => {
+            // cross-browser wheel delta
+            e = window.event || e; // old IE support
+            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            if (delta > 0) {
+                onF();
+                if (preventDefaultF) e.preventDefault();
+            }
+            else if (delta < 0) {
+                onB();
+                if (preventDefaultB) e.preventDefault();
+            }
+        };
+        if (element.addEventListener) {
+            element.addEventListener("mousewheel", mouseScroll, false); // IE9, Chrome, Safari, Opera
+            element.addEventListener("DOMMouseScroll", mouseScroll, false); // Firefox
+        } else {
+            element.attachEvent("onmousewheel", mouseScroll); // IE 6/7/8
+        }
+    }
 
     function documentOnReady() {
         // GLOBAL VARIABLES
@@ -1174,6 +1196,10 @@
         nextButton.addEventListener('click', function(e){onKeyDown(e, rArrowKey);}, false);
         delButton.addEventListener('click', function(e){onKeyDown(e, delKey);}, false);
         prevButton.addEventListener('click', function(e){onKeyDown(e, lArrowKey);}, false);
+
+        addMouseWheelHandler(nextButton, function(e){onKeyDown(e, rArrowKey);}, function(e){onKeyDown(e, lArrowKey);}, true, true);
+        addMouseWheelHandler(prevButton, function(e){onKeyDown(e, rArrowKey);}, function(e){onKeyDown(e, lArrowKey);}, true, true);
+        addMouseWheelHandler(delButton, function(e){onKeyDown(e, rArrowKey);}, function(e){onKeyDown(e, lArrowKey);}, true, true);
 
         /* $( '.spoilerbox' ).sortable({
             beforeStop: function addGap( event, ui ) {
