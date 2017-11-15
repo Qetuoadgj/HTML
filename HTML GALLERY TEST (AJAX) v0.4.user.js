@@ -130,6 +130,7 @@
 
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
         forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
+        forEach(clone.querySelectorAll('.ui-sortable'), function(index, self) {self.classList.remove('ui-sortable');});
 
         clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
         clone.innerHTML = clone.innerHTML.replace(/(\n[\t ]+){3,}/g, '$1$1');
