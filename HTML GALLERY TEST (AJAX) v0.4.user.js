@@ -499,6 +499,18 @@
 		parentElement.insertBefore(mainDiv, parentElement.firstChild);
 	}
 
+	function hmsToSecondsOnly(str) {
+		var p = str.split(':'),
+			s = 0, m = 1;
+
+		while (p.length > 0) {
+			s += m * parseInt(p.pop(), 10);
+			m *= 60;
+		}
+
+		return s;
+	}
+
 	// ==========================================================
 	// IMAGES LAZY LOAD
 	// https://toddmotto.com/echo-js-simple-javascript-image-lazy-loading/
@@ -738,6 +750,12 @@
 			} else if (!output) {
 				output = 'iframe';
 				content = content + '#autoplay=true';
+				var start = thisThumbnail.getAttribute('start');
+				var end = thisThumbnail.getAttribute('end');
+				if (start || end) {
+					var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
+					content = content + '&' + '#t=' + duration;
+				}
 			}
 
 			buttonClicked(thisThumbnail, thumbnailsArray);
