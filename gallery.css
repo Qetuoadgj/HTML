@@ -197,3 +197,10 @@ body
 	z-index: 100;
 	color: white;
 }
+
+.thumbnail {
+	list-style: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
