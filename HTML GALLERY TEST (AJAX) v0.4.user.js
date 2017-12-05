@@ -12,6 +12,12 @@
 // @match		 file:///*/2.0.4.html
 // @match		 file:///*/2.0.2.html
 // @match		 file:///*/HTML/tmp/html/*.html
+//
+// ------------- http://api.jqueryui.com/sortable/ -------------
+// @require      https://code.jquery.com/jquery-1.12.4.js
+// @require      https://code.jquery.com/ui/1.12.1/jquery-ui.js
+// -------------------------------------------------------------
+//
 // ==/UserScript==
 
 // Require chrome extension:
@@ -224,6 +230,8 @@
 
 		forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
 		forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
+		forEach(clone.querySelectorAll('.ui-handle'), function(index, self) {self.classList.remove('ui-handle');});
+		clone.classList.remove('ui-handle');
 		clone.classList.remove('ui-sortable');
 
 		clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
@@ -570,6 +578,7 @@
 			var self = echoStore[i];
 			if (scrolledIntoView(self)) {
 				echoSrc(self, removeEcho(self, i));
+				self.parentNode.classList.add('ui-handle');
 			}
 		}
 	};
@@ -626,11 +635,46 @@
 		}
 	}
 
+	function insertAfter(elem, refElem) {
+		return refElem.parentNode.insertBefore(elem, refElem.nextSibling);
+	}
+
+	function splitOnParts(element, childrenSelector, splitCount) {
+		var children = element.querySelectorAll(childrenSelector);
+		var childrenCount = children.length;
+		var iterations = Math.ceil(childrenCount / splitCount);
+		if (iterations > 1) {
+			var iteration = 1, num = 1;
+			for (var i = 0; i < children.length; ++i) {
+				var clone;
+				if (num == 1) {
+					clone = element.parentNode.insertBefore(element.cloneNode(false), element);
+					clone.title += ' pt'+(iteration);
+				}
+				if (num == splitCount) {
+					num = 0; ++iteration;
+				}
+				var child = children[i];
+				clone.appendChild(child);
+				num = num+1;
+			}
+			element.remove();
+		}
+	}
+
 	function documentOnReady() {
 		// GLOBAL VARIABLES
 		var wallpaperVideo = document.querySelector('video#wallpapers');
 		// var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop'); // moved down
 		var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+
+		forEach(spoilersArray, function(index, spoiler) {
+			var splitCount = spoiler.getAttribute('splitCount') || 250;
+			splitOnParts(spoiler, 'div.thumbnail', splitCount)
+		});
+
+		spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+
 		var thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
 		var outputs = document.getElementById('content');
 		var outputsArray = [];
@@ -885,6 +929,13 @@
 				activeSpoilerButton = thisButton;
 
 				initLazyLoad(lazyImagesArray);
+
+				if (!(typeof jQuery == 'undefined') && !spoiler.getAttribute('nosortable')) {
+					$( spoiler ).sortable({
+						items: '> .thumbnail'
+					});
+					$( spoiler ).disableSelection();
+				}
 			}
 		}
 
@@ -1236,7 +1287,7 @@
 				spoiler_id = title ? title.toCamelCase() : null;
 				self.setAttribute('id', spoiler_id);
 			}
-			var allowBackground = self.getAttribute('background'); if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild);backgroundsArray.push(background);}
+			var allowBackground = self.getAttribute('background'); if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild); backgroundsArray.push(background);}
 			var thumbnailsStyle = self.getAttribute('css'); if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoiler_id+' > .thumbnail '+'{'+thumbnailsStyle+'}', 'temporary');}
 			var lazyImagesArray = [];
 			var createButton = function() {
@@ -1298,24 +1349,23 @@
 		});
 		imgOutput.addEventListener('click', hideContent, false);
 		closeButton.addEventListener('click', hideContent, false);
-		nextButton.addEventListener('click', function(e){onKeyDown(e, rArrowKey);}, false);
-		delButton.addEventListener('click', function(e){onKeyDown(e, delKey);}, false);
-		prevButton.addEventListener('click', function(e){onKeyDown(e, lArrowKey);}, false);
+		nextButton.addEventListener('click', function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, false);
+		delButton.addEventListener('click', function(e){onKeyDown(e, KEY_DELETE);}, false);
+		prevButton.addEventListener('click', function(e){onKeyDown(e, KEY_LEFT_ARROW);}, false);
 
-		addMouseWheelHandler(nextButton, function(e){onKeyDown(e, rArrowKey);}, function(e){onKeyDown(e, lArrowKey);}, true, true);
-		addMouseWheelHandler(prevButton, function(e){onKeyDown(e, rArrowKey);}, function(e){onKeyDown(e, lArrowKey);}, true, true);
-		addMouseWheelHandler(delButton, function(e){onKeyDown(e, rArrowKey);}, function(e){onKeyDown(e, lArrowKey);}, true, true);
-
-		/*
-			$( '.spoilerbox' ).sortable({
-			beforeStop: function addGap( event, ui ) {
-				var item = event.target;
-				// console.log(event.target);
-				item.outerHTML = item.outerHTML; //.replace(/(<\/div>)(<div>)/g, '\1\n\2');
-			}
-		});
-		*/
+		addMouseWheelHandler(nextButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
+		addMouseWheelHandler(prevButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
+		addMouseWheelHandler(delButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
 	}
 
 	document.addEventListener('DOMContentLoaded', documentOnReady);
+
+	/*
+	if (typeof jQuery == 'undefined') {
+		var script = document.createElement('script');
+		script.type = "text/javascript";
+		script.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js";
+		document.getElementsByTagName('head')[0].appendChild(script);
+	}
+	*/
 })();
