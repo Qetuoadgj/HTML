@@ -27,7 +27,7 @@
 	'use strict';
 
 	// Your code here...
-	var G_disabledHosts = disabledHosts || [];
+	var G_disabledHosts = (typeof disabledHosts == 'undefined' || !disabledHosts) ? [] : disabledHosts;
 
 	//GLOBAL FUNCTIONS
 	var KEY_BACKSPACE = 8,
