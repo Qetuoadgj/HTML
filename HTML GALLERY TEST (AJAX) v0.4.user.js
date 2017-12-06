@@ -28,6 +28,7 @@
 
 	// Your code here...
 	var G_disabledHosts = (typeof disabledHosts == 'undefined' || !disabledHosts) ? [] : disabledHosts;
+	// console.log('disabledHosts: ', G_disabledHosts);
 
 	//GLOBAL FUNCTIONS
 	var KEY_BACKSPACE = 8,
@@ -982,7 +983,7 @@
 					}
 					if (image) lazyImagesArray.push(image);
 					var host = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
-					if (host.indexOf(G_disabledHosts) !== -1) {
+					if (G_disabledHosts.includes(host)) {
 						self.classList.add('disabled-host');
 						// console.log(host, G_disabledHosts);
 					}

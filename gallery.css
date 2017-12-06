@@ -62,6 +62,8 @@ div
 .centered
 {
 	position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; display: none; max-width: 90% !important; max-height: 90% !important; object-fit: contain;
+    border-width: 0.75px; border-style: solid; border-color: black;
+    background: rgba(0, 0, 0, 0.33);
 }
 
 /* img.centered
@@ -131,7 +133,7 @@ body
 	display: none;
 }
 
-.duplicate_1, .duplicate_2
+.duplicate_1, .duplicate_2, .disabled-host
 {
 	border-style: dashed !important; border-width: 2px !important;
 }
@@ -142,6 +144,11 @@ body
 .duplicate_2
 {
 	border-color: lime;
+}
+
+.disabled-host
+{
+	border-color: cadetblue;
 }
 
 #buttons
