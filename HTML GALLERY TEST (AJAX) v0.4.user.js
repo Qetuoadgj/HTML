@@ -232,6 +232,7 @@
 		forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
 		forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
 		forEach(clone.querySelectorAll('.ui-handle'), function(index, self) {self.classList.remove('ui-handle');});
+		forEach(clone.querySelectorAll('.disabled-host'), function(index, self) {self.classList.remove('disabled-host');});
 		clone.classList.remove('ui-handle');
 		clone.classList.remove('ui-sortable');
 
