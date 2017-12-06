@@ -171,6 +171,14 @@ body
 	/* background-image: url(https://github.com/Qetuoadgj/HTML/raw/master/button_close-128.png); */
 	/* background-size: contain; */
 	border-color: black; border-style: solid; border-width: 1px;
+	/* */
+    border-width: 0.75px; border-style: solid; border-color: black; background: rgba(0, 0, 0, 0.33);
+	/* border-radius: 10px; */
+}
+
+#closeButton
+{
+	background: rgba(0, 0, 0, 0.165);
 }
 
 #nextButton, #prevButton, #delButton
@@ -211,3 +219,10 @@ body
 	-moz-user-select: none;
 	user-select: none;
 }
+
+/*
+div, canvas, .centered
+{
+	border-radius: 16px;
+}
+*/
