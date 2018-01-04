@@ -236,6 +236,7 @@
 		forEach(clone.querySelectorAll('.disabled-host'), function(index, self) {self.classList.remove('disabled-host');});
 		clone.classList.remove('ui-handle');
 		clone.classList.remove('ui-sortable');
+		clone.classList.remove('ui-sortable-handle');
 
 		clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
 		clone.innerHTML = clone.innerHTML.replace(/([\r\n]+[\t ]+){3,}/g, '$1$1');
@@ -723,6 +724,36 @@
 			element.remove();
 		}
 	}
+
+	/*
+	function joinParts(spoilersArray) {
+		var storage = {};
+		forEach(spoilersArray, function(index, spoiler) {
+			var title = spoiler.title;
+			var match = title.match(/(.*) pt\d+/);
+			if (match) {
+				var name = match[1];
+				if (!storage[name]) {
+					spoiler.title = name;
+					storage[name] = spoiler;
+				}
+				else {
+					var children = spoiler.childNodes;
+					for (var i = 0; i < children.length; ++i) {
+						var child = children[i];
+						storage[name].appendChild(child);
+					}
+					spoiler.remove();
+					var spoilerButton = document.querySelector('.spoilertop[title="'+title+'"');
+					if (spoilerButton) spoilerButton.remove();
+					console.log('.spoilertop[title="'+title+'"');
+				}
+				console.log(children);
+			}
+		});
+		console.log(storage);
+	}
+	*/
 
 	function documentOnReady() {
 		// GLOBAL VARIABLES
@@ -1337,6 +1368,8 @@
 
 		// window.onkeydown =  function(e){onKeyDown(e);};
 		window.addEventListener('keydown', function(e){onKeyDown(e);}, false);
+
+		// joinParts(spoilersArray); spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
 
 		forEach(spoilersArray, function(index, self) {
 			var imageSrc = self.dataset.image;
