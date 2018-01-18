@@ -1,405 +1,536 @@
 <!DOCTYPE HTML>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8">
-    <title>SearchEngine.html</title>
-    <link rel="icon" type="image/png" href="http://iconspot.ru/files/87916.png"/>
-    <!-- <script src=""></script> -->
-    <style>
-      .spoilertop {
-      background: black;
-      }
+	<head>
+		<meta charset="UTF-8">
+		<title>SearchEngine.html</title>
+		<link rel="icon" type="image/png" href="http://iconspot.ru/files/87916.png"/>
+		<!-- <script src=""></script> -->
+		<style>
+			.spoilertop {
+			background: black;
+			}
 
-      div {
-      -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none;   /* Chrome/Safari/Opera */
-      -khtml-user-select: none;    /* Konqueror */
-      -moz-user-select: none;      /* Firefox */
-      -ms-user-select: none;       /* Internet Explorer/Edge */
-      user-select: none;           /* Non-prefixed version, currently not supported by any browser */
-      }
+			div {
+			-webkit-touch-callout: none; /* iOS Safari */
+			-webkit-user-select: none;	 /* Chrome/Safari/Opera */
+			-khtml-user-select: none;		 /* Konqueror */
+			-moz-user-select: none;			 /* Firefox */
+			-ms-user-select: none;			 /* Internet Explorer/Edge */
+			user-select: none;					 /* Non-prefixed version, currently not supported by any browser */
+			}
 
-      .background {
-      position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
-      }
+			.background {
+			position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
+			}
 
-      .spoilertop {
-      display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
-      /* margin: 0px 4px 0px 0px; */
-      }
+			.spoilertop {
+			display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
+			/* margin: 0px 4px 0px 0px; */
+			}
 
-      .spoilertop > p {
-      margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
-      }
+			.spoilertop > p {
+			margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
+			}
 
-      .spoilertop > p.forced {
-      display: block;
-      position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-      }
+			.spoilertop > p.forced {
+			display: block;
+			position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+			}
 
-      .spoilertop:hover {
-      border-color: red; border-style: solid; opacity: 1 !important;
-      }
+			.spoilertop:hover {
+			border-color: red; border-style: solid; opacity: 1 !important;
+			}
 
-      .spoilertop > img {
-      position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-      z-index: -1;
-      }
+			.spoilertop > img {
+			position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+			z-index: -1;
+			}
 
-      .spoilerbox {
-      display: none; height: 100%;
-      }
+			.spoilerbox {
+			display: none; height: 100%;
+			}
 
-      .wallpaper {
-      position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
-      z-index: -1;
-      }
+			.wallpaper {
+			position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
+			z-index: -1;
+			}
 
-      body {
-      font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
-      }
+			body {
+			font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
+			}
 
-      .spoilerbox > div > a:not(:hover) {
-      text-decoration: none;
-      }
-      .spoilerbox > div > a:hover {
-      font-size: 20px /* 24px */;
-      color: red;
-      }
+			.spoilerbox > div > a:not(:hover) {
+			text-decoration: none;
+			}
+			.spoilerbox > div > a:hover {
+			font-size: 20px /* 24px */;
+			color: red;
+			}
 
-      .spoilerbox a {
-        color: #086081;
-      }
-      
-      /*.spoilerbox {
-        -webkit-column-count: 3; /* Chrome, Safari, Opera */
-           -moz-column-count: 3; /* Firefox */
-                column-count: 3;
-      }
-      .siteLink {
-        -webkit-column-break-inside: avoid; /* Chrome, Safari */
-        page-break-inside: avoid;           /* Theoretically FF 20+ */
-        break-inside: avoid-column;         /* IE 11 */
-      }*/
-    </style>
-    <!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
-    <script>
-      //GLOBAL FUNCTIONS
-      function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
-      Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
+			.spoilerbox a {
+				color: #086081;
+			}
 
-      document.addEventListener('DOMContentLoaded', function() {
-        // GLOBAL VARIABLES
-        // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
-        var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
-        var activeSpoilerButton, activeSpoiler;
-        var activeLinksList = [], activeQueriesList = [];
+			.spoilerbox {
+				-webkit-column-count: 3; /* Chrome, Safari, Opera */
+					 -moz-column-count: 3; /* Firefox */
+								column-count: 3;
+			}
+			.siteLink {
+				-webkit-column-break-inside: avoid; /* Chrome, Safari */
+				page-break-inside: avoid;						/* Theoretically FF 20+ */
+				break-inside: avoid-column;					/* IE 11 */
+			}
+		</style>
+		<!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
+		<script>
+			//GLOBAL FUNCTIONS
+			function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
+			Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
 
-        forEach(spoilersArray, function(index, self) {
-          var spoiler = self;
-          var text = spoiler.innerText;
-          var queriesList = text.split('\n');
-          spoiler.innerHTML = '';
+			String.prototype.toTitleCase = function(lower) {
+				var string = lower ? this.toLowerCase() : this;
+				var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
 
-          var sortLinks = true;
+				return string.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
+					if (index > 0 && index + match.length !== title.length &&
+							match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
+							(title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
+							title.charAt(index - 1).search(/[^\s-]/) < 0) {
+						return match.toLowerCase();
+					}
 
-          if (sortLinks) queriesList.sort(function(a, b) {
-            a = a.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
-            b = b.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
-            return a.localeCompare(b);
-          });
+					if (match.substr(1).search(/[A-Z]|\../) > -1) {
+						return match;
+					}
 
-          forEach(queriesList, function(index, self) {
-            var query = self.trim();
-            if (query !== '') {
-              var a = document.createElement('a');
-              a.text = query.replace('<a>', '').replace('</a>', '');
-              spoiler.appendChild(a);
-            }
-          });
+					return match.charAt(0).toUpperCase() + match.substr(1);
+				});
+			};
+			
+			// -- GET VALUSE FROM URL [START]
+			function getParamsFromURL(searchString) {
+				var parse = function(params, pairs) {
+					var pair = pairs[0];
+					var parts = pair.split('=');
+					var key = decodeURIComponent(parts[0]).replace(/.*?\?/, '');
+					var value = decodeURIComponent(parts.slice(1).join('='));
+					// Handle multiple parameters of the same name
+					if (typeof params[key] === "undefined") params[key] = value;
+					else params[key] = [].concat(params[key], value);
+					return pairs.length == 1 ? params : parse(params, pairs.slice(1));
+				};
+				// Get rid of leading ?
+				return searchString.length === 0 ? {} : parse({}, searchString.split('&')); // .substr(1)
+			}
+			function getParams() {
+				var params = getParamsFromURL(location.search);
+				// Finally, to get the param you want
+				// params['c'];
+				if (params.q) {
+					searchField.value = params.q;
+					// Create a new 'change' event
+					var event = new Event('change');
+					// Dispatch it.
+					searchField.dispatchEvent(event);
+				}
+			}
+			// -- GET VALUSE FROM URL [END]
 
-          var createButton = function() {
-            var spoilerButton = document.createElement('div');
-            spoilerButton.setAttribute('class', 'spoilertop');
-            var image = spoilerButton.querySelector('img');
-            var text = spoilerButton.querySelector('p');
-            var imageSrc = spoiler.getAttribute('image');
-            var title = spoiler.getAttribute('title');
-            spoiler.removeAttribute('image');
-            spoiler.removeAttribute('title');        
-            if (!image) {
-              if (imageSrc) {
-                image = document.createElement('img');
-                image.setAttribute('src', imageSrc);
-                spoilerButton.appendChild(image);
-              }
-              if (title) {
-                text = text || document.createElement('p');
-                text.innerHTML += title;
-                spoilerButton.appendChild(text);
-                if (!imageSrc) text.setAttribute('class', 'forced');
-              }
-            }
-            if (image && text) {
-              image.onerror = function() {
-                // this.remove();
-                text.setAttribute('class', 'forced');
-              };
-              spoilerButton.setAttribute('title', title);
-            }
-            galleries.appendChild(spoilerButton);
-            galleries.appendChild(document.createTextNode('\n'));
-            spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
-          }();
-        });
-        var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+			document.addEventListener('DOMContentLoaded', function() {
+				// GLOBAL VARIABLES
+				// var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+				var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+				var activeSpoilerButton, activeSpoiler;
+				var activeLinksList = [], activeQueriesList = [];
 
-        var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
+				forEach(spoilersArray, function(index, self) {
+					var spoiler = self;
+					var text = spoiler.innerText;
+					var queriesList = text.split('\n');
+					spoiler.innerHTML = '';
 
-        // DOCUMENT FUNCTIONS
-        function buttonClicked(button, buttonsArray, unclick) {
-          if (unclick) {
-            forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
-          } else {
-            forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
-            button.style.removeProperty('opacity');
-          }
-        }
+					var sortLinks = false;
 
-        function showSpoiler(thisButton, spoiler) {
-          var active = spoiler.isVisible();
-          buttonClicked(thisButton, spoilerButtonsArray);
-          forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
-          if (active) {
-            buttonClicked(thisButton, spoilerButtonsArray, true);
-            activeSpoiler = false;
-            activeLinksList = [];
-            activeQueriesList = [];
-          } else {
-            spoiler.style.display = 'block';
-            activeLinksList = spoiler.querySelectorAll('a');
-            activeQueriesList = [];
-            forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
-            activeSpoiler = spoiler;
-            activeSpoilerButton = thisButton;
-          }
-          lastClicked = null;
-        }
+					if (sortLinks) queriesList.sort(function(a, b) {
+						a = a.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
+						b = b.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
+						return a.localeCompare(b);
+					});
 
-        var bodyStyle = window.getComputedStyle(document.body, null);
-        var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
-        var margin = '5px 0px 0px 0px';
-        var searchField = document.querySelector('#searchField');
-        var linksList = [];
-        var queriesList = [];
-        var domainsList = [];
+					forEach(queriesList, function(index, self) {
+						var query = self.trim();
+						if (query !== '') {
+							var a = document.createElement('a');
+							a.text = query.replace('<a>', '').replace('</a>', '');
+							spoiler.appendChild(a);
+						}
+					});
 
-        var shortNames = true;
+					var createButton = function() {
+						var spoilerButton = document.createElement('div');
+						spoilerButton.setAttribute('class', 'spoilertop');
+						var image = spoilerButton.querySelector('img');
+						var text = spoilerButton.querySelector('p');
+						var imageSrc = spoiler.getAttribute('image');
+						var title = spoiler.getAttribute('title');
+						spoiler.removeAttribute('image');
+						spoiler.removeAttribute('title');
+						if (!image) {
+							if (imageSrc) {
+								image = document.createElement('img');
+								image.setAttribute('src', imageSrc);
+								spoilerButton.appendChild(image);
+							}
+							if (title) {
+								text = text || document.createElement('p');
+								text.innerHTML += title;
+								spoilerButton.appendChild(text);
+								if (!imageSrc) text.setAttribute('class', 'forced');
+							}
+						}
+						if (image && text) {
+							image.onerror = function() {
+								// this.remove();
+								text.setAttribute('class', 'forced');
+							};
+							spoilerButton.setAttribute('title', title);
+						}
+						galleries.appendChild(spoilerButton);
+						galleries.appendChild(document.createTextNode('\n'));
+						spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
+					}();
+				});
+				var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
 
-        var lastClicked;
+				var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
 
-        searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
-        searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
-        searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
-        searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
-        // searchField.style.color = bodyStyle.getPropertyValue('color');
+				// DOCUMENT FUNCTIONS
+				function buttonClicked(button, buttonsArray, unclick) {
+					if (unclick) {
+						forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
+					} else {
+						forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
+						button.style.removeProperty('opacity');
+					}
+				}
 
-        forEach(searchesArray, function(index, self) {
-          var spoilerbox = self.parentNode;
-          var query = self.text;
-          var domain = query;
-          domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
-          domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
+				function showSpoiler(thisButton, spoiler) {
+					var active = spoiler.isVisible();
+					buttonClicked(thisButton, spoilerButtonsArray);
+					forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
+					if (active) {
+						buttonClicked(thisButton, spoilerButtonsArray, true);
+						activeSpoiler = false;
+						activeLinksList = [];
+						activeQueriesList = [];
+					} else {
+						spoiler.style.display = 'block';
+						activeLinksList = spoiler.querySelectorAll('a');
+						activeQueriesList = [];
+						forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
+						activeSpoiler = spoiler;
+						activeSpoilerButton = thisButton;
+					}
+					lastClicked = null;
+				}
 
-          var d = document.createElement('div');
-          d.setAttribute('class','siteLink');
-          d.style.margin = margin;
-          d.style.display = 'table';
+				var bodyStyle = window.getComputedStyle(document.body, null);
+				var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
+				var margin = '5px 0px 0px 0px';
+				var searchField = document.querySelector('#searchField');
+				var linksList = [];
+				var queriesList = [];
+				var domainsList = [];
 
-          // d.style['border-color'] = 'grey';
-          // d.style['border-width'] = '1px';
-          // d.style['border-style'] = 'solid';
+				var shortNames = true;
 
-          d.style.position = 'relative';
-          d.style.height = Math.ceil(fontSize*2)+'px';
-          spoilerbox.appendChild(d);
+				var lastClicked;
 
-          var i = document.createElement('img');
-          i.style.position = 'absolute';
-          i.style.top = '0';
-          i.style.bottom = '0';
-          i.style.left = '0';
-          i.style.right = '0';
-          // i.style.width = '50%';
-          i.style.height = '50%';
-          i.style.margin = 'auto 0px';
-          i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
-          d.appendChild(i);
+				searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
+				searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
+				searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
+				searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
+				// searchField.style.color = bodyStyle.getPropertyValue('color');
 
-          var linkURL, linkDomain;
-          var searchValue = encodeURIComponent(searchField.value);
+				forEach(searchesArray, function(index, self) {
+					var spoilerbox = self.parentNode;
+					var query = self.text;
+					var domain = query;
+					domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
+					domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
 
-          linkDomain = query.replace(/%s/g, '').replace(/^(http[s]?):\/\/(.*?)\/.*/g, '$1://$2');
-          linkURL = (searchValue !== '') ? query.replace(/%s/g, searchValue) : linkDomain;
+					var d = document.createElement('div');
+					d.setAttribute('class','siteLink');
+					d.style.margin = margin;
+					d.style.display = 'table';
 
-          var a = self; //document.createElement('a');
-          a.style.display = 'table-cell';
-          a.style['vertical-align'] = 'middle';
-          a.style['padding-left'] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
-          //a.style['font-size'] = fontSize+'px'; // styles
-          //a.style.color = '#086081'; // styles
-          a.style.width = 'auto';
-          a.setAttribute('target', '_blank'); // Open in new tab
-          a.setAttribute('href', linkURL); // a.setAttribute('href', query.replace(/%s/g, searchField.value));
-          a.text = shortNames ? domain : linkURL;
-          d.appendChild(a);
+					// d.style['border-color'] = 'grey';
+					// d.style['border-width'] = '1px';
+					// d.style['border-style'] = 'solid';
 
-          a.addEventListener('click',function(e){lastClicked = this;},false);
+					d.style.position = 'relative';
+					d.style.height = Math.ceil(fontSize*2)+'px';
+					spoilerbox.appendChild(d);
 
-          linksList.push(a);
+					var i = document.createElement('img');
+					i.style.position = 'absolute';
+					i.style.top = '0';
+					i.style.bottom = '0';
+					i.style.left = '0';
+					i.style.right = '0';
+					// i.style.width = '50%';
+					i.style.height = '50%';
+					i.style.margin = 'auto 0px';
+					i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
+					d.appendChild(i);
 
-          queriesList.push(query);
-          domainsList.push(linkDomain);
-        });
+					var linkURL, linkDomain;
+					var searchValue = encodeURIComponent(searchField.value);
 
-        var enterKey = 13, escKey = 27;
+					linkDomain = query.replace(/%s/g, '').replace(/^(http[s]?):\/\/(.*?)\/.*/g, '$1://$2');
+					linkURL = (searchValue !== '') ? query.replace(/%s/g, searchValue) : linkDomain;
 
-        var onEvent = function(e) {
-          e = e || window.event;
+					var a = self; //document.createElement('a');
+					a.style.display = 'table-cell';
+					a.style['vertical-align'] = 'middle';
+					a.style['padding-left'] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
+					//a.style['font-size'] = fontSize+'px'; // styles
+					//a.style.color = '#086081'; // styles
+					a.style.width = 'auto';
+					a.setAttribute('target', '_blank'); // Open in new tab
+					a.setAttribute('href', linkURL); // a.setAttribute('href', query.replace(/%s/g, searchField.value));
+					a.text = shortNames ? domain : linkURL;
+					d.appendChild(a);
 
-          var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
+					a.addEventListener('click',function(e){lastClicked = this;},false);
 
-          var query = searchField.value;
+					linksList.push(a);
 
-          if (e.type == 'change') {
-            query = query.replace(/-/g, ' ');
-            searchField.value = query;
-          }
+					queriesList.push(query);
+					domainsList.push(linkDomain);
+				});
 
-          if (e.keyCode == escKey) { // Escape
-          } else if (e.keyCode == enterKey) {
-            if (ctrlDown) {
-              activeLinksList.forEach(function(link, index) {link.click();});
-            } else {
-              if (lastClicked) lastClicked.click();
-            }
-          } else {
-            linksList.forEach(function(link, index) {
-              var linkURL, linkDomain;
-              var searchValue = searchField.value;
+				var enterKey = 13, escKey = 27;
 
-              linkDomain = domainsList[index];
-              linkURL = (searchValue !== '') ? queriesList[index].replace(/%s/g, encodeURIComponent(query)) : linkDomain;
+				var onEvent = function(e) {
+					e = e || window.event;
 
-              var ref = linkURL; // queriesList[index].replace(/%s/g, query);
-              // var base64_ref = queriesList[index].replace('%s', encodeURIComponent(query));
-              if (!shortNames) link.text = ref;
-              link.href = ref; // base64_ref;
-            });
-          }
-        };
+					var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
 
-        var eventList = ['keydown', 'keyup', 'change'];
-        var inputList = [searchField];
+					var query = searchField.value.trim();
 
-        inputList.forEach(function(input){
-          eventList.forEach(function(event){
-            input.addEventListener(event,function(e){onEvent(e);},false);
-          });
-        });
+					if (e.type == 'change') {
+						// query = query.replace(/[-_\.\+\s]+/g, ' ').replace(/^\s{2,}|\s{2,}$/g, '');
+						query = query.replace(/[^a-zA-Z0-9]+/g, ' ').replace(/^\s{2,}|\s{2,}$/g, ''); //.toTitleCase(true);
+						// searchField.value = query.toTitleCase(true);
+					}
 
-        // document.querySelector('.spoilertop').click();
-      });
-    </script>
-  </head>
-  <body>
-    <!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
-    <div id="galleries">
-      <!--  <div class="spoilertop" spoiler="videos" title="Videos" image=""></div>
-      <div class="spoilertop" spoiler="images" title="Images" image=""></div>
-      <div class="spoilertop" spoiler="movies" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
-      <div class="spoilertop" spoiler="torrents" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150"></div>
-      <div class="spoilertop" spoiler="software" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png"></div>
-      <div class="spoilertop" spoiler="handbooks" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png"></div>
-      <div class="spoilertop" spoiler="global" title="Global" image="http://iconspot.ru/files/87916.png"></div>
-      <div class="spoilertop" spoiler="wow" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png"></div>
-      -->
-    </div>
-    <div id="previews">
-      <input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
-      <div class="spoilerbox" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg">
-        http://fs.to/search.aspx?search=%s
-      </div>
-      <div class="spoilerbox" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150">
-        http://xrutor.org/search/%s/
-        http://www.ex.ua/search?s=%s
-        http://www.ex.ua/search?s=md5:%s
-      </div>
-      <div class="spoilerbox" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png">
-      </div>
-      <div class="spoilerbox" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png">
-        http://alternativeto.net/browse/search?q=%s
-        http://google.com/search?q=%s&as_sitesearch=w3schools.com
-      </div>
-      <div class="spoilerbox" title="Global" image="http://www.eduportal44.ru/koiro/DOP/DocLib/Chrome.gif">
-        https://encrypted.google.com/#q=%s
-        https://www.wikipedia.org/search-redirect.php?family=wikipedia&language=en&search=%s&language=ru&go=Go
-        https://www.youtube.com/results?search_query=%s
-        http://www.liveleak.com/browse?q=%s&safe_mode=off
-      </div>
-      <div class="spoilerbox" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png">
-        http://wowroad.info/?search=%s
-        http://ru.wowhead.com/search?q=%s
-        http://wowhead.com/search?q=%s
-        http://google.com/search?q=%s&as_sitesearch=wowprogramming.com
-        https://www.wowace.com/search/?search=%s
-      </div>
-      <div class="spoilerbox" title="Games" image="">
-        http://ru.darksouls.wikia.com/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Search?query=%s
-      </div>
-      
-      <div class="spoilerbox" title="Videos" image="">
-        http://sexix.net/?s=%s
-        http://www.eporner.com/search/%s/
-        https://biqle.ru/video/%s
-        http://porndoe.com/search?keywords=%s
-        http://pron.tv/stream/search?q=%s&RandomHD=Random%20HD!
-        http://hdporn1080.net/?s=%s
-        https://www.bitporno.sx/?q=%s
-        http://www.xmoviesforyou.com/?s=%s
-        http://hdpoz.com/?s=%s
-        http://sexiz.net/?s=%s
-        http://wixvi.cc/?s=%s
-        http://www.porntrex.com/search?search_query=%s&search_type=videos
-        <!-- http://pornmegabox.com/?s=%s -->
-        <!-- http://www.hdporncollections.com/?s=%s -->
-        http://www.pornerbros.com/search?q=%s
-        http://www.xvideos.com/?k=%s
-        
-        http://www.tube8.com/searches.html?q=%s
-        http://www.pornhub.com/video/search?search=%s
-        
-        http://www.nudevista.tv/?q=%s+length%3E10:00&s=t
-        http://hd.xtapes.to/?s=%s
-        
-        https://encrypted.google.com/search?tbm=vid&as_q=&as_epq=%s&as_oq=&as_eq=youtube+xvideos+pornhub&lr=&dur=&as_qdr=all&as_sitesearch=&safe=images&tbs=hq%3Ah
-      </div>
-      <div class="spoilerbox" title="Images" image="">
-        http://pornstarnetwork.premiumarchive.com/pornstar/most-popular/keywordsearch/%s
-        http://www.babesandstars.com/search/?t=models&q=%s
-        http://www.definebabe.com/search/?words=%s&search=&type=1
-        http://www.pichunter.com/search/%s
-        http://www.imagefap.com/gallery.php?search=%s
-        http://webbabe.ws/search/?q=%s
-        http://www.sex.com/search/pictures?query=%s
-        http://juicygif.com/gallery/search?SearchText=%s
-        http://babesource.com/search/photos/%s/
-      </div>
-      <div class="spoilerbox" title="Hentai" image="">
-        http://konachan.com/post?tags=%s
-        <!-- https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s&ms=1 -->
-        https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s+limit%3A50&ms=1
-      </div>
-    </div>
-  </body>
+					if (e.keyCode == escKey) { // Escape
+					} else if (e.keyCode == enterKey) {
+						if (ctrlDown) {
+							activeLinksList.forEach(function(link, index) {link.click();});
+							} else {
+							if (lastClicked) lastClicked.click();
+						}
+					} else {
+						linksList.forEach(function(link, index) {
+							var linkURL, linkDomain;
+							var searchValue = searchField.value;
+							
+							linkDomain = domainsList[index];
+							linkURL = (searchValue !== '') ? queriesList[index].replace(/%s/g, encodeURIComponent(query)) : linkDomain;
+							
+							var ref = linkURL; // queriesList[index].replace(/%s/g, query);
+							// var base64_ref = queriesList[index].replace('%s', encodeURIComponent(query));
+							if (!shortNames) link.text = ref;
+							link.href = ref; // base64_ref;
+						});
+					}
+				};
+
+				var eventList = ['change', 'input', 'cut', 'copy', 'paste']; // 'keydown', 'keyup',
+				var inputList = [searchField];
+
+				inputList.forEach(function(input){
+					eventList.forEach(function(event){
+						input.addEventListener(event,function(e){onEvent(e);},false);
+					});
+				});
+
+				// document.querySelector('.spoilertop').click();
+			});
+		</script>
+		</head>
+	<body>
+		<!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
+		<div id="galleries">
+			<!--	<div class="spoilertop" spoiler="videos" title="Videos" image=""></div>
+			<div class="spoilertop" spoiler="images" title="Images" image=""></div>
+			<div class="spoilertop" spoiler="movies" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
+			<div class="spoilertop" spoiler="torrents" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150"></div>
+			<div class="spoilertop" spoiler="software" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png"></div>
+			<div class="spoilertop" spoiler="handbooks" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png"></div>
+			<div class="spoilertop" spoiler="global" title="Global" image="http://iconspot.ru/files/87916.png"></div>
+			<div class="spoilertop" spoiler="wow" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png"></div>
+			-->
+		</div>
+		<div id="previews">
+			<input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
+			<script>getParams()</script>
+			<div class="spoilerbox" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg">
+				<!-- http://fs.to/search.aspx?search=%s -->
+				https://my-hit.org/search/?q=%s
+			</div>
+			<div class="spoilerbox" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150">
+				http://live-rutor.org/search/%s/
+				http://www.ex.ua/search?s=%s
+				http://www.ex.ua/search?s=md5:%s
+				http://tparser.org/%s
+			</div>
+			<div class="spoilerbox" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png">
+				http://alternativeto.net/browse/search?q=%s
+			</div>
+			<div class="spoilerbox" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png">
+				http://npppythonscript.sourceforge.net/docs/latest/search.html?q=%s&check_keywords=yes&area=default
+				http://google.com/search?q=%s&as_sitesearch=w3schools.com
+			</div>
+			<div class="spoilerbox" title="Global" image="http://www.eduportal44.ru/koiro/DOP/DocLib/Chrome.gif">
+				https://encrypted.google.com/#q=%s
+				https://www.wikipedia.org/search-redirect.php?family=wikipedia&language=en&search=%s&language=ru&go=Go
+				http://www.imfdb.org/wiki/%s
+				https://www.youtube.com/results?search_query=%s
+				http://www.liveleak.com/browse?q=%s&safe_mode=off
+				https://www.thefreedictionary.com/%s
+			</div>
+			<div class="spoilerbox" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png">
+				http://wowroad.info/?search=%s
+				http://ru.wowhead.com/search?q=%s
+				http://wowhead.com/search?q=%s
+				http://google.com/search?q=%s&as_sitesearch=wowprogramming.com
+				https://www.wowace.com/search/?search=%s
+				https://mods.curse.com/search?search=%s
+			</div>
+			<div class="spoilerbox" title="Games" image="">
+				http://ru.darksouls.wikia.com/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Search?query=%s
+			</div>
+			<div class="spoilerbox" title="Videos" image="">
+				http://www.eporner.com/search/%s/
+				
+				http://yespornplease.com/search?q=%s
+				
+				http://pornroom.org/?s=%s
+				
+				<!-- http://pron.tv/stream/search?q=%s+size%3A50mb&RandomHD=Random%20HD! -->
+				http://pron.tv/stream/search?q=%s
+				
+				https://xfreehd.com/search?search_query=%s&search_type=videos
+				
+				https://yourporn.sexy/%s.html?mode=videos
+				
+				http://fuckingsession.com/?s=%s
+				http://click4porn.me/?s=%s
+				
+				http://xxvideoss.org/?s=%s
+				http://porntube4k.net/?s=%s
+				
+				http://streamxxx.tv/?s=%s&cat=
+				
+				http://twizporn.com/?s=%s
+				http://www.veporn.net/porn/%s
+				
+				http://pantporn.com/?s=%s
+				
+				http://pornmovie.webcam/?s=%s
+				
+				http://www.freeomovie.com/?s=%s
+				
+				https://hqcollect.tv/search/?utf8=%E2%9C%93&q=%s&button=
+
+				http://sexix.net/?s=%s
+
+				http://jizzman.com/?s=%s
+
+				http://www.gameofporn.net/search.html?q=%s
+				
+				http://www.pornbaze.com/search.php?s=%s
+				http://pornhdhdporn.com/?s=%s
+				
+				http://18onlygirls.ru/tags/%s
+
+				https://biqle.ru/video/%s
+				http://porndoe.com/search?keywords=%s
+				http://www.nudeflix.com/search/%s
+
+				http://hdporn1080.net/?s=%s
+				https://www.bitporno.sx/?q=%s
+				http://www.xmoviesforyou.com/?s=%s
+				http://hdpoz.com/?s=%s
+				http://sexiz.net/?s=%s
+				http://wixvi.cc/?s=%s
+				<!-- http://www.porntrex.com/search?search_query=%s&search_type=videos -->
+				https://www.porntrex.com/search/%s/
+				<!-- http://pornmegabox.com/?s=%s -->
+				<!-- http://www.hdporncollections.com/?s=%s -->
+				http://www.pornerbros.com/search?q=%s
+				http://www.xvideos.com/?k=%s
+
+				http://www.tube8.com/searches.html?q=%s
+				<!-- http://www.pornhub.com/video/search?search=%s -->
+				https://www.pornhub.com/video/search?search=%s&hd=1&min_duration=20
+				https://www.playvids.com/sq?q=%s
+
+				http://www.nudevista.com/?q=%s+length%3E10:00&s=t
+				http://hd.xtapes.to/?s=%s
+				
+				https://daftsex.com/video/%s
+
+				https://vipergirls.to/search.php?contenttype=1&do=process&query=%s
+				
+				http://www.camshooker.com/search/%s/
+				
+				https://encrypted.google.com/search?tbm=vid&as_q=&as_epq=%s&as_oq=&as_eq=youtube+xvideos+pornhub&lr=&dur=&as_qdr=all&as_sitesearch=&safe=images&tbs=hq%3Ah
+			</div>
+			<div class="spoilerbox" title="Sites" image="">
+				http://www.data18.com/search/?k=%s
+				
+				https://www.hardx.com/en/search/%s?query=%s
+				http://www.rk.com/tour/search/all/%s/
+				http://www.videoz.com/s/search?type=&query=%s
+				
+				https://www.evilangel.com/en/search/%s?query=%s
+				
+				https://encrypted.google.com/search?q=%s&as_sitesearch=pron.tv
+			</div>		
+			<div class="spoilerbox" title="Images" image="">
+				<!-- http://www.pornpics.com/?q=%s -->
+				https://www.pornpics.com/?q=%s
+				http://pornstarnetwork.premiumarchive.com/pornstar/most-popular/keywordsearch/%s
+				http://www.babesandstars.com/search/?t=models&q=%s
+				http://www.definebabe.com/search/?words=%s&search=&type=1
+				http://www.pichunter.com/search/%s
+				http://www.imagefap.com/gallery.php?search=%s
+				http://webbabe.ws/search/?q=%s
+				http://www.sex.com/search/pictures?query=%s
+				http://juicygif.com/gallery/search?SearchText=%s
+				http://babesource.com/search/photos/%s/
+				
+				http://namethatpornstar.com/reverse/index.php
+				
+				https://vipergirls.to/search.php?query=%s&do=process
+			</div>
+			<div class="spoilerbox" title="Hentai" image="">
+				http://konachan.com/post?tags=%s
+				<!-- https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s&ms=1 -->
+				https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s+limit%3A50&ms=1
+				https://luscious.net/search/?q=%s&community=hentai
+			</div>
+			<div class="spoilerbox" title="Passwords" image="">
+				http://passwordshub.com/?s=%s
+			</div>
+			<div class="spoilerbox" title="Trackers" image="">
+				http://torrent-pirat.com/search.php?tracker_search=torrent&keywords=%s&terms=all&fp=1&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0
+			</div>
+		</div>
+	</body>
 </html>
