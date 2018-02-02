@@ -511,6 +511,31 @@
         parentElement.insertBefore(mainDiv, parentElement.firstChild);
     }
 
+    function addHostText(parentElement, hostText, backGroundColor, textColor, backGroundAlpha, opactity) {
+        backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
+        var mainDiv = document.createElement('div');
+        mainDiv.setAttribute('class', 'hostText');
+        mainDiv.style.background = backGroundColor;
+        mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
+        mainDiv.style.background = 'black';
+        mainDiv.style.zIndex = 2147483647; // '10000';
+        mainDiv.style.position = 'absolute'; // 'inherit'
+        mainDiv.style.width = 'auto';
+        mainDiv.style.height = '20px';
+        // mainDiv.style.float = 'left';
+        // mainDiv.style.left = '0';
+        mainDiv.style.right = '0';
+        if (textColor) mainDiv.style.color = textColor; // 'rgba(0, 253, 255, 0)';
+        mainDiv.style.padding = '0px 2px';
+        mainDiv.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+        mainDiv.innerText = hostText;
+        mainDiv.style.bottom = '0px';
+        mainDiv.style.textAlign = 'center';
+        mainDiv.style.opacity = opactity === 0 ? 0 : opactity ? opactity : 0.65;
+        mainDiv.style.color = 'whitesmoke';
+        parentElement.insertBefore(mainDiv, parentElement.firstChild);
+    }
+
     function hmsToSecondsOnly(str) {
         var p = str.split(':'),
             s = 0, m = 1;
@@ -996,6 +1021,7 @@
                     if (!image) {
                         var imageSrc = self.dataset.image;
                         var contentSrc = self.dataset.content;
+                        var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
                         var contentSize = self.dataset.quality;
                         var text, title = self.dataset.title;
                         if (imageSrc || contentSrc) {
@@ -1019,10 +1045,12 @@
                                 addHDtext(self, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                             }
                         }
+                        if (contentSrc) {
+                            addHostText(self, contentHost, pickColourByScale((800*600)/(1900*1080)*100, 1, 100, 0, 100), 'rgba(255, 255, 255, 1)', 0.4, 0.5);
+                        }
                     }
                     if (image) lazyImagesArray.push(image);
-                    var host = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
-                    if (G_disabledHosts.includes(host)) {
+                    if (G_disabledHosts.includes(contentHost)) {
                         self.classList.add('disabled-host');
                         // console.log(host, G_disabledHosts);
                     }
