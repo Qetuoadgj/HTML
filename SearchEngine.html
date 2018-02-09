@@ -290,6 +290,8 @@
 
 					linkDomain = query.replace(/%s/g, '').replace(/^(http[s]?):\/\/(.*?)\/.*/g, '$1://$2');
 					linkURL = (searchValue !== '') ? query.replace(/%s/g, searchValue) : linkDomain;
+					
+					linkURL = linkURL.replace(/[ \t]+\|.*/g, '');
 
 					var a = self; //document.createElement('a');
 					a.style.display = 'table-cell';
@@ -301,6 +303,9 @@
 					a.setAttribute('target', '_blank'); // Open in new tab
 					a.setAttribute('href', linkURL); // a.setAttribute('href', query.replace(/%s/g, searchField.value));
 					a.text = shortNames ? domain : linkURL;
+					a.text = query.match(/.*[ \t]+\|[ \t]+/i) ?
+					a.text + ' [' + query.replace(/.*[ \t]+\|[ \t]+(.*)/i, '$1').trim() + ']':
+					a.text;
 					d.appendChild(a);
 
 					a.addEventListener('click',function(e){lastClicked = this;},false);
@@ -340,6 +345,8 @@
 							
 							linkDomain = domainsList[index];
 							linkURL = (searchValue !== '') ? queriesList[index].replace(/%s/g, encodeURIComponent(query)) : linkDomain;
+							
+							linkURL = linkURL.replace(/[ \t]+\|.*/g, '');
 							
 							var ref = linkURL; // queriesList[index].replace(/%s/g, query);
 							// var base64_ref = queriesList[index].replace('%s', encodeURIComponent(query));
@@ -426,6 +433,12 @@
 				<!-- http://pron.tv/stream/search?q=%s+size%3A50mb&RandomHD=Random%20HD! -->
 				http://pron.tv/stream/search?q=%s
 				
+				http://pron.tv/stream/search?q=%s%20host%3Aopenload.co | openload.co
+				http://pron.tv/stream/search?q=%s%20host%3Avshare.io | vshare.io
+				http://pron.tv/stream/search?q=%s%20host%3Avidoza.net | vidoza.net
+				http://pron.tv/stream/search?q=%s%20host%3Adrive.google.com | drive.google.com
+				http://pron.tv/stream/search?q=%s%20host%3Abitporno.com | bitporno.com 
+				
 				https://xfreehd.com/search?search_query=%s&search_type=videos
 				
 				https://yourporn.sexy/%s.html?mode=videos
@@ -502,6 +515,8 @@
 				
 				https://www.evilangel.com/en/search/%s?query=%s
 				
+				https://www.private.com/search.php?query=%s
+				
 				https://encrypted.google.com/search?q=%s&as_sitesearch=pron.tv
 			</div>		
 			<div class="spoilerbox" title="Images" image="">
@@ -522,9 +537,9 @@
 				https://vipergirls.to/search.php?query=%s&do=process
 			</div>
 			<div class="spoilerbox" title="Hentai" image="">
-				http://konachan.com/post?tags=%s
+				http://konachan.com/post?tags=%s+limit%3A100
 				<!-- https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s&ms=1 -->
-				https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s+limit%3A50&ms=1
+				https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s+limit%3A100&ms=1
 				https://luscious.net/search/?q=%s&community=hentai
 			</div>
 			<div class="spoilerbox" title="Passwords" image="">
