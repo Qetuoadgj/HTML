@@ -213,15 +213,7 @@
         if (outputs) {iframeOutput.src = ''; imgOutput.src = '';}
 
         var removed = clone.querySelectorAll('.REMOVED');
-        var commented = clone.querySelectorAll('.COMMENTED');
         forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
-        forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
-
-        clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
-        clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
-
-        var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi'));
-        var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
 
         var linkText = clone.querySelector('#linkText');
         if (linkText) linkText.remove();
@@ -231,12 +223,23 @@
         if (id && id == title.toCamelCase()) clone.removeAttribute('id');
 
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
+        forEach(clone.querySelectorAll('.hostText'), function(index, self) {self.remove();});
+
         forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
         forEach(clone.querySelectorAll('.ui-handle'), function(index, self) {self.classList.remove('ui-handle');});
         forEach(clone.querySelectorAll('.disabled-host'), function(index, self) {self.classList.remove('disabled-host');});
         clone.classList.remove('ui-handle');
         clone.classList.remove('ui-sortable');
         clone.classList.remove('ui-sortable-handle');
+
+        var commented = clone.querySelectorAll('.COMMENTED');
+        forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
+
+        clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
+        clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
+
+        var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi'));
+        var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
 
         clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
         clone.innerHTML = clone.innerHTML.replace(/([\r\n]+[\t ]+){3,}/g, '$1$1');
@@ -1018,12 +1021,12 @@
                 var lazyImagesArray = [];
                 var activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
                     var image = self.querySelector('img');
+                    var imageSrc = self.dataset.image;
+                    var contentSrc = self.dataset.content;
+                    var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
+                    var contentSize = self.dataset.quality;
+                    var text, title = self.dataset.title;
                     if (!image) {
-                        var imageSrc = self.dataset.image;
-                        var contentSrc = self.dataset.content;
-                        var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
-                        var contentSize = self.dataset.quality;
-                        var text, title = self.dataset.title;
                         if (imageSrc || contentSrc) {
                             image = document.createElement('img');
                             image.setAttribute('data-echo', imageSrc || contentSrc); // src
