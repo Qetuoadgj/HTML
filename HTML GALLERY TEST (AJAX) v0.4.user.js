@@ -930,11 +930,13 @@
             content = appendFlashVars(content, player);
 
             content = content + '#autoplay=true';
+            console.log('content: '+content);
             var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
             if (start || end) {
                 var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
                 content = content + '&' + '#t=' + duration;
             }
+            content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
 
             var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
             if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
