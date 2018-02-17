@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.7.4
+// @version		 2.7.5
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -936,7 +936,7 @@
                 var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
                 content = content + '&' + '#t=' + duration;
             }
-            content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
+            // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
 
             var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
             if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
