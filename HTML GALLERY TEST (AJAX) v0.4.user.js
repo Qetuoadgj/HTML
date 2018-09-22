@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.7.5
+// @version		 2.7.6
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -27,7 +27,8 @@
     'use strict';
 
     // Your code here...
-    var G_disabledHosts = (typeof disabledHosts == 'undefined' || !disabledHosts) ? [] : disabledHosts;
+    // var $=unsafeWindow.jQuery;
+    var G_disabledHosts = (typeof unsafeWindow.disabledHosts == 'undefined' || !unsafeWindow.disabledHosts) ? [] : unsafeWindow.disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
 
     //GLOBAL FUNCTIONS
@@ -231,6 +232,8 @@
         clone.classList.remove('ui-handle');
         clone.classList.remove('ui-sortable');
         clone.classList.remove('ui-sortable-handle');
+
+        forEach(clone.querySelectorAll('.ui-sortable'), function(index, self) {self.classList.remove('ui-sortable');});
 
         var commented = clone.querySelectorAll('.COMMENTED');
         forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
@@ -556,10 +559,10 @@
     // '?startIndex=1&pageSize=10' -> {startIndex: 1, pageSize: 10}
     function processSearchParams(search, preserveDuplicates) {
         //  option to preserve duplicate keys (e.g. 'sort=name&sort=age')
-        preserveDuplicates = preserveDuplicates || false;  //  disabled by default
+        preserveDuplicates = preserveDuplicates || false; //  disabled by default
 
         var outputNoDupes = {};
-        var outputWithDupes = [];  //  optional output array to preserve duplicate keys
+        var outputWithDupes = []; //  optional output array to preserve duplicate keys
 
         //  sanity check
         if(!search) throw new Error('processSearchParams: expecting "search" input parameter');
@@ -602,11 +605,11 @@
 
         //  return an easy-to-use object that breaks apart the path
         return {
-            host:     link.hostname,  //  'example.com'
-            port:     link.port,      //  12345
-            search:   processSearchParams(link.search || '?'),  //  {startIndex: 1, pageSize: 10}
-            path:     link.pathname,  //  '/blog/foo/bar'
-            protocol: link.protocol   //  'http:'
+            host:     link.hostname, // 'example.com'
+            port:     link.port, // 12345
+            search:   processSearchParams(link.search || '?'), // {startIndex: 1, pageSize: 10}
+            path:     link.pathname, // '/blog/foo/bar'
+            protocol: link.protocol // 'http:'
         };
     }
 
@@ -792,7 +795,7 @@
         forEach(spoilersArray, function(index, spoiler) {
             var splitCount = 250; // default
             if (typeof(split) == "number") {
-                splitCount = split;
+                splitCount = unsafeWindow.split;
             }
             if (typeof(spoiler.dataset.split) !== "undefined") {
                 splitCount = spoiler.dataset.split;
@@ -934,7 +937,7 @@
             var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
             if (start || end) {
                 var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
-                content = content + '&' + '#t=' + duration;
+                content = content + '&#t=' + duration;
             }
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
 
@@ -1070,10 +1073,10 @@
                 initLazyLoad(lazyImagesArray);
 
                 if ((typeof jQuery !== 'undefined') && !spoiler.dataset.nosortable) {
-                    $( spoiler ).sortable({
+                    $(spoiler).sortable({
                         items: '> .thumbnail'
                     });
-                    $( spoiler ).disableSelection();
+                    $(spoiler).disableSelection();
                 }
             }
         }
@@ -1342,7 +1345,7 @@
             if (code) e.keyCode = code;
 
             if (!(targetType == 'input' || targetType == 'textarea')) {
-                var hovered = (activeSpoiler && activeThumbnail) ? activeThumbnail : (activeSpoiler ?  activeSpoiler.querySelector('.thumbnail:hover') : null);
+                var hovered = (activeSpoiler && activeThumbnail) ? activeThumbnail : (activeSpoiler ? activeSpoiler.querySelector('.thumbnail:hover') : null);
 
                 if (e.keyCode == KEY_ESCAPE) { // Escape
                     hideContent();
@@ -1423,7 +1426,7 @@
                 self.setAttribute('id', spoiler_id);
             }
             var allowBackground = self.dataset.background; if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild); backgroundsArray.push(background);}
-            var thumbnailsStyle = self.dataset.css; if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoiler_id+' > .thumbnail '+'{'+thumbnailsStyle+'}', 'temporary');}
+            var thumbnailsStyle = self.dataset.css; if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoiler_id+' > .thumbnail {'+thumbnailsStyle+'}', 'temporary');}
             var lazyImagesArray = [];
             var createButton = function() {
                 var spoiler = self;
