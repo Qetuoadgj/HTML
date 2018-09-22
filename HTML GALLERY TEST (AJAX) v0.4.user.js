@@ -241,7 +241,7 @@
         clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
         clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
 
-        var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi'));
+        var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi')) || '';
         var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
 
         clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
