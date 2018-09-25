@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.7.6
+// @version		 2.7.7
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -9,9 +9,12 @@
 // @noframes
 // @downloadURL	 https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
 // @homepageURL	 https://github.com/Qetuoadgj/HTML
+//
 // @match		 file:///*/2.0.4.html
 // @match		 file:///*/2.0.2.html
 // @match		 file:///*/HTML/tmp/html/*.html
+//
+// @exclude		 file:///*/HTML_Indent.html
 //
 // ------------- http://api.jqueryui.com/sortable/ -------------
 // @require      https://code.jquery.com/jquery-1.12.4.js
@@ -889,6 +892,8 @@
             } else if (source.match('rtmp://') || (info && info.match('StrobeMediaPlayback.swf'))) {
                 // source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
                 source = 'src=' + source +'&autoPlay=true';
+            } else if (source.split("?")[0].split("#")[0].endsWith("mp4")) {
+                source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source; // обычное видео
             }
             return source;
         }
@@ -932,7 +937,10 @@
 
             content = appendFlashVars(content, player);
 
-            content = content + '#autoplay=true';
+            content = content + '#autoplay=true&autoplay=true';
+            // content = content.split('?')[1] ? (content + '&autoplay=true') : (content + '?autoplay=true');
+            // content = content.replace(/#autoplay=true(&autoplay=true){1,}/g, '#autoplay=true').replace(/(&autoplay=true){2,}/g, '&autoplay=true');
+
             console.log('content: '+content);
             var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
             if (start || end) {
