@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.7.8
+// @version		 2.7.9
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -892,9 +892,12 @@
             } else if (source.match('rtmp://') || (info && info.match('StrobeMediaPlayback.swf'))) {
                 // source = 'StrobeMediaPlayback.swf?src=' + source +'&autoPlay=true';
                 source = 'src=' + source +'&autoPlay=true';
-            } else if (source.split("?")[0].split("#")[0].endsWith("mp4")) {
+            }
+            /*
+            else if (source.split("?")[0].split("#")[0].endsWith("mp4")) {
                 source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source; // обычное видео
             }
+            */
             return source;
         }
 
