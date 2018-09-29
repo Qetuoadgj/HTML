@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.7.7
+// @version		 2.7.8
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -937,7 +937,7 @@
 
             content = appendFlashVars(content, player);
 
-            content = content + '#autoplay=true&autoplay=true';
+            content = content + '#autoplay=true'; //'#autoplay=true&autoplay=true';
             // content = content.split('?')[1] ? (content + '&autoplay=true') : (content + '?autoplay=true');
             // content = content.replace(/#autoplay=true(&autoplay=true){1,}/g, '#autoplay=true').replace(/(&autoplay=true){2,}/g, '&autoplay=true');
 
