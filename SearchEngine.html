@@ -134,6 +134,7 @@
 					// Dispatch it.
 					searchField.dispatchEvent(event);
 				}
+				return params;
 			}
 			// -- GET VALUSE FROM URL [END]
 
@@ -224,6 +225,7 @@
 						activeSpoiler = false;
 						activeLinksList = [];
 						activeQueriesList = [];
+						activeSpoilerButton = null;
 					} else {
 						spoiler.style.display = 'block';
 						activeLinksList = spoiler.querySelectorAll('a');
@@ -231,8 +233,63 @@
 						forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
 						activeSpoiler = spoiler;
 						activeSpoilerButton = thisButton;
+						//
+						/*
+						var title = thisButton.querySelector('p');
+						if (title) {
+							// var params = getParams();
+							var title_text = title.innerText.trim();
+							var path = parent.location.pathname;
+							params.tab = title_text;
+							var options = "";
+							var i = 0;
+							for (var key in params) {
+								i++;
+								var val = params[key];
+								if (i == 1) options = options + "?";
+								else if (i > 1) options = options + "&";
+								options = options + (key + "=" + val);
+								console.log('key: '+key);
+								console.log('val: '+val);
+								console.log('options: '+options);
+							}
+							path = path + options;
+							console.log('path: '+path);
+							history.pushState(parent.location.pathname, "", path);
+						}
+						*/
 					}
+					updateURL();
 					lastClicked = null;
+				}
+				
+				function updateURL() {
+					// var params = getParams();
+					delete params['tab']; 
+					// console.log('activeSpoilerButton: '+activeSpoilerButton);
+					if (activeSpoilerButton) {
+						var title = activeSpoilerButton.querySelector('p');
+						if (title) {
+							var title_text = title.innerText.trim();
+							params.tab = title_text;
+						}
+					}
+					var options = "";
+					var i = 0;
+					for (var key in params) {
+						i++;
+						var val = params[key];
+						if (i == 1) options = options + "?";
+						else if (i > 1) options = options + "&";
+						options = options + (key + "=" + val);
+						// console.log('key: '+key);
+						// console.log('val: '+val);
+						// console.log('options: '+options);
+					}
+					var path = parent.location.pathname;
+					path = path + options;
+					// console.log('path: '+path);
+					history.pushState(parent.location.pathname, "", path);
 				}
 
 				var bodyStyle = window.getComputedStyle(document.body, null);
@@ -354,6 +411,8 @@
 							link.href = ref; // base64_ref;
 						});
 					}
+					params.q = searchField.value.trim();
+					updateURL();
 				};
 
 				var eventList = ['change', 'input', 'cut', 'copy', 'paste']; // 'keydown', 'keyup',
@@ -366,6 +425,22 @@
 				});
 
 				// document.querySelector('.spoilertop').click();
+				
+				if (params.tab) {
+					var tabs = document.querySelectorAll('.spoilertop');
+					forEach(tabs, function(index, self) {
+						var title = self.querySelector('p');
+						if (title) {
+							var title_text = title.innerText.trim();
+							if (title_text == params.tab.trim()) {
+								// Create a new 'change' event
+								var event = new Event('click');
+								// Dispatch it.
+								self.dispatchEvent(event);
+							}
+						}
+					});
+				}
 			});
 		</script>
 		</head>
@@ -384,7 +459,7 @@
 		</div>
 		<div id="previews">
 			<input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
-			<script>getParams()</script>
+			<script>var params = getParams();</script>
 			<div class="spoilerbox" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg">
 				<!-- http://fs.to/search.aspx?search=%s -->
 				https://my-hit.org/search/?q=%s
@@ -426,35 +501,39 @@
 				
 				http://yespornplease.com/search?q=%s
 				
-				https://fucktat.com/videos?search=%s
+				https://www.pentasex.io/search.php?keywords=%s
 				
-				http://pornroom.org/?s=%s
+				<!-- https://fucktat.com/videos?search=%s -->
+				
+				<!-- http://pornroom.org/?s=%s -->
+				
+				<!-- http://vpornex.com/?s=%s -->
 				
 				<!-- http://pron.tv/stream/search?q=%s+size%3A50mb&RandomHD=Random%20HD! -->
-				http://pron.tv/stream/search?q=%s
+				<!-- http://pron.tv/stream/search?q=%s -->
 				
-				http://pron.tv/stream/search?q=%s%20host%3Aopenload.co | openload.co
-				http://pron.tv/stream/search?q=%s%20host%3Avshare.io | vshare.io
-				http://pron.tv/stream/search?q=%s%20host%3Avidoza.net | vidoza.net
-				http://pron.tv/stream/search?q=%s%20host%3Adrive.google.com | drive.google.com
-				http://pron.tv/stream/search?q=%s%20host%3Abitporno.com | bitporno.com 
+				<!-- http://pron.tv/stream/search?q=%s%20host%3Aopenload.co | openload.co -->
+				<!-- http://pron.tv/stream/search?q=%s%20host%3Avshare.io | vshare.io -->
+				<!-- http://pron.tv/stream/search?q=%s%20host%3Avidoza.net | vidoza.net -->
+				<!-- http://pron.tv/stream/search?q=%s%20host%3Adrive.google.com | drive.google.com -->
+				<!-- http://pron.tv/stream/search?q=%s%20host%3Abitporno.com | bitporno.com  -->
 				
 				https://xfreehd.com/search?search_query=%s&search_type=videos
 				
 				https://yourporn.sexy/%s.html?mode=videos
 				
 				http://fuckingsession.com/?s=%s
-				http://click4porn.me/?s=%s
+				<!-- http://click4porn.me/?s=%s -->
 				
 				http://xxvideoss.org/?s=%s
-				http://porntube4k.net/?s=%s
+				<!-- http://porntube4k.net/?s=%s -->
 				
 				http://streamxxx.tv/?s=%s&cat=
 				
 				http://twizporn.com/?s=%s
 				http://www.veporn.net/porn/%s
 				
-				http://pantporn.com/?s=%s
+				<!-- http://pantporn.com/?s=%s -->
 				
 				http://pornmovie.webcam/?s=%s
 				
@@ -521,6 +600,7 @@
 			</div>		
 			<div class="spoilerbox" title="Images" image="">
 				<!-- http://www.pornpics.com/?q=%s -->
+				https://www.jjgirls.com/pornpics/%s
 				https://www.pornpics.com/?q=%s
 				http://pornstarnetwork.premiumarchive.com/pornstar/most-popular/keywordsearch/%s
 				http://www.babesandstars.com/search/?t=models&q=%s
@@ -528,7 +608,7 @@
 				http://www.pichunter.com/search/%s
 				http://www.imagefap.com/gallery.php?search=%s
 				http://webbabe.ws/search/?q=%s
-				http://www.sex.com/search/pictures?query=%s
+				http://www.sex.com/search/gifs?query=%s
 				http://juicygif.com/gallery/search?SearchText=%s
 				http://babesource.com/search/photos/%s/
 				
