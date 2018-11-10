@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.7.9
+// @version		 2.8.0
 // @description	 Pure JavaScript version.
-// @author		 Ægir
+// @author		 Ãgir
 // @grant		 unsafeWindow
 // @run-at		 document-start
 // @noframes
@@ -12,6 +12,7 @@
 //
 // @match		 file:///*/2.0.4.html
 // @match		 file:///*/2.0.2.html
+// @match		 file:///*/2.0.*.html
 // @match		 file:///*/HTML/tmp/html/*.html
 //
 // @exclude		 file:///*/HTML_Indent.html
@@ -895,7 +896,7 @@
             }
             /*
             else if (source.split("?")[0].split("#")[0].endsWith("mp4")) {
-                source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source; // обычное видео
+                source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source; // Ð¾Ð±ÑÑÐ½Ð¾Ðµ Ð²Ð¸Ð´ÐµÐ¾
             }
             */
             return source;
@@ -1119,7 +1120,7 @@
             var inputWidth = promptFrame.style.width.Num()*0.8 - 5 + 'px';
 
             var label = document.createElement('label');
-            label.innerText = 'Адрес потока:';
+            label.innerText = 'ÐÐ´ÑÐµÑ Ð¿Ð¾ÑÐ¾ÐºÐ°:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1135,7 +1136,7 @@
             promptFrame.appendChild(promptFrameContent);
 
             label = document.createElement('label');
-            label.innerText = 'Адрес иконки:';
+            label.innerText = 'ÐÐ´ÑÐµÑ Ð¸ÐºÐ¾Ð½ÐºÐ¸:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1151,7 +1152,7 @@
             promptFrame.appendChild(promptFrameImage);
 
             label = document.createElement('label');
-            label.innerText = 'Название:';
+            label.innerText = 'ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1167,7 +1168,7 @@
             promptFrame.appendChild(promptFrameTitle);
 
             label = document.createElement('label');
-            label.innerText = 'Источник:';
+            label.innerText = 'ÐÑÑÐ¾ÑÐ½Ð¸Ðº:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1183,7 +1184,7 @@
             promptFrame.appendChild(promptFrameSourcePage);
 
             label = document.createElement('label');
-            label.innerText = 'HTML-код:';
+            label.innerText = 'HTML-ÐºÐ¾Ð´:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1217,7 +1218,7 @@
             cancelButton.style.height = '20px';
             cancelButton.style.float = 'right';
             cancelButton.style.margin='15px 0px 0px 10px';
-            cancelButton.innerText = 'Отмена';
+            cancelButton.innerText = 'ÐÑÐ¼ÐµÐ½Ð°';
             promptFrame.appendChild(cancelButton);
 
             var promptFramePlayers = document.createElement('select');
@@ -1228,7 +1229,7 @@
             promptFramePlayers.style.padding='5px';
             promptFrame.appendChild(promptFramePlayers);
 
-            var options = ['Проигрыватель', 'StrobeMediaPlayback.swf', 'uppod.swf'];
+            var options = ['ÐÑÐ¾Ð¸Ð³ÑÑÐ²Ð°ÑÐµÐ»Ñ', 'StrobeMediaPlayback.swf', 'uppod.swf'];
             var num; for (num = 0; num < options.length; ++num) {
                 var selectOption = document.createElement('option');
                 selectOption.text = options[num];
