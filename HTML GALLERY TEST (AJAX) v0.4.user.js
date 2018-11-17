@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.8.0
+// @version		 2.8.1
 // @description	 Pure JavaScript version.
 // @author		 Ãgir
 // @grant		 unsafeWindow
@@ -229,6 +229,7 @@
 
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
         forEach(clone.querySelectorAll('.hostText'), function(index, self) {self.remove();});
+        forEach(clone.querySelectorAll('.remove-on-copy'), function(index, self) {self.remove();});
 
         forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
         forEach(clone.querySelectorAll('.ui-handle'), function(index, self) {self.classList.remove('ui-handle');});
@@ -1424,6 +1425,38 @@
 
         // window.onkeydown =  function(e){onKeyDown(e);};
         window.addEventListener('keydown', function(e){onKeyDown(e);}, false);
+
+        // /*
+        var previews = document.querySelector('#previews');
+        forEach(thumbnailsArray, function(index, self) {
+            var thisThumbnail = self;
+            var categories = self.dataset.categories;
+            if (categories) {
+                // alert(categories);
+                var categoriesArray = categories.split(',')
+                forEach(categoriesArray, function(index, self) {
+                    var category = self.trim();
+                    var id = 'category-' + category.toLowerCase();
+                    var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
+                    if (!newSpoiler) {
+                        newSpoiler = document.createElement('div');
+                        previews.appendChild(document.createTextNode('\n'));
+                        previews.appendChild(newSpoiler);
+                        newSpoiler.setAttribute('class', 'spoilerbox');
+                        newSpoiler.classList.add('remove-on-copy');
+                        newSpoiler.setAttribute('title', id);
+                        newSpoiler.setAttribute('id', id);
+                    }
+                    var thisThumbnailclone = thisThumbnail.cloneNode(false);
+                    newSpoiler.appendChild(document.createTextNode('\n'));
+                    newSpoiler.appendChild(thisThumbnailclone);
+                    // alert(category);
+                });
+            }
+        });
+        spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+        thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
+        // */
 
         // joinParts(spoilersArray); spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
 
