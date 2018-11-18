@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.8.2
+// @version		 2.8.3
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -1436,21 +1436,23 @@
                 var categoriesArray = categories.split(',')
                 forEach(categoriesArray, function(index, self) {
                     var category = self.trim();
-                    var id = 'category-' + category.toLowerCase();
-                    var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
-                    if (!newSpoiler) {
-                        newSpoiler = document.createElement('div');
-                        previews.appendChild(document.createTextNode('\n'));
-                        previews.appendChild(newSpoiler);
-                        newSpoiler.setAttribute('class', 'spoilerbox');
-                        newSpoiler.classList.add('remove-on-copy');
-                        newSpoiler.setAttribute('title', id);
-                        newSpoiler.setAttribute('id', id);
+                    if (category.length > 0) {
+                        var id = 'category-' + category.toLowerCase();
+                        var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
+                        if (!newSpoiler) {
+                            newSpoiler = document.createElement('div');
+                            previews.appendChild(document.createTextNode('\n'));
+                            previews.appendChild(newSpoiler);
+                            newSpoiler.setAttribute('class', 'spoilerbox');
+                            newSpoiler.classList.add('remove-on-copy');
+                            newSpoiler.setAttribute('title', id);
+                            newSpoiler.setAttribute('id', id);
+                        }
+                        var thisThumbnailclone = thisThumbnail.cloneNode(false);
+                        newSpoiler.appendChild(document.createTextNode('\n'));
+                        newSpoiler.appendChild(thisThumbnailclone);
+                        // alert(category);
                     }
-                    var thisThumbnailclone = thisThumbnail.cloneNode(false);
-                    newSpoiler.appendChild(document.createTextNode('\n'));
-                    newSpoiler.appendChild(thisThumbnailclone);
-                    // alert(category);
                 });
             }
         });
