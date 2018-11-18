@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.8.1
+// @version		 2.8.2
 // @description	 Pure JavaScript version.
-// @author		 Ãgir
+// @author		 Ægir
 // @grant		 unsafeWindow
 // @run-at		 document-start
 // @noframes
@@ -31,7 +31,7 @@
     'use strict';
 
     // Your code here...
-    // var $=unsafeWindow.jQuery;
+    var $ = window.$;
     var G_disabledHosts = (typeof unsafeWindow.disabledHosts == 'undefined' || !unsafeWindow.disabledHosts) ? [] : unsafeWindow.disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
 
