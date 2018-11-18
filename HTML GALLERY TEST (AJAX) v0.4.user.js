@@ -1437,7 +1437,8 @@
                 forEach(categoriesArray, function(index, self) {
                     var category = self.trim();
                     if (category.length > 0) {
-                        var id = 'category-' + category.toLowerCase();
+                       var title = category.replace(/\s+/i, ' ').Capitalize();
+                       var id = 'category-' + category.toLowerCase().replace(/\s+/i, '_');
                         var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
                         if (!newSpoiler) {
                             newSpoiler = document.createElement('div');
@@ -1445,7 +1446,7 @@
                             previews.appendChild(newSpoiler);
                             newSpoiler.setAttribute('class', 'spoilerbox');
                             newSpoiler.classList.add('remove-on-copy');
-                            newSpoiler.setAttribute('title', id);
+                            newSpoiler.setAttribute('title', '*\n' + title);
                             newSpoiler.setAttribute('id', id);
                         }
                         var thisThumbnailclone = thisThumbnail.cloneNode(false);
