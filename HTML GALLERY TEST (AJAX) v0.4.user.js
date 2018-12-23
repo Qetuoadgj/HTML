@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.8.3
+// @version		 2.9.0
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -135,6 +135,12 @@
         KEY_CLOSE_BRACKET = 221,
         KEY_SINGLE_QUOTE = 222
     ;
+
+    function popItUp(url, windowName, focus) {
+        var newWindow = window.open(url, windowName, 'height=200, width=150');
+        if (window.focus && focus) {newWindow.focus()}
+        return newWindow;
+    }
 
     function download(text, filename, type) { // http://stackoverflow.com/a/40139881
         var blob = new Blob([text], {type: (type || 'text/plain')}); // http://www.freeformatter.com/mime-types-list.html
@@ -962,7 +968,12 @@
                         objectOutput.data = player || 'StrobeMediaPlayback.swf';
                         objectFlashvars.value = flashvars + content;
                     } else {
-                        outputFrame.setAttribute(outputAttr, content);
+                        if (content.match(/https?:\/\/yourporn\.sexy\/post\/.*\.html#onlyVideo/i)) {
+                            popItUp(content, 'HTML Gallery PopUP', 0)
+                        }
+                        else {
+                            outputFrame.setAttribute(outputAttr, content);
+                        }
                     }
                 }, 10);
 
@@ -1437,8 +1448,8 @@
                 forEach(categoriesArray, function(index, self) {
                     var category = self.trim();
                     if (category.length > 0) {
-                       var title = category.replace(/\s+/i, ' ').Capitalize();
-                       var id = 'category-' + category.toLowerCase().replace(/\s+/i, '_');
+                        var title = category.replace(/\s+/i, ' ').Capitalize();
+                        var id = 'category-' + category.toLowerCase().replace(/\s+/i, '_');
                         var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
                         if (!newSpoiler) {
                             newSpoiler = document.createElement('div');
@@ -1542,6 +1553,15 @@
         addMouseWheelHandler(nextButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         addMouseWheelHandler(prevButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         addMouseWheelHandler(delButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
+
+        /*
+        var me = 'complete.misc_1'; // some id
+        window.addEventListener("message", function(e) {
+            if(e.origin === location.origin && typeof e.data === 'object' && e.data.sender !== me) {
+                console.log('received in script ' + me +': ', e.data.data);
+            }
+        });
+        */
     }
 
     document.addEventListener('DOMContentLoaded', documentOnReady);
