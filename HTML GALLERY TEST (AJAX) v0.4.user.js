@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.1
+// @version		 2.9.3
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -968,11 +968,7 @@
                         objectOutput.data = player || 'StrobeMediaPlayback.swf';
                         objectFlashvars.value = flashvars + content;
                     } else {
-                        if (
-                            content.match(/https?:\/\/yourporn\.sexy\/post\/.*\.html#onlyVideo/i) ||
-                            content.match(/https?:\/\/biqle.ru\/watch\/.*#onlyVideo/i) // https://biqle.ru/watch/-159565098_456242372
-                        ) {
-                            // if (content.match('#onlyVideo')) {
+                        if (content.match(/\b#ReCast\b.*/)) {
                             popItUp(content, 'HTML Gallery PopUP', 0)
                         }
                         else {
