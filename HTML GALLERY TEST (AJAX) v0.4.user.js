@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.3
+// @version		 2.9.7
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -34,6 +34,8 @@
     var $ = window.$;
     var G_disabledHosts = (typeof unsafeWindow.disabledHosts == 'undefined' || !unsafeWindow.disabledHosts) ? [] : unsafeWindow.disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
+
+    // unsafeWindow.closePopups = 1;
 
     //GLOBAL FUNCTIONS
     var KEY_BACKSPACE = 8,
@@ -952,13 +954,14 @@
             // content = content.split('?')[1] ? (content + '&autoplay=true') : (content + '?autoplay=true');
             // content = content.replace(/#autoplay=true(&autoplay=true){1,}/g, '#autoplay=true').replace(/(&autoplay=true){2,}/g, '&autoplay=true');
 
-            console.log('content: '+content);
+            // console.log('content: '+content);
             var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
             if (start || end) {
                 var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
                 content = content + '&#t=' + duration;
             }
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
+            console.log('content: '+content);
 
             var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
             if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
@@ -969,7 +972,7 @@
                         objectFlashvars.value = flashvars + content;
                     } else {
                         if (content.match(/\b#ReCast\b.*/)) {
-                            popItUp(content, 'HTML Gallery PopUP', 0)
+                            var popUpWin = popItUp(content, 'HTML Gallery PopUP', 0);
                         }
                         else {
                             outputFrame.setAttribute(outputAttr, content);
