@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.7
+// @version		 2.9.8
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -34,6 +34,9 @@
     var $ = window.$;
     var G_disabledHosts = (typeof unsafeWindow.disabledHosts == 'undefined' || !unsafeWindow.disabledHosts) ? [] : unsafeWindow.disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
+
+    var G_reCastHosts = (typeof unsafeWindow.reCastHosts == 'undefined' || !unsafeWindow.reCastHosts) ? [] : unsafeWindow.reCastHosts;
+    // console.log('reCastHosts: ', G_reCastHosts);
 
     // unsafeWindow.closePopups = 1;
 
@@ -936,6 +939,13 @@
             var flashvars = thisThumbnail.dataset.flashvars || '';
 
             var content = thisThumbnail.dataset.content || thisThumbnail.dataset.image;
+            var contentHost = getPathInfo(content).host.replace(/^www\./, '');
+            if (G_reCastHosts.includes(contentHost)) {
+                content = thisThumbnail.dataset.url;
+                if (!content.match(/#ReCast\b/)) {
+                    content += '#ReCast'
+                }
+            }
             linkText.innerText = decodeURIComponent(content);
             if (!output && (content.match(/^rtmp:\/\//i) || player)) {
                 output = 'object';
@@ -1081,6 +1091,10 @@
                             }
                         }
                         if (contentSrc) {
+                            if (G_reCastHosts.includes(contentHost)) {
+                                self.classList.add('recast-host');
+                                contentHost = getPathInfo(self.dataset.url).host.replace(/^www\./, '');
+                            }
                             addHostText(self, contentHost, pickColourByScale((800*600)/(1900*1080)*100, 1, 100, 0, 100), 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                         }
                     }

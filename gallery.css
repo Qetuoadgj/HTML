@@ -133,6 +133,16 @@ body
 	display: none;
 }
 
+.disabled-host
+{
+	border-color: cadetblue !important;
+}
+
+.recast-host
+{
+	border-color: blueviolet;
+}
+
 .duplicate_1, .duplicate_2, .disabled-host
 {
 	border-style: dashed !important; border-width: 2px !important;
@@ -145,12 +155,6 @@ body
 {
 	border-color: lime;
 }
-
-.disabled-host
-{
-	border-color: cadetblue;
-}
-
 #buttons
 {
 	position: fixed;
