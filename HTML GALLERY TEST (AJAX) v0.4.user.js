@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.8
+// @version		 2.9.9
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -12,7 +12,7 @@
 //
 // @match		 file:///*/2.0.4.html
 // @match		 file:///*/2.0.2.html
-// @match		 file:///*/2.0.*.html
+// @match		 file:///*/2.*.*.html
 // @match		 file:///*/HTML/tmp/html/*.html
 //
 // @exclude		 file:///*/HTML_Indent.html
