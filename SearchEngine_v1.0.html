@@ -274,6 +274,7 @@
 						var title = activeSpoilerButton.querySelector('p');
 						if (title) {
 							var title_text = title.innerText.trim();
+							title_text = encodeURIComponent(title_text);
 							params.tab = title_text;
 						}
 					}
