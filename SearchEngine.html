@@ -475,6 +475,8 @@
 						var title = self.querySelector('p');
 						if (title) {
 							var title_text = title.innerText.trim();
+							title_text = title_text.replace(/\n/g, '');
+							// console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
 							if (title_text == params.tab.trim()) {
 								// Create a new 'change' event
 								var event = new Event('click');
@@ -576,6 +578,8 @@
 			<div class="spoilerbox" title="Videos" image="">
 				http://www.eporner.com/search/%s/
 				https://www.google.com/search?tbm=isch&q=porn+%s+site%3Aeporner.com | eporner.com | *eporner.com
+				
+				https://hqporner.com/?s=%s
 
 				http://yespornplease.com/search?q=%s
 				https://www.google.com/search?tbm=isch&q=porn+%s+site%3Ayespornplease.com | yespornplease.com | *yespornplease.com
