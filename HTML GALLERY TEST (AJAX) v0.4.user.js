@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.9
+// @version		 2.9.12
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -10,10 +10,10 @@
 // @downloadURL	 https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
 // @homepageURL	 https://github.com/Qetuoadgj/HTML
 //
-// @match		 file:///*/2.0.4.html
-// @match		 file:///*/2.0.2.html
-// @match		 file:///*/2.*.*.html
-// @match		 file:///*/HTML/tmp/html/*.html
+// @match		 file:///*/2.0.4.html*
+// @match		 file:///*/2.0.2.html*
+// @match		 file:///*/2.*.*.html*
+// @match		 file:///*/HTML/tmp/html/*.html*
 //
 // @exclude		 file:///*/HTML_Indent.html
 //
@@ -39,6 +39,41 @@
     // console.log('reCastHosts: ', G_reCastHosts);
 
     // unsafeWindow.closePopups = 1;
+
+    // ---------------------
+    // -- GET VALUSE FROM URL [START]
+    function getParamsFromURL(searchString) {
+        var parse = function(params, pairs) {
+            var pair = pairs[0];
+            var parts = pair.split('=');
+            var key = decodeURIComponent(parts[0]).replace(/.*?\?/, '');
+            var value = decodeURIComponent(parts.slice(1).join('='));
+            // Handle multiple parameters of the same name
+            if (typeof params[key] === "undefined") params[key] = value;
+            else params[key] = [].concat(params[key], value);
+            return pairs.length == 1 ? params : parse(params, pairs.slice(1));
+        };
+        // Get rid of leading ?
+        return searchString.length === 0 ? {} : parse({}, searchString.split('&')); // .substr(1)
+    }
+    function getParams() {
+        var params = getParamsFromURL(location.search);
+        // Finally, to get the param you want
+        // params['c'];
+        /*
+            if (params.q) {
+                searchField.value = params.q;
+                // Create a new 'change' event
+                var event = new Event('change');
+                // Dispatch it.
+                searchField.dispatchEvent(event);
+            }
+            */
+        return params;
+    }
+    var params = getParams();
+    // -- GET VALUSE FROM URL [END]
+    // ---------------------
 
     //GLOBAL FUNCTIONS
     var KEY_BACKSPACE = 8,
@@ -263,6 +298,11 @@
         clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
         clone.innerHTML = clone.innerHTML.replace(/([\r\n]+[\t ]+){3,}/g, '$1$1');
 
+        clone.innerHTML = clone.innerHTML.replace(/^\s*[\r\n]/gm, '');
+
+        forEach(clone.querySelectorAll('.recast-host'), function(index, self) {self.classList.remove('recast-host');});
+        clone.classList.remove('recast-host');
+
         return [clone, spaces];
     }
 
@@ -440,79 +480,47 @@
         context.closePath();
     }
 
-    // * Converts an HSL color value to RGB. Conversion formula
-    // * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-    // * Assumes h, s, and l are contained in the set [0, 1] and
-    // * returns r, g, and b in the set [0, 255].
-    // *
-    // * @param	  {number}	h		The hue
-    // * @param	  {number}	s		The saturation
-    // * @param	  {number}	l		The lightness
-    // * @return  {Array}			The RGB representation
-    function hslToRgb(h, s, l){
-        var r, g, b;
-        if(s === 0){
-            r = g = b = l; // achromatic
-        }else{
-            var hue2rgb = function hue2rgb(p, q, t){
-                if(t < 0) t += 1;
-                if(t > 1) t -= 1;
-                if(t < 1/6) return p + (q - p) * 6 * t;
-                if(t < 1/2) return q;
-                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                return p;
-            };
-            var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            var p = 2 * l - q;
-            r = hue2rgb(p, q, h + 1/3);
-            g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1/3);
-        }
-        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-    }
-
-    // * Converts an RGB color value to HSL. Conversion formula
-    // * adapted from http://en.wikipedia.org/wiki/HSL_color_space.
-    // * Assumes r, g, and b are contained in the set [0, 255] and
-    // * returns h, s, and l in the set [0, 1].
-    // *
-    // * @param	  {number}	r		The red color value
-    // * @param	  {number}	g		The green color value
-    // * @param	  {number}	b		The blue color value
-    // * @return  {Array}			The HSL representation
-    function rgbToHsl(r, g, b){
-        r /= 255; g /= 255; b /= 255;
-        var max = Math.max(r, g, b), min = Math.min(r, g, b);
-        var h, s, l = (max + min) / 2;
-        if(max == min){
-            h = s = 0; // achromatic
-        }else{
-            var d = max - min;
-            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-            switch(max){
-                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                case g: h = (b - r) / d + 2; break;
-                case b: h = (r - g) / d + 4; break;
-            }
-            h /= 6;
-        }
-        return [h, s, l];
-    }
-
-    function pickColourByScale(percent, clip, saturation, start, end, format) {
-        format = format || 'hsl';
+    // ================================================================================
+    // expected hue range: [0, 360)
+    // expected saturation range: [0, 1]
+    // expected lightness range: [0, 1]
+    function hslToRgb(hue, saturation, lightness) { // SOURCE: https://stackoverflow.com/questions/27653757/how-to-use-hsl-to-rgb-conversion-function/27663212#27663212
+        var red, green, blue;
+        // based on algorithm from http://en.wikipedia.org/wiki/HSL_and_HSV#Converting_to_RGB
+        if (hue == undefined) return [0, 0, 0];
+        var chroma = (1 - Math.abs((2 * lightness) - 1)) * saturation,
+            huePrime = hue / 60,
+            secondComponent = chroma * (1 - Math.abs((huePrime % 2) - 1))
+        ;
+        huePrime = Math.floor(huePrime);
+        if (huePrime === 0) {red = chroma; green = secondComponent; blue = 0;}
+        else if (huePrime === 1) {red = secondComponent; green = chroma; blue = 0;}
+        else if (huePrime === 2) {red = 0; green = chroma; blue = secondComponent;}
+        else if (huePrime === 3) {red = 0; green = secondComponent; blue = chroma;}
+        else if (huePrime === 4) {red = secondComponent; green = 0; blue = chroma;}
+        else if (huePrime === 5) {red = chroma; green = 0; blue = secondComponent;}
+        var lightnessAdjustment = lightness - (chroma / 2);
+        red += lightnessAdjustment;
+        green += lightnessAdjustment;
+        blue += lightnessAdjustment;
+        return [Math.round(red * 255), Math.round(green * 255), Math.round(blue * 255)];
+    };
+    // --------------------------------------------------------------------------------
+    function valToColor(percent = 100, clip = 0, saturation = 1.0, start = 0, end = 100, toRGB = 0) {
+        percent = Math.min(percent, 160); end = Math.min(end, 100);
         var a = (percent <= clip) ? 0 : (((percent - clip) / (100 - clip))),
             b = Math.abs(end - start) * a,
             c = (end > start) ? (start + b) : (start - b);
-        var h = c, s = saturation, l = '50%';
-        if (format=='hsl') {
-            return 'hsl(' + c + ','+ saturation +'%,50%)';
-        } else {
+        var h = c, s = saturation, l = 0.5;
+        if (toRGB) {
             var rgb = hslToRgb(h, s, l);
-            return 'rgb('+rgb[1]+', '+rgb[2]+', '+rgb[3]+')';
+            return 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
         }
-    }
-
+        else {
+            return 'hsl(' + h + ', ' + (s*100) + '%, ' + (l*100) + '%)';
+        }
+    };
+    // ================================================================================
     function addHDtext(parentElement, qualityText, backGroundColor, textColor, backGroundAlpha, opactity) {
         backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
         var mainDiv = document.createElement('div');
@@ -856,6 +864,35 @@
         }
 
         // DOCUMENT FUNCTIONS
+        function updateURL() {
+            // var params = getParams();
+            delete params.tab;
+            // console.log('activeSpoilerButton: '+activeSpoilerButton);
+            if (activeSpoilerButton) {
+                var title = activeSpoilerButton.querySelector('p');
+                if (title) {
+                    var title_text = title.innerText.trim();
+                    params.tab = title_text;
+                }
+            }
+            var options = "";
+            var i = 0;
+            for (var key in params) {
+                i++;
+                var val = params[key];
+                if (i == 1) options = options + "?";
+                else if (i > 1) options = options + "&";
+                options = options + (key + "=" + val);
+                // console.log('key: '+key);
+                // console.log('val: '+val);
+                // console.log('options: '+options);
+            }
+            var path = parent.location.pathname;
+            path = path + options;
+            // console.log('path: '+path);
+            history.pushState(parent.location.pathname, "", path);
+        }
+
         function buttonClicked(button, buttonsArray, unclick) {
             if (unclick) {forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});} else {
                 forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';}); button.style.removeProperty('opacity');
@@ -1085,7 +1122,7 @@
                             contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
                             var quality = contentSize ? contentSize[1]*contentSize[2] : null;
                             if (quality) {
-                                var color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
+                                var color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
                                 if (text) text.style.color = color;
                                 addHDtext(self, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                             }
@@ -1095,7 +1132,7 @@
                                 self.classList.add('recast-host');
                                 contentHost = getPathInfo(self.dataset.url).host.replace(/^www\./, '');
                             }
-                            addHostText(self, contentHost, pickColourByScale((800*600)/(1900*1080)*100, 1, 100, 0, 100), 'rgba(255, 255, 255, 1)', 0.4, 0.5);
+                            addHostText(self, contentHost, valToColor((800*600)/(1900*1080) * 100, 1, 1.0, 0, 100, 1), 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                         }
                     }
                     if (image) lazyImagesArray.push(image);
@@ -1110,6 +1147,8 @@
                 galleryList = createGalleryList(spoiler);
                 activeSpoiler = spoiler;
                 activeSpoilerButton = thisButton;
+
+                updateURL();
 
                 initLazyLoad(lazyImagesArray);
 
@@ -1529,7 +1568,7 @@
                         contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
                         var quality = contentSize ? contentSize[1]*contentSize[2] : null;
                         if (quality) {
-                            var color = pickColourByScale(quality/(1900*1080)*100, 1, 100, 0, 100);
+                            var color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
                             if (text) text.style.color = color;
                             addHDtext(spoilerButton, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                         }
@@ -1579,6 +1618,25 @@
             }
         });
         */
+        //
+        console.log(params);
+        if (params.tab) {
+            var tabs = document.querySelectorAll('.spoilertop');
+            forEach(tabs, function(index, self) {
+                var title = self.querySelector('p');
+                if (title) {
+                    var title_text = title.innerText.trim();
+                    title_text = title_text.replace(/\n/g, '');
+                    // console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
+                    if (title_text == params.tab.trim()) {
+                        // Create a new 'change' event
+                        var event = new Event('click');
+                        // Dispatch it.
+                        self.dispatchEvent(event);
+                    }
+                }
+            });
+        }
     }
 
     document.addEventListener('DOMContentLoaded', documentOnReady);
