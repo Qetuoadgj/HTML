@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.12
+// @version		 2.9.13
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -872,6 +872,7 @@
                 var title = activeSpoilerButton.querySelector('p');
                 if (title) {
                     var title_text = title.innerText.trim();
+                    title_text = encodeURIComponent(title_text);
                     params.tab = title_text;
                 }
             }
@@ -1627,7 +1628,7 @@
                 if (title) {
                     var title_text = title.innerText.trim();
                     title_text = title_text.replace(/\n/g, '');
-                    // console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
+                    console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
                     if (title_text == params.tab.trim()) {
                         // Create a new 'change' event
                         var event = new Event('click');
