@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.13
+// @version		 2.9.14
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -32,6 +32,13 @@
 
     // Your code here...
     var $ = window.$;
+
+    var isScripted = document.documentElement.getAttribute("isScripted");
+    if (isScripted == "true") return;
+    document.documentElement.setAttribute("isScripted", "true");
+
+    if (typeof unsafeWindow == 'undefined') var unsafeWindow = window;
+
     var G_disabledHosts = (typeof unsafeWindow.disabledHosts == 'undefined' || !unsafeWindow.disabledHosts) ? [] : unsafeWindow.disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
 
@@ -303,6 +310,8 @@
         forEach(clone.querySelectorAll('.recast-host'), function(index, self) {self.classList.remove('recast-host');});
         clone.classList.remove('recast-host');
 
+        clone.removeAttribute("isScripted");
+
         return [clone, spaces];
     }
 
@@ -338,7 +347,10 @@
     }
 
     function downloadCurrentDocument() {
-        var pageURL = location.href; var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1'); pageTitle = pageTitle.replace('.html', '') + '.html';
+        var pageURL = location.href;
+        var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1');
+        pageTitle = pageTitle.replace(/[?].*=.*/, '');
+        pageTitle = pageTitle.replace('.html', '') + '.html';
         var documentClone = document.documentElement.cloneNode(true);
         documentClone = resetAttributes(documentClone)[0];
         var documentString = getDoctype()+'\n'+documentClone.outerHTML+'\n';
