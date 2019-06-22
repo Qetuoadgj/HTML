@@ -31,25 +31,20 @@
     'use strict';
 
     // Your code here...
-    var win;
-    if (typeof GM == 'undefined') {
-        win = function(){window};
-    }
-    else {
-        win = function(){return unsafeWindow};
-    }
     var isScripted = document.documentElement.getAttribute("isScripted");
     if (isScripted == "true") return;
     document.documentElement.setAttribute("isScripted", "true");
 
-    var $ = window.$;
-    var G_disabledHosts = (typeof win().disabledHosts == 'undefined' || !win().disabledHosts) ? [] : win().disabledHosts;
+    function G_win() {return (typeof GM == 'undefined') ? window : unsafeWindow;};
+	
+    var $ = G_win().$; // window.$;
+    var G_disabledHosts = (typeof G_win().disabledHosts == 'undefined' || !G_win().disabledHosts) ? [] : G_win().disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
 
-    var G_reCastHosts = (typeof win().reCastHosts == 'undefined' || !win().reCastHosts) ? [] : win().reCastHosts;
+    var G_reCastHosts = (typeof G_win().reCastHosts == 'undefined' || !G_win().reCastHosts) ? [] : G_win().reCastHosts;
     // console.log('reCastHosts: ', G_reCastHosts);
 
-    // win().closePopups = 1;
+    // G_win().closePopups = 1;
 
     // ---------------------
     // -- GET VALUSE FROM URL [START]
@@ -830,7 +825,7 @@
         forEach(spoilersArray, function(index, spoiler) {
             var splitCount = 250; // default
             if (typeof(split) == "number") {
-                splitCount = win().split;
+                splitCount = G_win().split;
             }
             if (typeof(spoiler.dataset.split) !== "undefined") {
                 splitCount = spoiler.dataset.split;
