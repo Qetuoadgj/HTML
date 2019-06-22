@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.15
+// @version		 2.9.16
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -31,19 +31,25 @@
     'use strict';
 
     // Your code here...
+    var win;
+    if (typeof GM == 'undefined') {
+        win = function(){window};
+    }
+    else {
+        win = function(){return unsafeWindow};
+    }
     var isScripted = document.documentElement.getAttribute("isScripted");
     if (isScripted == "true") return;
     document.documentElement.setAttribute("isScripted", "true");
-    if (typeof unsafeWindow == 'undefined') var unsafeWindow = window;
 
     var $ = window.$;
-    var G_disabledHosts = (typeof unsafeWindow.disabledHosts == 'undefined' || !unsafeWindow.disabledHosts) ? [] : unsafeWindow.disabledHosts;
+    var G_disabledHosts = (typeof win().disabledHosts == 'undefined' || !win().disabledHosts) ? [] : win().disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
 
-    var G_reCastHosts = (typeof unsafeWindow.reCastHosts == 'undefined' || !unsafeWindow.reCastHosts) ? [] : unsafeWindow.reCastHosts;
+    var G_reCastHosts = (typeof win().reCastHosts == 'undefined' || !win().reCastHosts) ? [] : win().reCastHosts;
     // console.log('reCastHosts: ', G_reCastHosts);
 
-    // unsafeWindow.closePopups = 1;
+    // win().closePopups = 1;
 
     // ---------------------
     // -- GET VALUSE FROM URL [START]
@@ -824,7 +830,7 @@
         forEach(spoilersArray, function(index, spoiler) {
             var splitCount = 250; // default
             if (typeof(split) == "number") {
-                splitCount = unsafeWindow.split;
+                splitCount = win().split;
             }
             if (typeof(spoiler.dataset.split) !== "undefined") {
                 splitCount = spoiler.dataset.split;
