@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.18
+// @version		 2.9.19
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -31,16 +31,16 @@
     'use strict';
 
     // Your code here...
+	var G_win = function(){return (typeof GM == 'undefined') ? window : unsafeWindow;};
+
     var isScripted = document.documentElement.getAttribute("isScripted");
     if (isScripted == "true") return;
     document.documentElement.setAttribute("isScripted", "true");
 
-    function G_win() {return (typeof GM == 'undefined') ? window : unsafeWindow;};
-	
-    var $ = G_win().$; // window.$;
+    var $ = G_win().$ || window.$; // window.$;
+
     var G_disabledHosts = (typeof G_win().disabledHosts == 'undefined' || !G_win().disabledHosts) ? [] : G_win().disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
-
     var G_reCastHosts = (typeof G_win().reCastHosts == 'undefined' || !G_win().reCastHosts) ? [] : G_win().reCastHosts;
     // console.log('reCastHosts: ', G_reCastHosts);
 
@@ -486,6 +486,30 @@
         context.closePath();
     }
 
+    /*
+    function drawCross(color = 'Orange', width = 32, height = 32, thickness = 10, gap = 0.15) {
+        let len = 1.0 - gap;
+        return (
+            'data:image/svg+xml;utf8,' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'" fill="'+color+'">' +
+            '<line x1="'+(width*gap)+'" y1="'+(height*gap)+'" x2="'+(width*len)+'" y2="'+(height*len)+'" stroke="'+color+'" stroke-width="'+thickness+'"/>' +
+            '<line x1="'+(width*gap)+'" y1="'+(height*len)+'" x2="'+(width*len)+'" y2="'+(height*gap)+'" stroke="'+color+'" stroke-width="'+thickness+'"/>' +
+            '</svg>'
+        );
+    };
+
+    function drawArrow(color = 'Orange', width = 32, height = 32, thickness = 10, gap = 0.15) {
+        let len = 1.0 - gap;
+        return (
+            'data:image/svg+xml;utf8,' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'" fill="'+color+'">' +
+            '<line x1="'+(width*2*gap)+'" y1="'+(height*gap)+'" x2="'+(width*1.5 * 0.5)+'" y2="'+(height * 0.5 + 3)+'" stroke="'+color+'" stroke-width="'+thickness+'"/>' +
+            '<line x1="'+(width*1.5 * 0.5)+'" y1="'+(height * 0.5 - 3)+'" x2="'+(width*2*gap)+'" y2="'+(height*len)+'" stroke="'+color+'" stroke-width="'+thickness+'"/>' +
+            '</svg>'
+        );
+    };
+    */
+
     // ================================================================================
     // expected hue range: [0, 360)
     // expected saturation range: [0, 1]
@@ -877,9 +901,9 @@
             if (activeSpoilerButton) {
                 var title = activeSpoilerButton.querySelector('p');
                 if (title) {
-                    var title_text = title.innerText.trim();
-                    title_text = encodeURIComponent(title_text);
-                    params.tab = title_text;
+                    var titleText = title.innerText.trim();
+                    titleText = encodeURIComponent(titleText);
+                    params.tab = titleText;
                 }
             }
             var options = "";
@@ -952,7 +976,7 @@
             }
             /*
             else if (source.split("?")[0].split("#")[0].endsWith("mp4")) {
-                source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source; // Ð¾Ð±ÑÑÐ½Ð¾Ðµ Ð²Ð¸Ð´ÐµÐ¾
+                source = 'chrome-extension://emnphkkblegpebimobpbekeedfgemhof/player.html#' + source; // standard video
             }
             */
             return source;
@@ -1542,13 +1566,13 @@
             var title = self.getAttribute('title');
             var style = self.getAttribute('style');
 
-            var spoiler_id = self.getAttribute('id');
-            if (!spoiler_id) {
-                spoiler_id = title ? title.toCamelCase() : null;
-                self.setAttribute('id', spoiler_id);
+            var spoilerId = self.getAttribute('id');
+            if (!spoilerId) {
+                spoilerId = title ? title.toCamelCase() : null;
+                self.setAttribute('id', spoilerId);
             }
             var allowBackground = self.dataset.background; if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild); backgroundsArray.push(background);}
-            var thumbnailsStyle = self.dataset.css; if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoiler_id+' > .thumbnail {'+thumbnailsStyle+'}', 'temporary');}
+            var thumbnailsStyle = self.dataset.css; if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoilerId+' > .thumbnail {'+thumbnailsStyle+'}', 'temporary');}
             var lazyImagesArray = [];
             var createButton = function() {
                 var spoiler = self;
@@ -1632,10 +1656,10 @@
             forEach(tabs, function(index, self) {
                 var title = self.querySelector('p');
                 if (title) {
-                    var title_text = title.innerText.trim();
-                    title_text = title_text.replace(/\n/g, '');
-                    console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
-                    if (title_text == params.tab.trim()) {
+                    var titleText = title.innerText.trim();
+                    titleText = titleText.replace(/\n/g, '');
+                    console.log(titleText, params.tab.trim(), titleText == params.tab.trim())
+                    if (titleText == params.tab.trim()) {
                         // Create a new 'change' event
                         var event = new Event('click');
                         // Dispatch it.
