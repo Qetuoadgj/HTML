@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.19
+// @version		 2.9.20
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -31,7 +31,7 @@
     'use strict';
 
     // Your code here...
-	var G_win = function(){return (typeof GM == 'undefined') ? window : unsafeWindow;};
+    var G_win = function(){return (typeof GM == 'undefined') ? window : unsafeWindow;};
 
     var isScripted = document.documentElement.getAttribute("isScripted");
     if (isScripted == "true") return;
@@ -182,6 +182,7 @@
         KEY_SINGLE_QUOTE = 222
     ;
 
+    var G_activePopUpWin;
     function popItUp(url, windowName, focus) {
         var newWindow = window.open(url, windowName, 'height=200, width=150');
         if (window.focus && focus) {newWindow.focus()}
@@ -327,8 +328,9 @@
             var escKey = 27;
             if (e.keyCode == escKey) { // Escape
                 removeTextarea();
+                e.preventDefault();
             }
-            e.preventDefault();
+            // e.preventDefault();
         }
         clipboard.addEventListener('keydown', function(e){onKeyDown(e);}, false);
         clipboard.value = code; clipboard.select(); // document.execCommand('copy');
@@ -918,8 +920,7 @@
                 // console.log('val: '+val);
                 // console.log('options: '+options);
             }
-            var path = parent.location.pathname;
-            path = path + options;
+            var path = parent.location.pathname + options;
             // console.log('path: '+path);
             history.pushState(parent.location.pathname, "", path);
         }
@@ -986,9 +987,11 @@
             if (activeOutput) {
                 resetContentOutputs();
                 buttonClicked(false, thumbnailsArray, true);
-            } else if (activeSpoiler) {
+            }
+            else if (activeSpoiler) {
                 activeSpoiler.style.removeProperty('display');
                 buttonClicked(false, spoilerButtonsArray, true);
+                history.pushState(parent.location.pathname, "", parent.location.pathname);
             }
             closeButton.style.removeProperty('display');
             nextButton.style.removeProperty('display');
@@ -996,6 +999,10 @@
             prevButton.style.removeProperty('display');
             linkText.innerText = null;
             if (wallpaperVideo) wallpaperVideo.play();
+            if (G_activePopUpWin) {
+                G_activePopUpWin.close();
+                G_activePopUpWin = null;
+            };
         }
 
         function showContent(thisThumbnail, thumbnailsArray) {
@@ -1051,6 +1058,7 @@
                     } else {
                         if (content.match(/\b#ReCast\b.*/)) {
                             var popUpWin = popItUp(content, 'HTML Gallery PopUP', 0);
+                            G_activePopUpWin = popUpWin;
                         }
                         else {
                             outputFrame.setAttribute(outputAttr, content);
@@ -1126,7 +1134,12 @@
             var active = isVisible(spoiler);
             buttonClicked(thisButton, spoilerButtonsArray);
             forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
-            if (active) {buttonClicked(thisButton, spoilerButtonsArray, true); activeSpoiler = false;} else {
+            if (active) {
+                buttonClicked(thisButton, spoilerButtonsArray, true);
+                activeSpoiler = false;
+                history.pushState(parent.location.pathname, "", parent.location.pathname);
+            }
+            else {
                 spoiler.style.display = 'block';
                 var lazyImagesArray = [];
                 var activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
@@ -1412,10 +1425,12 @@
                 if (e.keyCode == escKey) { // Escape
                     promptFrameCancel();
                     e.preventDefault();
-                } else if (e.keyCode == enterKey) {
+                }
+                else if (e.keyCode == enterKey) {
                     promptFrameSubmit();
                     e.preventDefault();
-                } else {
+                }
+                else {
                     if (target == promptFrameCode) {
                         fillFields();
                     } else {
@@ -1461,58 +1476,72 @@
                 if (e.keyCode == KEY_ESCAPE) { // Escape
                     hideContent();
                     e.preventDefault();
-                } else if (e.keyCode == KEY_LEFT_ARROW) {
+                }
+                else if (e.keyCode == KEY_LEFT_ARROW) {
                     changeContent(galleryList, -1); // Left Arrow
                     e.preventDefault();
-                } else if (e.keyCode == KEY_RIGHT_ARROW) {
+                }
+                else if (e.keyCode == KEY_RIGHT_ARROW) {
                     changeContent(galleryList, false); // Right Arrow
                     e.preventDefault();
-                } else if ((hovered || activeThumbnail) && e.keyCode == KEY_DELETE) { // Delete
+                }
+                else if ((hovered || activeThumbnail) && e.keyCode == KEY_DELETE) { // Delete
                     if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true);}
                     galleryList = createGalleryList(activeSpoiler);
                     findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
                     e.preventDefault();
-                } else if ((hovered || activeThumbnail) && e.keyCode == KEY_K) { // Control + K
+                }
+                else if ((hovered || activeThumbnail) && e.keyCode == KEY_K) { // Control + K
                     if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false);}
                     galleryList = createGalleryList(activeSpoiler);
                     findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
                     e.preventDefault();
-                } else if (activeSpoiler && ctrlDown && e.keyCode == KEY_C) { // Control + C
+                }
+                else if (activeSpoiler && ctrlDown && e.keyCode == KEY_C) { // Control + C
                     parent.focus();
                     if (hovered) copyToClipboard(hovered);
                     else copyToClipboard(activeSpoiler);
                     e.preventDefault();
-                } else if (ctrlDown && e.keyCode == KEY_S) { // Control + S
+                }
+                else if (ctrlDown && e.keyCode == KEY_S) { // Control + S
                     downloadCurrentDocument(document.documentElement);
                     e.preventDefault();
-                } else if (activeOutput && e.keyCode == KEY_Z && !ctrlDown) {
+                }
+                else if (activeOutput && e.keyCode == KEY_Z && !ctrlDown) {
                     minimizeContentOutputs();
                     e.preventDefault();
-                } else if (e.keyCode == KEY_Q) {
+                }
+                else if (e.keyCode == KEY_Q) {
                     var buttonTextShow = document.head.querySelector('style.buttonTextShow');
                     if (buttonTextShow) {buttonTextShow.remove();}
                     else {addGlobalStyle('.spoilertop > p, .thumbnail > p, #linkText {display: block;}', 'temporary buttonTextShow');}
                     e.preventDefault();
-                } else if (activeSpoiler && e.keyCode == KEY_G) {
+                }
+                else if (activeSpoiler && e.keyCode == KEY_G) {
                     initPromptFrame();
                     e.preventDefault();
                     // } else if (activeSpoiler && hovered && ctrlDown && e.keyCode == eKey) {
-                } else if (activeSpoiler && hovered && e.keyCode == KEY_O) {
+                }
+                else if (activeSpoiler && hovered && e.keyCode == KEY_O) {
                     var url = hovered.dataset.url;
                     if (url) window.open(url,'_blank');
                     e.preventDefault();
-                } else if (activeSpoiler && e.keyCode == KEY_Z && ctrlDown) {
+                }
+                else if (activeSpoiler && e.keyCode == KEY_Z && ctrlDown) {
                     undoAction();
                     galleryList = createGalleryList(activeSpoiler);
                     findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
                     e.preventDefault();
-                } else if (e.keyCode == KEY_OPEN_BRACKET) {
+                }
+                else if (e.keyCode == KEY_OPEN_BRACKET) {
                     changeContentOffset = -1;
                     e.preventDefault();
-                } else if (e.keyCode == KEY_CLOSE_BRACKET) {
+                }
+                else if (e.keyCode == KEY_CLOSE_BRACKET) {
                     changeContentOffset = false;
                     e.preventDefault();
-                } else if (hovered && (ctrlDown && e.keyCode == KEY_F)) { // Control + F
+                }
+                else if (hovered && (ctrlDown && e.keyCode == KEY_F)) { // Control + F
                     var title = hovered.getAttribute('title') || hovered.getAttribute('alt');
                     if (title) window.open('https://encrypted.google.com/webhp#q='+title,'_blank');
                     e.preventDefault();
@@ -1657,8 +1686,10 @@
                 var title = self.querySelector('p');
                 if (title) {
                     var titleText = title.innerText.trim();
-                    titleText = titleText.replace(/\n/g, '');
-                    console.log(titleText, params.tab.trim(), titleText == params.tab.trim())
+                    // titleText = titleText.replace(/\n/g, '');
+                    console.log(titleText);
+                    console.log(params.tab.trim());
+                    console.log(titleText == params.tab.trim());
                     if (titleText == params.tab.trim()) {
                         // Create a new 'change' event
                         var event = new Event('click');
