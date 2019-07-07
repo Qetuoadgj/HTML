@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.21
+// @version		 2.9.22
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -346,7 +346,9 @@
     }
 
     function downloadCurrentDocument() {
-        var pageURL = location.href; var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1'); pageTitle = pageTitle.replace('.html', '') + '.html';
+        var pageURL = location.href;
+        var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1');
+        pageTitle = pageTitle.replace(/.html[?]?.*/, '') + '.html';
         var documentClone = document.documentElement.cloneNode(true);
         documentClone = resetAttributes(documentClone)[0];
         var documentString = getDoctype()+'\n'+documentClone.outerHTML+'\n';

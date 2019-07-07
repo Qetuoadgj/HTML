@@ -1,7 +1,6 @@
 /* https://github.com/Qetuoadgj/HTML *//* version: 1.0.1 */
 
-body, .spoilertop, .thumbnail
-{
+body, .spoilertop, .thumbnail {
 	background: black;
 }
 
@@ -9,8 +8,7 @@ body {
 	font-size: 0 !important;
 }
 
-div
-{
+div {
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none;	 /* Chrome/Safari/Opera */
 	-khtml-user-select: none;	 /* Konqueror */
@@ -19,52 +17,45 @@ div
 	user-select: none;			 /* Non-prefixed version, currently not supported by any browser */
 }
 
-.background
-{
+.background {
 	position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
 }
 
-.spoilertop, .thumbnail
-{
+.spoilertop, .thumbnail {
 	display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
 	font-size: 16px;
 	margin: 2px
 }
 
-.spoilertop > p, .thumbnail > p
-{
+.spoilertop > p, .thumbnail > p {
 	margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
 }
 
-.spoilertop > p.forced, .thumbnail > p.forced
-{
+.spoilertop > p.forced, .thumbnail > p.forced {
 	display: block;
 	position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
 }
 
-.spoilertop:hover, .thumbnail:hover
-{
+.spoilertop:hover, .thumbnail:hover {
 	border-color: red; border-style: solid; opacity: 1 !important;
 }
 
-.spoilertop > img, .thumbnail > img
-{
+.spoilertop > img, .thumbnail > img {
 	/*	position: relative; */ position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
 	z-index: -1;
 	/* width: 100%; */
 }
 
-.spoilerbox
-{
+.spoilerbox {
 	display: none; height: 100%;
 }
 /*
-.centered
-{
+	.centered
+	{
 	position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; display: none; max-width: 90% !important; max-height: 90% !important; object-fit: contain;
-    border-width: 0; border-style: solid; border-color: black;
-    background: rgba(0, 0, 0, 0.33);
-}
+	border-width: 0; border-style: solid; border-color: black;
+	background: rgba(0, 0, 0, 0.33);
+	}
 */
 /* img.centered
 	{
@@ -76,35 +67,32 @@ div
 	-webkit-backface-visibility: hidden;
 } */
 /*
-.centered:-webkit-full-screen
-{
+	.centered:-webkit-full-screen
+	{
 	top: 0px; left: 0px; transform: translate(0px, 0px);
-}
-.centered:-moz-full-screen
-{
+	}
+	.centered:-moz-full-screen
+	{
 	top: 0px; left: 0px; transform: translate(0px, 0px);
-}
-.centered:-ms-fullscreen
-{
+	}
+	.centered:-ms-fullscreen
+	{
 	top: 0px; left: 0px; transform: translate(0px, 0px);
-}
-.centered:fullscreen
-{
+	}
+	.centered:fullscreen
+	{
 	top: 0px; left: 0px; transform: translate(0px, 0px);
-}
+	}
 */
-.wallpaper
-{
+.wallpaper {
 	position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
 }
 
-.minimized
-{
+.minimized {
 	position: fixed; right: 15px; bottom: 15px; top: initial; left: initial; transform: initial; width: 441px !important; height: 248px !important;
 }
 
-img.minimized
-{
+img.minimized {
 	width: inherit !important; height: inherit !important;
 	max-width: 441px !important; max-height: 248px !important;
 }
@@ -122,49 +110,42 @@ img.minimized
 	object-fit: contain;
 } */
 
-body
-{
+body {
 	font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
 }
 
-.COMMENTED, .REMOVED
-{
+.COMMENTED, .REMOVED {
 	visibility: hidden;
 	display: none;
 }
 
-.disabled-host
-{
+.disabled-host {
 	border-color: cadetblue !important;
 }
 
-.recast-host
-{
+.recast-host {
 	border-color: blueviolet;
 }
 
-.duplicate_1, .duplicate_2, .disabled-host
-{
+.duplicate_1, .duplicate_2, .disabled-host {
 	border-style: dashed !important; border-width: 2px !important;
 }
-.duplicate_1
-{
+.duplicate_1 {
 	border-color: antiquewhite;
 }
-.duplicate_2
-{
+.duplicate_2 {
 	border-color: lime;
 }
 /*
-#buttons
-{
+	#buttons
+	{
 	position: fixed;
 	top: 20%;
 	right: 0;
 	z-index: 11;
-}
-#closeButton, #nextButton, #prevButton, #delButton
-{
+	}
+	#closeButton, #nextButton, #prevButton, #delButton
+	{
 	width: 32px;
 	height: 32px;
 	position: fixed;
@@ -173,30 +154,29 @@ body
 	display: none;
 	border-color: black; border-style: solid; border-width: 1px;
 	border-width: 0.75px; border-style: solid; border-color: black; background: rgba(0, 0, 0, 0.33);
-}
-#closeButton
-{
+	}
+	#closeButton
+	{
 	background: rgba(0, 0, 0, 0.165);
-}
-#nextButton, #prevButton, #delButton
-{
+	}
+	#nextButton, #prevButton, #delButton
+	{
 	width: 96px;
 	height: 96px;
 	opacity: 0.5;
 	margin: 10px;
 	position: relative;
-}
-#prevButton
-{
+	}
+	#prevButton
+	{
 	transform: scale(-1, 1);
-}
-#buttons canvas:hover
-{
+	}
+	#buttons canvas:hover
+	{
 	background: rgba(255, 0, 0, 0.42);
-}
+	}
 */
-#linkText
-{
+#linkText {
 	position: fixed;
 	display: none;
 	/* height: 2.5%; */
@@ -278,5 +258,9 @@ div#outputs > *, div#content > * {pointer-events: all;}
 }
 #buttons canvas:hover {
 	background-color: rgba(255, 0, 0, 0.42);
+}
+
+.spoilerbox {
+	width: 92%;
 }
 
