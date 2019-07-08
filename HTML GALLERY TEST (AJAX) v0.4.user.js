@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.22
+// @version		 2.9.23
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -1567,8 +1567,9 @@
                     var category = self.trim();
                     if (category.length > 0) {
                         var title = category.replace(/\s+/i, ' ').Capitalize();
-                        var id = 'category-' + category.toLowerCase().replace(/\s+/i, '_');
+                        var id = 'category-' + category.toLowerCase().replace(/\s+/ig, '_');
                         var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
+                        // console.log(id);
                         if (!newSpoiler) {
                             newSpoiler = document.createElement('div');
                             previews.appendChild(document.createTextNode('\n'));
