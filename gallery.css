@@ -40,7 +40,7 @@ div {
 	border-color: red; border-style: solid; opacity: 1 !important;
 }
 
-.spoilertop > img, .thumbnail > img {
+.spoilertop > img, .thumbnail > img,  .thumbnail > video {
 	/*	position: relative; */ position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
 	z-index: -1;
 	/* width: 100%; */

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.23
+// @version		 2.9.24
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -46,6 +46,17 @@
 
     // G_win().closePopups = 1;
 
+    // ---------------------
+    function eventFire(el, etype) {
+        if (el.fireEvent) {
+            el.fireEvent('on' + etype);
+        }
+        else {
+            var evObj = document.createEvent('Events');
+            evObj.initEvent(etype, true, false);
+            el.dispatchEvent(evObj);
+        };
+    };
     // ---------------------
     // -- GET VALUSE FROM URL [START]
     function getParamsFromURL(searchString) {
@@ -258,6 +269,8 @@
         forEach(thumbnailsArray, function(index, self) {
             self.removeAttribute('style');
             var image = self.querySelector('img'); if (image) image.remove();
+            var video = self.querySelector('video'); if (video) video.remove();
+            self.removeAttribute('onmouseover'); self.removeAttribute('onmouseout');
             var text = self.querySelector('p'); if (text) text.remove();
             removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');
         });
@@ -309,6 +322,8 @@
 
         forEach(clone.querySelectorAll('.recast-host'), function(index, self) {self.classList.remove('recast-host');});
         clone.classList.remove('recast-host');
+
+        clone.innerHTML = '\n' + clone.innerHTML + '\t\n' + spaces;
 
         return [clone, spaces];
     }
@@ -1147,6 +1162,8 @@
                 var activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
                     var image = self.querySelector('img');
                     var imageSrc = self.dataset.image;
+                    var video = self.querySelector('video');
+                    var videoSrc = self.dataset.video;
                     var contentSrc = self.dataset.content;
                     var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
                     var contentSize = self.dataset.quality;
@@ -1156,6 +1173,18 @@
                             image = document.createElement('img');
                             image.setAttribute('data-echo', imageSrc || contentSrc); // src
                             self.appendChild(image);
+                        }
+                        if (!video && videoSrc) {
+                            video = document.createElement('video');
+                            video.setAttribute('src', videoSrc); // src
+                            video.setAttribute('loop', '');
+                            video.setAttribute('muted', '');
+                            video.setAttribute('playsinline', '');
+                            video.style.zIndex = -2;
+                            self.setAttribute('onmouseover', "let v = this.querySelector('video'); v.play(); v.currentTime = 0; v.style.zIndex = 1;");
+                            self.setAttribute('onmouseout', "let v = this.querySelector('video'); v.pause(); v.currentTime = 0; v.style.zIndex = -2;");
+                            video.preload = "auto";
+                            self.appendChild(video);
                         }
                         if (title) {
                             //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
@@ -1702,6 +1731,7 @@
                 }
             });
         }
+        eventFire(document.querySelector('body'), 'click');
     }
 
     document.addEventListener('DOMContentLoaded', documentOnReady);
