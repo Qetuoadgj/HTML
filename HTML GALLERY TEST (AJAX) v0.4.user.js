@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.24
+// @version		 2.9.25
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -587,6 +587,7 @@
         mainDiv.style.border = '1px solid rgba(255, 255, 255, 0.2)';
         mainDiv.innerText = qualityText;
         mainDiv.style.opacity = opactity === 0 ? 0 : opactity ? opactity : 0.65;
+        mainDiv.style.pointerEvents = 'none';
         parentElement.insertBefore(mainDiv, parentElement.firstChild);
     }
 
@@ -612,6 +613,7 @@
         mainDiv.style.textAlign = 'center';
         mainDiv.style.opacity = opactity === 0 ? 0 : opactity ? opactity : 0.65;
         mainDiv.style.color = 'whitesmoke';
+        mainDiv.style.pointerEvents = 'none';
         parentElement.insertBefore(mainDiv, parentElement.firstChild);
     }
 
@@ -1176,16 +1178,39 @@
                         }
                         if (!video && videoSrc) {
                             video = document.createElement('video');
-                            video.setAttribute('src', videoSrc); // src
+                            video.setAttribute('preload', 'none');
+                            video.setAttribute('muted', 'muted');
                             video.setAttribute('loop', '');
-                            video.setAttribute('muted', '');
-                            video.setAttribute('playsinline', '');
+                            // video.setAttribute('src', videoSrc); // src
                             video.style.zIndex = -2;
-                            self.setAttribute('onmouseover', "let v = this.querySelector('video'); v.play(); v.currentTime = 0; v.style.zIndex = 1;");
-                            self.setAttribute('onmouseout', "let v = this.querySelector('video'); v.pause(); v.currentTime = 0; v.style.zIndex = -2;");
-                            video.preload = "auto";
+                            // self.setAttribute('onmouseover', "let v = this.querySelector('video'); v.currentTime = 0; v.play(); v.style.zIndex = 1;");
+                            // self.setAttribute('onmouseout', "let v = this.querySelector('video'); v.pause(); v.currentTime = 0; v.style.zIndex = -2;");
                             self.appendChild(video);
-                        }
+                            //*
+                            let source = document.createElement('source');
+                            source.setAttribute('src', videoSrc); source.type = "video/mp4";
+                            video.appendChild(source);
+                            //*/
+                            let videoPlay = function(video) {
+                                let promise = video.play();
+                                if (promise !== undefined) {
+                                    promise.then(_ => {
+                                        video.currentTime = 0;
+                                        // Autoplay started!
+                                    }).catch(error => {
+                                        // Autoplay was prevented.
+                                    });
+                                };
+                                video.style.zIndex = 1;
+                            };
+                            self.addEventListener('mouseover', function(){videoPlay(video);}, false);
+                            let videoStop = function(video) {
+                                if (!video.paused) {video.pause(); video.currentTime = 0;};
+                                video.style.zIndex = -2;
+                            };
+                            self.addEventListener('mouseout', function(){videoStop(video);}, false);
+                            // */
+                        };
                         if (title) {
                             //if (contentSrc.match(/youtube.com\/embed/i)) {text = document.createElement('p'); type = 'YouTube'; text.innerHTML += type; self.appendChild(text);}
                             text = document.createElement('p');
@@ -1730,9 +1755,8 @@
                     }
                 }
             });
-        }
-        eventFire(document.querySelector('body'), 'click');
-    }
+        };
+    };
 
     document.addEventListener('DOMContentLoaded', documentOnReady);
 
