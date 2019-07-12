@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.25
+// @version		 2.9.26
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -224,6 +224,20 @@
     function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
     // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
     function disableElement(element, remove) {if (remove) {addClass(element, 'REMOVED');} else {addClass(element, 'COMMENTED');}}
+    function favElement(element, toggle) {
+        if (toggle) {
+            if (element.classList.contains('fav')) {
+                element.classList.remove('fav');
+                datasetRemove(element, 'categories', 'fav');
+            }
+            else {
+                addClass(element, 'fav');
+                datasetAdd(element, 'categories', 'fav');
+            };
+        } else {
+            addClass(element, 'fav');
+        };
+    };
 
     function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId ? (' PUBLIC "' +	document.doctype.publicId.toUpperCase() + '"') : '') + (document.doctype.systemId ? (' "' + document.doctype.systemId.toUpperCase() + '"') : '') + '>';}
 
@@ -254,6 +268,8 @@
         if (delButton) {delButton.removeAttribute('width'); delButton.removeAttribute('height');}
         var prevButton = clone.querySelector('#prevButton');
         if (prevButton) {prevButton.removeAttribute('width'); prevButton.removeAttribute('height');}
+        var favButton = clone.querySelector('#favButton');
+        if (favButton) {favButton.removeAttribute('width'); favButton.removeAttribute('height');}
 
         clone.removeAttribute('style');
         forEach(spoilerButtonsArray, function(index, self) {
@@ -323,7 +339,10 @@
         forEach(clone.querySelectorAll('.recast-host'), function(index, self) {self.classList.remove('recast-host');});
         clone.classList.remove('recast-host');
 
-        clone.innerHTML = '\n' + clone.innerHTML + '\t\n' + spaces;
+        if (whitespace) {clone.innerHTML = '\n' + clone.innerHTML + '\t\n' + spaces;};
+
+        clone.removeAttribute('isScripted');
+        clone.removeAttribute('clean-media-page-extension-installed');
 
         return [clone, spaces];
     }
@@ -398,6 +417,19 @@
         element.className = element.className.replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
     }
 
+    function datasetAdd(element, param, value) {
+        var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
+        if (re.test(element.dataset[param])) return;
+        element.dataset[param] = element.dataset[param] ? (element.dataset[param] + ', ' + value).replace(/\s+/g, ' ').replace(/(^ | $)/g, '') : value;
+    }
+
+    function datasetRemove(element, param, value){
+        if (!element.dataset[param]) return;
+        if (element.dataset[param] == value) element.removeAttribute('data-'+param);
+        var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
+        element.dataset[param] = element.dataset[param].replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
+    }
+
     String.prototype.Capitalize = function() {
         function capFirst(str) {return str.length === 0 ? str : str[0].toUpperCase() + str.substr(1);}
         return this.split(' ').map(capFirst).join(' ');
@@ -421,6 +453,7 @@
             // undoElementsBuffer[num].outerHTML = undoChangesBuffer[num];
             removeClass(undoElementsBuffer[num], 'REMOVED');
             removeClass(undoElementsBuffer[num], 'COMMENTED');
+            removeClass(undoElementsBuffer[num], 'fav');
             undoElementsBuffer.splice(num, 1); // undoChangesBuffer.splice(num, 1);
         }
     }
@@ -938,9 +971,11 @@
         var nextButton = document.querySelector('#nextButton');
         drawArrow(nextButton, null, null, null, 'white', null);
         var delButton = document.querySelector('#delButton');
-        drawCloseButton(delButton, null, null, null, 'white', null);
+        drawCloseButton(delButton, null, null, null, 'red', null);
         var prevButton = document.querySelector('#prevButton');
         drawArrow(prevButton, null, null, null, 'white', null);
+        var favButton = document.querySelector('#favButton');
+        if (favButton) drawArrow(favButton, null, null, null, 'limegreen', null);
 
         var linkText = document.querySelector('#linkText');
         if (!linkText) {
@@ -1051,6 +1086,7 @@
             nextButton.style.removeProperty('display');
             delButton.style.removeProperty('display');
             prevButton.style.removeProperty('display');
+            favButton.style.removeProperty('display');
             linkText.innerText = null;
             if (wallpaperVideo) wallpaperVideo.play();
             if (G_activePopUpWin) {
@@ -1127,6 +1163,7 @@
                 nextButton.style.display = 'block';
                 delButton.style.display = 'block';
                 prevButton.style.display = 'block';
+                favButton.style.display = 'block';
             }
 
             setThumbnailImage(thisThumbnail);
@@ -1641,6 +1678,14 @@
                     if (title) window.open('https://encrypted.google.com/webhp#q='+title,'_blank');
                     e.preventDefault();
                 }
+                else if ((hovered || activeThumbnail) && e.keyCode == KEY_F) { // Mark as Favourite
+                    if (activeThumbnail) {regUndoAction(activeThumbnail); favElement(activeThumbnail, true); /*changeContent(galleryList, changeContentOffset);*/} else if (hovered) {regUndoAction(hovered); favElement(hovered, true);}
+                    /*
+                    galleryList = createGalleryList(activeSpoiler);
+                    findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
+                    */
+                    e.preventDefault();
+                }
                 // e.preventDefault();
             }
         }
@@ -1761,10 +1806,12 @@
         nextButton.addEventListener('click', function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, false);
         delButton.addEventListener('click', function(e){onKeyDown(e, KEY_DELETE);}, false);
         prevButton.addEventListener('click', function(e){onKeyDown(e, KEY_LEFT_ARROW);}, false);
+        if (favButton) favButton.addEventListener('click', function(e){onKeyDown(e, KEY_F);}, false);
 
         addMouseWheelHandler(nextButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         addMouseWheelHandler(prevButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         addMouseWheelHandler(delButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
+        if (favButton) addMouseWheelHandler(favButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
 
         /*
         var me = 'complete.misc_1'; // some id

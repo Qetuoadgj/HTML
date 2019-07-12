@@ -136,6 +136,11 @@ body {
 .duplicate_2 {
 	border-color: lime;
 }
+.fav {
+    border-color: limegreen;
+    border-width: 4px !important;
+    border-style: double;
+}
 /*
 	#buttons
 	{
@@ -240,16 +245,17 @@ div#outputs > *, div#content > * {pointer-events: all;}
 /**/
 
 #buttons {position: fixed; /* top: 0px; */ right: 0px; z-index: 11; display: block; /* ansform: translateY(25%); */}
-#closeButton, #nextButton, #prevButton, #delButton {width: 32px; height: 32px; position: fixed; top: 2px; right: 0px; border-color: black; border-style: solid; border-width: 1px; border-width: 0.75px; border-style: solid; border-color: black; background-color: rgba(0, 0, 0, 0.33); margin: 10px; display: block; background-size: contain;}
+#closeButton, #nextButton, #prevButton, #delButton, #favButton {width: 32px; height: 32px; position: fixed; top: 2px; right: 0px; border-color: black; border-style: solid; border-width: 1px; border-width: 0.75px; border-style: solid; border-color: black; background-color: rgba(0, 0, 0, 0.33); margin: 10px; display: block; background-size: contain;}
 #closeButton {margin: 2px; top: 0px; right: 0px; background-color: rgba(0, 0, 0, 0.165);}
-#nextButton, #prevButton, #delButton {width: 96px; height: 96px; opacity: 0.5; margin: 10px; position: relative;}
+#nextButton, #prevButton, #delButton, #favButton {width: 96px; height: 96px; opacity: 0.5; margin: 10px; position: relative;}
 #prevButton {transform: scale(-1, 1);}
+#favButton {transform: rotate(90deg);}
 /* #nextButton, #prevButton {background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Wheat"><polygon points="24,64 48,32 72,64" transform="rotate(90 48 48)"/></svg>');} */
 /* #closeButton, #delButton {background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Wheat"><line x1="24" y1="24" x2="72" y2="72" stroke="Wheat" stroke-width="10"/><line x1="24" y1="72" x2="72" y2="24" stroke="Wheat" stroke-width="10"/></svg>'); } */
 /* #nextButton:hover, #prevButton:hover {background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Sandybrown"><polygon points="24,64 48,32 72,64" transform="rotate(90 48 48)"/></svg>'); border-color: Wheat;} */
 /* #closeButton:hover, #delButton:hover {background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Sandybrown"><line x1="24" y1="24" x2="72" y2="72" stroke="Sandybrown" stroke-width="10"/><line x1="24" y1="72" x2="72" y2="24" stroke="Sandybrown" stroke-width="10"/></svg>'); border-color: Wheat;} */
 /* #nextButton, #prevButton, #delButton {border-width: 2px;} */
-#closeButton, #nextButton, #prevButton, #delButton {
+#closeButton, #nextButton, #prevButton, #delButton, #favButton {
 	border-color: black; border-style: solid; border-width: 1px;
 	border-width: 0.75px; border-style: solid; border-color: black; background-color: rgba(0, 0, 0, 0.33);
 }
