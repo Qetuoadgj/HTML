@@ -136,10 +136,29 @@ body {
 .duplicate_2 {
 	border-color: lime;
 }
+
+.spoilertop, .thumbnail {
+    border-width: 4px !important;
+	border-color: black;
+    border-style: inset;
+}
+
+.spoilertop:hover, .thumbnail:hover {
+	border-color: orange; border-style: double; opacity: 1 !important;
+}
+
+
+.duplicate_1, .duplicate_2, .disabled-host {
+	border-style: inset !important;
+}
+
 .fav {
     border-color: limegreen;
     border-width: 4px !important;
-    border-style: double;
+    border-style: double !important;
+}
+.fav:hover {
+    border-color: yellow !important;
 }
 /*
 	#buttons

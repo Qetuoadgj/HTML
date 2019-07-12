@@ -420,14 +420,17 @@
     function datasetAdd(element, param, value) {
         var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
         if (re.test(element.dataset[param])) return;
-        element.dataset[param] = element.dataset[param] ? (element.dataset[param] + ', ' + value).replace(/\s+/g, ' ').replace(/(^ | $)/g, '') : value;
+        element.dataset[param] = element.dataset[param] ? (element.dataset[param] + ', ' + value).replace(/\s+/g, ' ').replace(/(^ | $)/g, '').replace(/,{2}/g, ',') : value;
     }
 
     function datasetRemove(element, param, value){
         if (!element.dataset[param]) return;
-        if (element.dataset[param] == value) element.removeAttribute('data-'+param);
+        if (element.dataset[param] == value) {
+            element.removeAttribute('data-'+param);
+            return;
+        };
         var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
-        element.dataset[param] = element.dataset[param].replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
+        element.dataset[param] = element.dataset[param].replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '').replace(/,{2}/g, ',');
     }
 
     String.prototype.Capitalize = function() {
