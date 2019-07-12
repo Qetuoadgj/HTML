@@ -617,6 +617,41 @@
         parentElement.insertBefore(mainDiv, parentElement.firstChild);
     }
 
+    function addTimeText(parentElement, timeText, backGroundColor, textColor, backGroundAlpha, opactity) {
+        backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
+        var mainDiv = document.createElement('div');
+        mainDiv.setAttribute('class', 'hostText');
+        mainDiv.style.background = backGroundColor;
+        mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
+        mainDiv.style.background = 'black';
+        mainDiv.style.zIndex = 2147483647; // '10000';
+        mainDiv.style.position = 'absolute'; // 'inherit'
+        mainDiv.style.width = 'auto';
+        mainDiv.style.height = '20px';
+        // mainDiv.style.float = 'left';
+        // mainDiv.style.left = '0';
+        mainDiv.style.right = '0';
+        if (textColor) mainDiv.style.color = textColor; // 'rgba(0, 253, 255, 0)';
+        mainDiv.style.padding = '0px 2px';
+        mainDiv.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+        mainDiv.innerText = timeText;
+        mainDiv.style.top = '0px';
+        mainDiv.style.textAlign = 'center';
+        mainDiv.style.opacity = opactity === 0 ? 0 : opactity ? opactity : 0.65;
+        mainDiv.style.color = 'whitesmoke';
+        mainDiv.style.pointerEvents = 'none';
+        // mainDiv.style.zoom = 0.70;
+        // mainDiv.style.fontSize = '12px';
+        // mainDiv.style.borderRadius = '2px';
+        // mainDiv.style['-moz-border-radius'] = '3px';
+        // mainDiv.style['-webkit-border-radius'] = '3px';
+        // mainDiv.style.fontFamily = '"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif';
+        // mainDiv.style.border = 'none';
+        // mainDiv.style.height = '15px';
+        // mainDiv.style.padding = '3px 5px';
+        parentElement.insertBefore(mainDiv, parentElement.firstChild);
+    }
+
     function hmsToSecondsOnly(str) {
         var p = str.split(':'),
             s = 0, m = 1;
@@ -1169,6 +1204,7 @@
                     var contentSrc = self.dataset.content;
                     var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
                     var contentSize = self.dataset.quality;
+                    var duration = self.dataset.duration;
                     var text, title = self.dataset.title;
                     if (!image) {
                         if (imageSrc || contentSrc) {
@@ -1234,6 +1270,9 @@
                             }
                             addHostText(self, contentHost, valToColor((800*600)/(1900*1080) * 100, 1, 1.0, 0, 100, 1), 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                         }
+                        if (duration) {
+                            addTimeText(self, duration, valToColor((800*600)/(1900*1080) * 100, 1, 1.0, 0, 100, 1), 'rgba(255, 255, 255, 1)', 0.4, 0.5);
+                        };
                     }
                     if (image) lazyImagesArray.push(image);
                     if (G_disabledHosts.includes(contentHost)) {
@@ -1744,9 +1783,11 @@
                 if (title) {
                     var titleText = title.innerText.trim();
                     // titleText = titleText.replace(/\n/g, '');
+                    /*
                     console.log(titleText);
                     console.log(params.tab.trim());
                     console.log(titleText == params.tab.trim());
+                    */
                     if (titleText == params.tab.trim()) {
                         // Create a new 'change' event
                         var event = new Event('click');
