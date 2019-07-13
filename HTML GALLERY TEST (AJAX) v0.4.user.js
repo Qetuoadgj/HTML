@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.26
+// @version		 2.9.27
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -976,11 +976,11 @@
         var nextButton = document.querySelector('#nextButton');
         drawArrow(nextButton, null, null, null, 'white', null);
         var delButton = document.querySelector('#delButton');
-        drawCloseButton(delButton, null, null, null, 'red', null);
+        drawCloseButton(delButton, null, null, null, 'rgba(255, 0, 0, 0.75)', null);
         var prevButton = document.querySelector('#prevButton');
         drawArrow(prevButton, null, null, null, 'white', null);
         var favButton = document.querySelector('#favButton');
-        if (favButton) drawArrow(favButton, null, null, null, 'limegreen', null);
+        if (favButton) drawArrow(favButton, null, null, null, 'rgba(64, 255, 64, 0.75)', null);
 
         var linkText = document.querySelector('#linkText');
         if (!linkText) {
@@ -1234,6 +1234,7 @@
                 buttonClicked(thisButton, spoilerButtonsArray, true);
                 activeSpoiler = false;
                 history.pushState(parent.location.pathname, "", parent.location.pathname);
+                document.querySelector('#buttons').style.removeProperty('display');
             }
             else {
                 spoiler.style.display = 'block';
@@ -1339,8 +1340,10 @@
                     });
                     $(spoiler).disableSelection();
                 }
-            }
-        }
+
+                document.querySelector('#buttons').style.display = 'block';
+            };
+        };
 
         String.prototype.Num = function(){return this.match(/\d+/);};
 
