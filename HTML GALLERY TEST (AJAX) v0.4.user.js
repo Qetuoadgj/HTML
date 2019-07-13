@@ -297,7 +297,7 @@
         forEach(temporary, function(index, self) {self.remove();});
         forEach(backgroundsArray, function(index, self) {self.remove();});
 
-        if (outputs) {iframeOutput.src = ''; imgOutput.src = '';}
+        if (outputs) {iframeOutput.src = ''; imgOutput.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';};
 
         var removed = clone.querySelectorAll('.REMOVED');
         forEach(removed, function(index, self) {self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */});
@@ -343,6 +343,8 @@
 
         clone.removeAttribute('isScripted');
         clone.removeAttribute('clean-media-page-extension-installed');
+
+        forEach(clone.querySelectorAll('#buttons'), function(index, self) {self.removeAttribute('style');});
 
         return [clone, spaces];
     }
