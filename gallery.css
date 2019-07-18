@@ -4,7 +4,7 @@ body,
 .spoilertop,
 .thumbnail
 {
-	background: black;
+	background-color: black;
 }
 body
 {
@@ -107,7 +107,7 @@ div
 	border-width: 0;
 	border-style: solid;
 	border-color: black;
-	background: rgba(0, 0, 0, 0.33);
+	background-color: rgba(0, 0, 0, 0.33);
 }
 */
 /*
@@ -253,11 +253,11 @@ body
 	border-width: 0.75px;
 	border-style: solid;
 	border-color: black;
-	background: rgba(0, 0, 0, 0.33);
+	background-color: rgba(0, 0, 0, 0.33);
 }
 #closeButton
 {
-	background: rgba(0, 0, 0, 0.165);
+	background-color: rgba(0, 0, 0, 0.165);
 }
 #nextButton,
 #prevButton,
@@ -275,7 +275,7 @@ body
 }
 #buttons canvas:hover
 {
-	background: rgba(255, 0, 0, 0.42);
+	background-color: rgba(255, 0, 0, 0.42);
 }
 */
 #linkText
@@ -285,7 +285,7 @@ body
 	/* height: 2.5%; */
 	bottom: 0;
 	left: 50%;
-	/* background: white; */
+	/* background-color: white; */
 	transform: translateX(-50%);
 	z-index: 100;
 	color: white;
@@ -317,7 +317,8 @@ p
 }
 ::-webkit-scrollbar-button
 {
-	background: no-repeat #222;
+	background-repeat: no-repeat;
+	background-color: #222;
 	background-size: 18px;
 	background-position: center bottom;
 }
@@ -595,6 +596,7 @@ div#content>*
 	border-width: 4px;
 	border-color: black;
 	border-style: inset;
+	border-style: double;
 }
 .spoilertop:hover,
 .thumbnail:hover
@@ -607,6 +609,29 @@ div#content>*
 .disabled-host
 {
 	border-style: inset;
+}
+.disabled-host
+{
+	border-color: cadetblue !important;
+}
+.recast-host
+{
+	border-color: blueviolet;
+}
+.duplicate_1,
+.duplicate_2,
+.disabled-host
+{
+	border-style: dashed !important;
+	border-width: 2px !important;
+}
+.duplicate_1
+{
+	border-color: antiquewhite;
+}
+.duplicate_2
+{
+	border-color: lime;
 }
 /* ---------------------- */
 /*

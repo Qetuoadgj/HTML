@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.27
+// @version		 2.9.28
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -1086,12 +1086,13 @@
                 activeSpoiler.style.removeProperty('display');
                 buttonClicked(false, spoilerButtonsArray, true);
                 history.pushState(parent.location.pathname, "", parent.location.pathname);
+                document.querySelector('#buttons').style.removeProperty('display');
             }
-            closeButton.style.removeProperty('display');
+            // closeButton.style.removeProperty('display');
             nextButton.style.removeProperty('display');
             delButton.style.removeProperty('display');
             prevButton.style.removeProperty('display');
-            favButton.style.removeProperty('display');
+            if (favButton) favButton.style.removeProperty('display');
             linkText.innerText = null;
             if (wallpaperVideo) wallpaperVideo.play();
             if (G_activePopUpWin) {
@@ -1169,6 +1170,8 @@
                 delButton.style.display = 'block';
                 prevButton.style.display = 'block';
                 favButton.style.display = 'block';
+
+                document.querySelector('#buttons').style.display = 'block';
             }
 
             setThumbnailImage(thisThumbnail);
