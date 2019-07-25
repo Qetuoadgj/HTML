@@ -1143,6 +1143,9 @@
                     else {
                         content = content + '?autoplay=true';
                     };
+                }
+                else {
+                    content = content + '#autoplay=true';
                 };
             }
             else {
