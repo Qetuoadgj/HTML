@@ -1136,6 +1136,7 @@
             let array = content.split('#');
             if (array) {
                 if (array[1]) {
+                    // alert(array[1]);
                     if (array[1].match(/[?]/)) {
                         content = content + '&autoplay=true';
                     }
