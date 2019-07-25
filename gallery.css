@@ -18,7 +18,7 @@ div
 	-moz-user-select: none;			/* Firefox */
 	-ms-user-select: none;			/* Internet Explorer/Edge */
 	user-select: none;				/* Non-prefixed version, currently not supported by any browser */
-}
+	}
 .background
 {
 	position: fixed;
@@ -491,6 +491,7 @@ div#content>*
 	right: 0px;
 	background-color: rgba(0, 0, 0, 0.165);
 	display: block;
+	z-index: 2147483647;
 }
 #nextButton,
 #prevButton,
