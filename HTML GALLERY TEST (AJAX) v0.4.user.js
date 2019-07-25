@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.28
+// @version		 2.9.29
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -1131,9 +1131,22 @@
 
             content = appendFlashVars(content, player);
 
-            content = content + '#autoplay=true'; //'#autoplay=true&autoplay=true';
-            // content = content.split('?')[1] ? (content + '&autoplay=true') : (content + '?autoplay=true');
-            // content = content.replace(/#autoplay=true(&autoplay=true){1,}/g, '#autoplay=true').replace(/(&autoplay=true){2,}/g, '&autoplay=true');
+            //content = content + '#autoplay=true'; //'#autoplay=true&autoplay=true';
+
+            let array = content.split('#');
+            if (array) {
+                if (array[1]) {
+                    if (array[1].match(/[?]/)) {
+                        content = content + '&autoplay=true';
+                    }
+                    else {
+                        content = content + '?autoplay=true';
+                    };
+                };
+            }
+            else {
+                content = content + '#autoplay=true';
+            };
 
             // console.log('content: '+content);
             var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
@@ -1169,7 +1182,7 @@
                 nextButton.style.display = 'block';
                 delButton.style.display = 'block';
                 prevButton.style.display = 'block';
-                favButton.style.display = 'block';
+                if (favButton) favButton.style.display = 'block';
 
                 document.querySelector('#buttons').style.display = 'block';
             }
