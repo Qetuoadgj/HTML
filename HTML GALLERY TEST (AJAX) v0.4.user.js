@@ -343,7 +343,8 @@
         clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
         clone.innerHTML = clone.innerHTML.replace(/([\r\n]+[\t ]+){3,}/g, '$1$1');
 
-        clone.innerHTML = clone.innerHTML.replace(/^\s*[\r\n]/gm, '');
+        // clone.innerHTML = clone.innerHTML.replace(/^\s*[\r\n]/gm, '');
+        clone.innerHTML = clone.innerHTML.replace(/(<\/\w+>)\n(\t+)\n+(<\/\w+>)/gi, '$1\n$2$3');
 
         forEach(clone.querySelectorAll('.recast-host'), function(index, self) {self.classList.remove('recast-host');});
         clone.classList.remove('recast-host');
@@ -354,6 +355,11 @@
         clone.removeAttribute('clean-media-page-extension-installed');
 
         forEach(clone.querySelectorAll('#buttons'), function(index, self) {self.removeAttribute('style');});
+
+        clone.innerHTML = clone.innerHTML.
+        replace(/-\&nbsp;/g, '- ').
+        replace(/\&amp;/g, '&')
+        ;
 
         return [clone, spaces];
     }
@@ -404,6 +410,11 @@
 
         documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n  <head>').replace(/[\s]+<\/body><\/html>/i, '\n  </body>\n</html>');
         documentString = documentString.replace(/\r\n/g, '\n').replace(/\n/g, '\r\n');
+
+        documentString = documentString.
+        replace(/-\&nbsp;/g, '- ').
+        replace(/\&amp;/g, '&')
+        ;
 
         download(documentString, pageTitle, 'text/html');
     }
@@ -1732,7 +1743,7 @@
 
         // /*
         var previews = document.querySelector('#previews');
-        thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
+        thumbnailsArray = document.querySelectorAll('.thumbnail');
         forEach(thumbnailsArray, function(index, self) {
             var thisThumbnail = self;
             var categories = self.dataset.categories;
@@ -1747,6 +1758,7 @@
                 ;
                 self.dataset.categories = categories;
                 // alert(categories);
+                self.title = self.title + '\nCategories: [' + self.dataset.categories /*.toTitleCase()*/ + ']';
                 var categoriesArray = categories.split(',')
                 forEach(categoriesArray, function(index, self) {
                     var category = self.trim();
@@ -1770,7 +1782,6 @@
                         // alert(category);
                     };
                 });
-                self.title = self.title + '\nCategories: [' + self.dataset.categories /*.toTitleCase()*/ + ']';
             };
         });
         /*
