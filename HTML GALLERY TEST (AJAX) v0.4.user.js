@@ -247,6 +247,14 @@
         var spoilersArray = clone.querySelectorAll('.spoilerbox');
         var thumbnailsArray = clone.querySelectorAll('.thumbnail');
 
+        let replaceStringInAttribute = function(element, attribute, string, replace) {
+            let value = element[attribute];
+            if (value && value.match(string)) {
+                element.setAttribute(attribute, value.replace(string, replace));
+            };
+        };
+        replaceStringInAttribute(clone, 'title', /\ncategories: \[.*\]/i, '')
+
         if (clone.hasClass('thumbnail')) thumbnailsArray = [clone];
 
         var outputs = clone.querySelector('div#content');
@@ -289,6 +297,7 @@
             self.removeAttribute('onmouseover'); self.removeAttribute('onmouseout');
             var text = self.querySelector('p'); if (text) text.remove();
             removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');
+            replaceStringInAttribute(self, 'title', /\ncategories: \[.*\]/i, '')
         });
         forEach(outputsArray, function(index, self) {
             self.removeAttribute('style');
@@ -1723,10 +1732,20 @@
 
         // /*
         var previews = document.querySelector('#previews');
+        thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
         forEach(thumbnailsArray, function(index, self) {
             var thisThumbnail = self;
             var categories = self.dataset.categories;
             if (categories) {
+                categories = categories.trim().
+                replace(/\s+,/g, ',').
+                replace(/,\s+/g, ',').
+                replace(/,+/g, ',').
+                replace(/^,/g, '').
+                replace(/,$/g, '').
+                replace(/,/g, ', ')
+                ;
+                self.dataset.categories = categories;
                 // alert(categories);
                 var categoriesArray = categories.split(',')
                 forEach(categoriesArray, function(index, self) {
@@ -1751,9 +1770,16 @@
                         // alert(category);
                     };
                 });
-                thisThumbnail.title += '\nCategories: [' + categories.toTitleCase() + ']';
+                self.title = self.title + '\nCategories: [' + self.dataset.categories /*.toTitleCase()*/ + ']';
             };
         });
+        /*
+        forEach(thumbnailsArray, function(index, self) {
+            if (self.dataset.categories) {
+                self.title = self.title + '\nCategories: [' + self.dataset.categories.toTitleCase() + ']';
+            };
+        });
+        */
         spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
         thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
         // */
