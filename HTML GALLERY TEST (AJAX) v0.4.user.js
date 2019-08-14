@@ -241,6 +241,13 @@
 
     function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId ? (' PUBLIC "' +	document.doctype.publicId.toUpperCase() + '"') : '') + (document.doctype.systemId ? (' "' + document.doctype.systemId.toUpperCase() + '"') : '') + '>';}
 
+    function unEscapeSpecialChars(str) {
+        return str.
+        replace(/-\&nbsp;/g, '- ').
+        replace(/\&amp;/g, '&')
+        ;
+    }
+
     function resetAttributes(node) {
         var clone = node.cloneNode(true);
         var spoilerButtonsArray = clone.querySelectorAll('.spoilertop');
@@ -356,10 +363,7 @@
 
         forEach(clone.querySelectorAll('#buttons'), function(index, self) {self.removeAttribute('style');});
 
-        clone.innerHTML = clone.innerHTML.
-        replace(/-\&nbsp;/g, '- ').
-        replace(/\&amp;/g, '&')
-        ;
+        clone.innerHTML = unEscapeSpecialChars(clone.innerHTML);
 
         return [clone, spaces];
     }
@@ -369,6 +373,7 @@
         var variables = resetAttributes(element);
         var clone = variables[0], spaces = variables[1] || '';
         var code = spaces + clone.outerHTML;
+        code = unEscapeSpecialChars(code);
         var clipboard = document.createElement('textarea');
         clipboard.style.position = 'fixed'; clipboard.style.top = '50%'; clipboard.style.left = '50%'; clipboard.style.transform = 'translate(-50%, -50%)'; clipboard.style['z-index'] = 10;
         clipboard.style.width = '90%'; clipboard.style.height = '90%';
@@ -411,10 +416,7 @@
         documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n  <head>').replace(/[\s]+<\/body><\/html>/i, '\n  </body>\n</html>');
         documentString = documentString.replace(/\r\n/g, '\n').replace(/\n/g, '\r\n');
 
-        documentString = documentString.
-        replace(/-\&nbsp;/g, '- ').
-        replace(/\&amp;/g, '&')
-        ;
+        documentString = unEscapeSpecialChars(documentString);
 
         download(documentString, pageTitle, 'text/html');
     }
