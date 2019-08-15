@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.30
+// @version		 2.9.31
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -225,17 +225,23 @@
     // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
     function disableElement(element, remove) {if (remove) {addClass(element, 'REMOVED');} else {addClass(element, 'COMMENTED');}}
     function favElement(element, toggle) {
-        if (toggle) {
-            if (element.classList.contains('fav')) {
-                element.classList.remove('fav');
-                datasetRemove(element, 'categories', 'fav');
-            }
-            else {
-                addClass(element, 'fav');
-                datasetAdd(element, 'categories', 'fav');
+        let thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
+        for (let el of thumbnailsArray) {
+            let matched = element.dataset.content == el.dataset.content;
+            if (matched) {
+                if (toggle) {
+                    if (el.classList.contains('fav')) {
+                        el.classList.remove('fav');
+                        datasetRemove(el, 'categories', 'fav');
+                    }
+                    else {
+                        addClass(el, 'fav');
+                        datasetAdd(el, 'categories', 'fav');
+                    };
+                } else {
+                    addClass(el, 'fav');
+                };
             };
-        } else {
-            addClass(element, 'fav');
         };
     };
 
@@ -275,16 +281,18 @@
         var temporary = clone.querySelectorAll('.temporary');
 
         var closeButton = clone.querySelector('#closeButton');
-        if (closeButton) {closeButton.removeAttribute('width'); closeButton.removeAttribute('height');}
-
         var nextButton = clone.querySelector('#nextButton');
-        if (nextButton) {nextButton.removeAttribute('width'); nextButton.removeAttribute('height');}
         var delButton = clone.querySelector('#delButton');
-        if (delButton) {delButton.removeAttribute('width'); delButton.removeAttribute('height');}
         var prevButton = clone.querySelector('#prevButton');
-        if (prevButton) {prevButton.removeAttribute('width'); prevButton.removeAttribute('height');}
         var favButton = clone.querySelector('#favButton');
-        if (favButton) {favButton.removeAttribute('width'); favButton.removeAttribute('height');}
+
+        for (let button of [nextButton, delButton, prevButton, favButton, closeButton]) {
+            if (button) {
+                button.removeAttribute('width');
+                button.removeAttribute('height');
+                button.removeAttribute('style');
+            };
+        };
 
         clone.removeAttribute('style');
         forEach(spoilerButtonsArray, function(index, self) {
@@ -444,7 +452,18 @@
     function datasetAdd(element, param, value) {
         var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
         if (re.test(element.dataset[param])) return;
-        element.dataset[param] = element.dataset[param] ? (element.dataset[param] + ', ' + value).replace(/\s+/g, ' ').replace(/(^ | $)/g, '').replace(/,{2}/g, ',') : value;
+        element.dataset[param] = element.dataset[param] ? (element.dataset[param] + ', ' + value).
+        // replace(/\s+/g, ' ').
+        // replace(/(^ | $)/g, '').
+        // replace(/,{2}/g, ',')
+        trim().
+        replace(/\s+,/g, ',').
+        replace(/,\s+/g, ',').
+        replace(/,+/g, ',').
+        replace(/^,/g, '').
+        replace(/,$/g, '').
+        replace(/,/g, ', ')
+        : value;
     }
 
     function datasetRemove(element, param, value){
@@ -454,8 +473,19 @@
             return;
         };
         var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
-        element.dataset[param] = element.dataset[param].replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '').replace(/,{2}/g, ',');
-    }
+        element.dataset[param] = element.dataset[param].replace(re, '$1').
+        // replace(/\s+/g, ' ').
+        // replace(/(^ | $)/g, '').
+        // replace(/,{2}/g, ',');
+        trim().
+        replace(/\s+,/g, ',').
+        replace(/,\s+/g, ',').
+        replace(/,+/g, ',').
+        replace(/^,/g, '').
+        replace(/,$/g, '').
+        replace(/,/g, ', ')
+        ;
+    };
 
     String.prototype.Capitalize = function() {
         function capFirst(str) {return str.length === 0 ? str : str[0].toUpperCase() + str.substr(1);}
