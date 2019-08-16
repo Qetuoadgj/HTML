@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.31
+// @version		 2.9.32
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -196,7 +196,9 @@
     var G_activePopUpWin;
     function popItUp(url, windowName, focus) {
         var newWindow = window.open(url, windowName, 'height=200, width=150');
-        if (window.focus && focus) {newWindow.focus()}
+        if (window.focus && focus) {
+            newWindow.focus();
+        };
         return newWindow;
     }
 
