@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.32
+// @version		 2.9.33
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -225,7 +225,20 @@
     function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
     function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
     // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
-    function disableElement(element, remove) {if (remove) {addClass(element, 'REMOVED');} else {addClass(element, 'COMMENTED');}}
+    function disableElement(element, remove, array = []) {
+        array = array.length > 0 ? array : [element];
+        for (let el of array) {
+            let matched = element.dataset.content == el.dataset.content;
+            if (matched) {
+                if (remove) {
+                    addClass(el, 'REMOVED');
+                }
+                else {
+                    addClass(el, 'COMMENTED');
+                };
+            };
+        };
+    };
     function favElement(element, toggle) {
         let thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
         for (let el of thumbnailsArray) {
@@ -1679,6 +1692,7 @@
             e = e || window.event;
 
             var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
+            var shiftDown = !!window.event.shiftKey;
 
             var targetType = e.target.tagName.toLowerCase();
 
@@ -1700,13 +1714,15 @@
                     e.preventDefault();
                 }
                 else if ((hovered || activeThumbnail) && e.keyCode == KEY_DELETE) { // Delete
-                    if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true);}
+                    let array = shiftDown ? document.querySelectorAll('#previews > .spoilerbox > .thumbnail') : null;
+                    if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, true, array); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, true, array);}
                     galleryList = createGalleryList(activeSpoiler);
                     findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
                     e.preventDefault();
                 }
                 else if ((hovered || activeThumbnail) && e.keyCode == KEY_K) { // Control + K
-                    if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false);}
+                    let array = shiftDown ? document.querySelectorAll('#previews > .spoilerbox > .thumbnail') : null;
+                    if (activeThumbnail) {regUndoAction(activeThumbnail); disableElement(activeThumbnail, false, array); changeContent(galleryList, changeContentOffset);} else if (hovered) {regUndoAction(hovered); disableElement(hovered, false, array);}
                     galleryList = createGalleryList(activeSpoiler);
                     findDuplicates(activeSpoiler.querySelectorAll('.thumbnail'));
                     e.preventDefault();
