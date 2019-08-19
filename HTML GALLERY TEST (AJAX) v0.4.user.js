@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.33
+// @version		 2.9.34
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -306,7 +306,7 @@
                 button.removeAttribute('width');
                 button.removeAttribute('height');
                 button.removeAttribute('style');
-            };
+				};
         };
 
         clone.removeAttribute('style');
@@ -385,6 +385,8 @@
         clone.removeAttribute('clean-media-page-extension-installed');
 
         forEach(clone.querySelectorAll('#buttons'), function(index, self) {self.removeAttribute('style');});
+
+        forEach(clone.querySelectorAll('[data=none]'), function(index, self) {self.data = '';});
 
         clone.innerHTML = unEscapeSpecialChars(clone.innerHTML);
 
@@ -1027,7 +1029,7 @@
         var outputsArray = [];
         var iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
         outputsArray.push(iframeOutput, imgOutput, objectOutput);
-        var objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
+        var objectFlashvars = objectOutput.querySelector('param[name=flashvars]');
         var galleryList = [];
         var activeSpoilerButton, activeSpoiler, activeThumbnail, activeOutput;
         var backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
