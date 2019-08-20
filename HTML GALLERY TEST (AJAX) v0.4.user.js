@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.34
+// @version		 2.9.35
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -226,7 +226,7 @@
     function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
     // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
     function disableElement(element, remove, array = []) {
-        array = array.length > 0 ? array : [element];
+        array = array ? array : [element];
         for (let el of array) {
             let matched = element.dataset.content == el.dataset.content;
             if (matched) {
@@ -1029,7 +1029,7 @@
         var outputsArray = [];
         var iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
         outputsArray.push(iframeOutput, imgOutput, objectOutput);
-        var objectFlashvars = objectOutput.querySelector('param[name=flashvars]');
+        var objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
         var galleryList = [];
         var activeSpoilerButton, activeSpoiler, activeThumbnail, activeOutput;
         var backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
