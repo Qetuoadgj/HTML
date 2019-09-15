@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.35
+// @version		 2.9.36
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -223,7 +223,12 @@
     };
 
     function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
-    function isVisible(element) {return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;}
+    function isVisible(element) {
+        var style = window.getComputedStyle(element);
+        let isHidden = (style.display === 'none') || style.visibility === 'hidden';
+        if (isHidden) return false;
+        return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;
+    }
     // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
     function disableElement(element, remove, array = []) {
         array = array ? array : [element];
