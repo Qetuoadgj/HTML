@@ -290,6 +290,7 @@ body
 	z-index: 100;
 	color: white;
 }
+.spoilertop,
 .thumbnail
 {
 	list-style: none;
@@ -378,6 +379,7 @@ iframe.gallery_frame.active
 {
 	display: block;
 }
+div.spoilertop
 div.gallery_button,
 div.thumbnail
 {
@@ -402,12 +404,14 @@ div.thumbnail:hover
 }
 */
 div.gallery_button.active,
-div.thumbnail.active
+div.thumbnail.active,
+div.spoilertop.active
 {
 	background-color: sandybrown;
 }
 div.gallery_button.active:hover,
-div.thumbnail.active:hover
+div.thumbnail.active:hover,
+div.spoilertop.active:hover
 {
 	background-color: yellow;
 }
@@ -563,6 +567,7 @@ div#content>*
 	border-style: solid;
 	border-color: black;
 	background-color: rgba(0, 0, 0, 0.33);
+	border-color: rgba(16, 16, 16, 0.75);
 }
 #closeButton
 {
@@ -575,6 +580,7 @@ div#content>*
 .spoilerbox
 {
 	width: 92%;
+	min-height: 640px;
 }
 /* ---------------------- */
 .fav
@@ -653,3 +659,42 @@ div#content>*
 	border-color: purple;
 }
 */
+/* ---------------------- */
+
+span.tooltip {
+	display: inline-block;
+	position: absolute;
+    width: auto;
+    height: auto;
+	bottom: -26px;
+	visibility: hidden;
+	
+	padding: 3px 6px;
+	border-radius: 2px;
+	background: #111;
+	/* color: #fff; */
+	font-size: 12px;
+	font-family: sans-serif;
+	white-space: nowrap;
+	
+	border-style: solid;
+	border-width: 1px;
+	border-color: #000;
+}
+.spoilertop:hover span.tooltip, .thumbnail:hover span.tooltip {
+	visibility: visible;
+}
+.spoilertop, .thumbnail {
+    overflow: unset;
+}
+.spoilertop, .thumbnail {
+	z-index: 0;
+}
+.spoilertop:hover, .thumbnail:hover {
+	z-index: 1;
+}
+.spoilertop p, .thumbnail p {
+    position: absolute;
+    max-height: 100%;
+    max-width: 100%;
+}
