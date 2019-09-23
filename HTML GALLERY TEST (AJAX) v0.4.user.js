@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.37
+// @version		 2.9.38
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -280,6 +280,7 @@
         var spoilersArray = clone.querySelectorAll('.spoilerbox');
         var thumbnailsArray = clone.querySelectorAll('.thumbnail');
 
+        /*
         let replaceStringInAttribute = function(element, attribute, string, replace) {
             let value = element[attribute];
             if (value && value.match(string)) {
@@ -287,6 +288,7 @@
             };
         };
         replaceStringInAttribute(clone, 'title', /\ncategories: \[.*\]/i, '')
+        */
 
         if (clone.hasClass('thumbnail')) thumbnailsArray = [clone];
 
@@ -332,7 +334,11 @@
             self.removeAttribute('onmouseover'); self.removeAttribute('onmouseout');
             var text = self.querySelector('p'); if (text) text.remove();
             removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');
-            replaceStringInAttribute(self, 'title', /\ncategories: \[.*\]/i, '')
+            // replaceStringInAttribute(self, 'title', /\ncategories: \[.*\]/i, '')
+            //
+            for (let child of self.querySelectorAll('*')){child.remove()};
+            // self.setAttribute('title', self.dataset.title.replace(/\n.*/, ''));
+            // self.removeAttribute('data-title');
         });
         forEach(outputsArray, function(index, self) {
             self.removeAttribute('style');
@@ -1349,6 +1355,8 @@
                     };
                     self.removeAttribute('title');
                     title = self.dataset.title;
+                    let categories = self.dataset.categories;
+                    let categoriesArray = categories ? categories.split(',') : [];
                     var tooltip = self.querySelector('.tooltip');
                     if (!image) {
                         if (imageSrc || contentSrc) {
@@ -1404,7 +1412,16 @@
                             if (!tooltip) {
                                 tooltip = document.createElement('span');
                                 tooltip.setAttribute('class', 'tooltip');
-                                tooltip.innerText = title;
+                                // tooltip.innerText = title;
+                                let span_text = title, index = 0;
+                                for (let category of categoriesArray) {
+                                    index++;
+                                    if (index == 1) {
+                                        span_text += '\nCategories:'
+                                    }
+                                    span_text += '\n - ' + category;
+                                };
+                                tooltip.innerText = span_text;
                                 self.appendChild(tooltip);
                             };
                         }
@@ -1832,8 +1849,9 @@
                 ;
                 self.dataset.categories = categories;
                 // alert(categories);
-                self.title = self.title + '\nCategories: [' + self.dataset.categories /*.toTitleCase()*/ + ']';
-                var categoriesArray = categories.split(',')
+                // self.title = self.title + '\nCategories: [' + self.dataset.categories /*.toTitleCase()*/ + ']';
+                // var categoriesArray = categories.split(',')
+                let categoriesArray = categories ? categories.split(',') : [];
                 forEach(categoriesArray, function(index, self) {
                     var category = self.trim();
                     if (category.length > 0) {

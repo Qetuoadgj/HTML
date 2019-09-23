@@ -580,7 +580,7 @@ div#content>*
 .spoilerbox
 {
 	width: 92%;
-	min-height: 640px;
+	min-height: 1280px;
 }
 /* ---------------------- */
 .fav
@@ -667,6 +667,7 @@ span.tooltip {
     width: auto;
     height: auto;
 	bottom: -26px;
+	left: 50%;
 	visibility: hidden;
 	
 	padding: 3px 6px;
