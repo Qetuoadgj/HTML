@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.38
+// @version		 2.9.39
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -356,7 +356,7 @@
         if (linkText) linkText.remove();
 
         var id = clone.getAttribute('id');
-        var title = clone.getAttribute('title');
+        var title = clone.dataset.title || clone.getAttribute('title');
         if (id && id == title.toCamelCase()) clone.removeAttribute('id');
 
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
@@ -1371,8 +1371,8 @@
                             video.setAttribute('muted', 'muted');
                             video.setAttribute('loop', '');
                             video.setAttribute('src', videoSrc); // src
-                            //video.style.zIndex = -2;
-                            video.style.visibility = 'hidden';
+                            // video.style.zIndex = -2;
+                            // video.style.visibility = 'hidden';
                             // self.setAttribute('onmouseover', "let v = this.querySelector('video'); v.currentTime = 0; v.play(); v.style.zIndex = 1;");
                             // self.setAttribute('onmouseout', "let v = this.querySelector('video'); v.pause(); v.currentTime = 0; v.style.zIndex = -2;");
                             self.appendChild(video);
@@ -1391,14 +1391,14 @@
                                         // Autoplay was prevented.
                                     });
                                 };
-                                //video.style.zIndex = 1;
-                                video.style.visibility = 'visible';
+                                // video.style.zIndex = 1;
+                                // video.style.visibility = 'visible';
                             };
                             self.addEventListener('mouseover', function(){videoPlay(video);}, false);
                             let videoStop = function(video) {
                                 if (!video.paused) {video.pause(); video.currentTime = 0;};
-                                //video.style.zIndex = -2;
-                                video.style.visibility = 'hidden';
+                                // video.style.zIndex = -2;
+                                // video.style.visibility = 'hidden';
                             };
                             self.addEventListener('mouseout', function(){videoStop(video);}, false);
                         };
@@ -1417,7 +1417,7 @@
                                 for (let category of categoriesArray) {
                                     index++;
                                     if (index == 1) {
-                                        span_text += '\nCategories:'
+                                        span_text += '\n\nCategories:'
                                     }
                                     span_text += '\n - ' + category;
                                 };

@@ -18,7 +18,7 @@ div
 	-moz-user-select: none;			/* Firefox */
 	-ms-user-select: none;			/* Internet Explorer/Edge */
 	user-select: none;				/* Non-prefixed version, currently not supported by any browser */
-	}
+}
 .background
 {
 	position: fixed;
@@ -93,8 +93,8 @@ div
 	height: 100%;
 }
 /*
-.centered
-{
+	.centered
+	{
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -108,47 +108,47 @@ div
 	border-style: solid;
 	border-color: black;
 	background-color: rgba(0, 0, 0, 0.33);
-}
+	}
 */
 /*
-img.centered
-{
+	img.centered
+	{
 	height: 100%;
 	width: 100%;
-}
+	}
 */
 /*
-.thumbnail>img,
-.centered
-{
+	.thumbnail>img,
+	.centered
+	{
 	-webkit-backface-visibility: hidden;
-}
+	}
 */
 /*
-.centered:-webkit-full-screen
-{
+	.centered:-webkit-full-screen
+	{
 	top: 0px;
 	left: 0px;
 	transform: translate(0px, 0px);
-}
-.centered:-moz-full-screen
-{
+	}
+	.centered:-moz-full-screen
+	{
 	top: 0px;
 	left: 0px;
 	transform: translate(0px, 0px);
-}
-.centered:-ms-fullscreen
-{
+	}
+	.centered:-ms-fullscreen
+	{
 	top: 0px;
 	left: 0px;
 	transform: translate(0px, 0px);
-}
-.centered:fullscreen
-{
+	}
+	.centered:fullscreen
+	{
 	top: 0px;
 	left: 0px;
 	transform: translate(0px, 0px);
-}
+	}
 */
 .wallpaper
 {
@@ -179,8 +179,8 @@ img.minimized
 	max-height: 248px !important;
 }
 /*
-.thumbnail>img
-{
+	.thumbnail>img
+	{
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -190,7 +190,7 @@ img.minimized
 	max-width: 90% !important;
 	max-height: 90% !important;
 	object-fit: contain;
-}
+	}
 */
 body
 {
@@ -229,18 +229,18 @@ body
 	border-color: lime;
 }
 /*
-#buttons
-{
+	#buttons
+	{
 	position: fixed;
 	top: 20%;
 	right: 0;
 	z-index: 11;
-}
-#closeButton,
-#nextButton,
-#prevButton,
-#delButton
-{
+	}
+	#closeButton,
+	#nextButton,
+	#prevButton,
+	#delButton
+	{
 	width: 32px;
 	height: 32px;
 	position: fixed;
@@ -254,29 +254,29 @@ body
 	border-style: solid;
 	border-color: black;
 	background-color: rgba(0, 0, 0, 0.33);
-}
-#closeButton
-{
+	}
+	#closeButton
+	{
 	background-color: rgba(0, 0, 0, 0.165);
-}
-#nextButton,
-#prevButton,
-#delButton
-{
+	}
+	#nextButton,
+	#prevButton,
+	#delButton
+	{
 	width: 96px;
 	height: 96px;
 	opacity: 0.5;
 	margin: 10px;
 	position: relative;
-}
-#prevButton
-{
+	}
+	#prevButton
+	{
 	transform: scale(-1, 1);
-}
-#buttons canvas:hover
-{
+	}
+	#buttons canvas:hover
+	{
 	background-color: rgba(255, 0, 0, 0.42);
-}
+	}
 */
 #linkText
 {
@@ -299,12 +299,12 @@ body
 	user-select: none;
 }
 /*
-div,
-canvas,
-.centered
-{
+	div,
+	canvas,
+	.centered
+	{
 	border-radius: 16px;
-}
+	}
 */
 p
 {
@@ -391,17 +391,17 @@ div.thumbnail
 	/* align-items: center; */
 }
 /*
-div.thumbnail
-{
+	div.thumbnail
+	{
 	margin: -1px;
-}
+	}
 */
 /*
-div.gallery_button:hover,
-div.thumbnail:hover
-{
+	div.gallery_button:hover,
+	div.thumbnail:hover
+	{
 	background-color: greenyellow;
-}
+	}
 */
 div.gallery_button.active,
 div.thumbnail.active,
@@ -517,42 +517,42 @@ div#content>*
 	transform: rotate(90deg);
 }
 /*
-#nextButton,
-#prevButton
-{
+	#nextButton,
+	#prevButton
+	{
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Wheat"><polygon points="24,64 48,32 72,64" transform="rotate(90 48 48)"/></svg>');
-}
+	}
 */
 /*
-#closeButton,
-#delButton
-{
+	#closeButton,
+	#delButton
+	{
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Wheat"><line x1="24" y1="24" x2="72" y2="72" stroke="Wheat" stroke-width="10"/><line x1="24" y1="72" x2="72" y2="24" stroke="Wheat" stroke-width="10"/></svg>');
-}
+	}
 */
 /*
-#nextButton:hover,
-#prevButton:hover
-{
+	#nextButton:hover,
+	#prevButton:hover
+	{
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Sandybrown"><polygon points="24,64 48,32 72,64" transform="rotate(90 48 48)"/></svg>');
 	border-color: Wheat;
-}
+	}
 */
 /*
-#closeButton:hover,
-#delButton:hover
-{
+	#closeButton:hover,
+	#delButton:hover
+	{
 	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="Sandybrown"><line x1="24" y1="24" x2="72" y2="72" stroke="Sandybrown" stroke-width="10"/><line x1="24" y1="72" x2="72" y2="24" stroke="Sandybrown" stroke-width="10"/></svg>');
 	border-color: Wheat;
-}
+	}
 */
 /*
-#nextButton,
-#prevButton,
-#delButton
-{
+	#nextButton,
+	#prevButton,
+	#delButton
+	{
 	border-width: 2px;
-}
+	}
 */
 #closeButton,
 #nextButton,
@@ -592,7 +592,7 @@ div#content>*
 	border-color: yellow !important;
 }
 /* ---------------------- */
- .fav
+.fav
 {
 	border-width: 4px;
 	border-style: double !important;
@@ -642,22 +642,22 @@ div#content>*
 }
 /* ---------------------- */
 /*
-.spoilertop,
-.thumbnail
-{
+	.spoilertop,
+	.thumbnail
+	{
 	color: pink;
 	border-width: 10px;
 	border-style: solid;
 	border-color: pink;
 	border-image: repeating-linear-gradient( 45deg, pink, pink 1%, purple 1%, purple 8%) 10;
-}
-.spoilertop:hover,
-.thumbnail:hover
-{
+	}
+	.spoilertop:hover,
+	.thumbnail:hover
+	{
 	border-image: repeating-linear-gradient( 45deg, purple, purple 1%, pink 1%, pink 8%) 10;
 	color: purple;
 	border-color: purple;
-}
+	}
 */
 /* ---------------------- */
 
@@ -666,7 +666,8 @@ span.tooltip {
 	position: absolute;
     width: auto;
     height: auto;
-	bottom: -26px;
+	/* bottom: -26px; */
+	top: 97%;
 	left: 50%;
 	visibility: hidden;
 	
@@ -698,4 +699,11 @@ span.tooltip {
     position: absolute;
     max-height: 100%;
     max-width: 100%;
+}
+
+.spoilertop video, .thumbnail video {
+	visibility: hidden;
+}
+.spoilertop:hover video, .thumbnail:hover video {
+	visibility: visible;
 }
