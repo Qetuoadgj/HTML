@@ -67,7 +67,7 @@
 			color: red;
 			}
 
-			.spoilerbox a {
+.spoilerbox a {
 			color: #086081;
 			}
 
@@ -103,7 +103,7 @@
 
 					if (match.substr(1).search(/[A-Z]|\../) > -1) {
 						return match;
-					}
+						}
 
 					return match.charAt(0).toUpperCase() + match.substr(1);
 				});
@@ -335,7 +335,7 @@
 					spoilerbox.appendChild(d);
 
 					var linkParams = query.split('|', 5),
-						linkName = linkParams[1], linkIcon = linkParams[2], linkSpace = linkParams[3], linkEncoding = linkParams[4]
+					linkName = linkParams[1], linkIcon = linkParams[2], linkSpace = linkParams[3], linkEncoding = linkParams[4]
 					;
 					linkURL = linkParams[0];
 					linkIcon = linkIcon ? linkIcon.trim() : linkIcon;
@@ -578,22 +578,28 @@
 			</div>
 			<div class="spoilerbox" title="Videos" image="">
 				http://www.eporner.com/search/%s/
-				https://www.google.com/search?tbm=isch&q=porn+%s+site%3Aeporner.com | eporner.com | *eporner.com
+				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=eporner.com&tbs=isz:a&safe=off | eporner.com | *eporner.com
 				
-				https://hqporner.com/?s=%s
-
+				https://www.pornesq.com/search/videos/%s
+				https://biqle.ru/video/%s
+				https://www.pornoeggs.com/sq?q=%s
+				
+				https://hqporner.com/?q=%s
+				
+				https://pornsexer.com/search/%s/
+				
 				http://yespornplease.com/search?q=%s
-				https://www.google.com/search?tbm=isch&q=porn+%s+site%3Ayespornplease.com | yespornplease.com | *yespornplease.com
+				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=yespornplease.com&tbs=isz:a&safe=off | yespornplease.com | *yespornplease.com
 
 				https://www.vporn.com/search?q=%s
 
 				http://www.veporns.com/porn/%s/
-				https://www.google.com/search?tbm=isch&q=porn+%s+site%3Aveporns.com | veporns.com | *veporns.com
+				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=veporns.com&tbs=isz:a&safe=off | veporns.com | *veporns.com
 
 				https://www.pentasex.io/search.php?keywords=%s
 
 				https://www.porntrex.com/search/%s/ ||| -
-				https://www.google.com/search?tbm=isch&q=porn+%s+site%3Aporntrex.com | porntrex.com | *porntrex.com
+				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=porntrex.com&tbs=isz:a&safe=off | porntrex.com | *porntrex.com
 
 				<!-- https://fucktat.com/videos?search=%s -->
 
@@ -613,7 +619,7 @@
 				https://xfreehd.com/search?search_query=%s&search_type=videos
 
 				https://yourporn.sexy/%s.html?mode=videos
-
+				
 				http://fuckingsession.com/?s=%s
 				<!-- http://click4porn.me/?s=%s -->
 
@@ -675,7 +681,8 @@
 
 				http://www.camshooker.com/search/%s/
 
-				https://encrypted.google.com/search?tbm=vid&as_q=&as_epq=%s&as_oq=&as_eq=youtube+xvideos+pornhub&lr=&dur=&as_qdr=all&as_sitesearch=&safe=images&tbs=hq%3Ah
+				<!-- https://google.com/search?tbm=vid&as_q=&as_q=porn&as_epq=%s&as_oq=&as_eq=youtube+xvideos+pornhub&lr=&dur=&as_qdr=all&as_sitesearch=&safe=off&tbs=hq%3Ah -->
+				https://www.google.com/search?tbm=vid&as_q=porn&as_epq=%s&as_sitesearch=&tbs=isz:a&safe=off 
 			</div>
 			<div class="spoilerbox" title="Sites" image="">
 				https://www.indexxx.com/search/?query=%s
@@ -691,7 +698,8 @@
 
 				https://www.private.com/search.php?query=%s
 
-				https://encrypted.google.com/search?q=%s&as_sitesearch=pron.tv
+				<!-- https://encrypted.google.com/search?q=%s&as_sitesearch=pron.tv -->
+				https://www.google.com/search?as_q=porn&as_epq=%s&as_sitesearch=pron.tv&safe=off 
 				
 				https://passion-hd.com/girls | passion-hd.com/girls
 			</div>
@@ -699,6 +707,7 @@
 				<!-- http://www.pornpics.com/?q=%s -->
 				https://www.jjgirls.com/pornpics/%s/
 				https://www.pornpics.com/?q=%s
+				https://www.barelist.com/search/searchMain.aspx?s=%s
 				http://pornstarnetwork.premiumarchive.com/pornstar/most-popular/keywordsearch/%s/
 				http://www.babesandstars.com/search/?t=models&q=%s
 				http://www.definebabe.com/search/?words=%s&search=&type=1
@@ -710,6 +719,8 @@
 				http://babesource.com/search/photos/%s/
 
 				http://namethatpornstar.com/reverse/index.php
+				
+				https://duckduckgo.com/?q=%s&iar=images&iax=images&ia=images
 
 				https://vipergirls.to/search.php?query=%s&do=process
 			</div>
