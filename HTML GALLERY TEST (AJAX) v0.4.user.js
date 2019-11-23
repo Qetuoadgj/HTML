@@ -1021,9 +1021,10 @@
         var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
 
         forEach(spoilersArray, function(index, spoiler) {
-            var splitCount = 250; // default
+            let splitCount = 250; // default
+            let split = G_win().split;
             if (typeof(split) == "number") {
-                splitCount = G_win().split;
+                splitCount = split;
             }
             if (typeof(spoiler.dataset.split) !== "undefined") {
                 splitCount = spoiler.dataset.split;
@@ -1959,6 +1960,7 @@
                 galleries.appendChild(document.createTextNode('\n'));
                 spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
                 if (image) lazyImagesArray.push(image);
+                if (!self.querySelector('.thumbnail')) spoilerButton.classList.add('empty');
             }();
             initLazyLoad(lazyImagesArray);
         });

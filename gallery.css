@@ -709,3 +709,13 @@ span.tooltip {
 .spoilertop:hover video, .thumbnail:hover video {
 	visibility: visible;
 }
+
+iframe#content_iframe
+{
+	left: 20px;
+	top: 20px;
+}
+/* ---------------------- */
+.spoilertop.empty {
+    display: none;
+}
