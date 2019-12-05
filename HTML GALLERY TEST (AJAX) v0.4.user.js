@@ -8,7 +8,7 @@
 // @run-at		 document-start
 // @noframes
 // @downloadURL	 https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
-// @homepageURL	 https://github.com/Qetuoadgj/HTML
+// @homepageURL  https://github.com/Qetuoadgj/HTML/tree/master
 //
 // @match		 file:///*/2.0.4.html*
 // @match		 file:///*/2.0.2.html*
