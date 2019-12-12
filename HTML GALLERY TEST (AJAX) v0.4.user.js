@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.39
+// @version		 2.9.42
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -46,6 +46,13 @@
 
     // G_win().closePopups = 1;
 
+    // ---------------------
+    function isOdd(x) {return x & 1;};
+    function isEven(x) {return !( x & 1 );};
+    // ---------------------
+    function shiftKeyIsDown() {return !!window.event.shiftKey;}
+    function ctrlKeyIsDown() {return !!(window.event.ctrlKey || window.event.metaKey);}
+    function altKeyIsDown() {return !!window.event.altKey;}
     // ---------------------
     function eventFire(el, etype) {
         if (el.fireEvent) {
@@ -936,10 +943,11 @@
     // ==========================================================
 
     function addMouseWheelHandler(element, onB, onF, preventDefaultB, preventDefaultF) {
-        var mouseScroll = (e) => {
+        function mouseScroll(e) {
             // cross-browser wheel delta
             e = window.event || e; // old IE support
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            // console.log(e);
             if (delta > 0) {
                 onF();
                 if (preventDefaultF) e.preventDefault();
@@ -950,9 +958,14 @@
             }
         };
         if (element.addEventListener) {
+            element.removeEventListener("mousewheel", mouseScroll);
+            element.removeEventListener("DOMMouseScroll", mouseScroll);
+            //
             element.addEventListener("mousewheel", mouseScroll, false); // IE9, Chrome, Safari, Opera
             element.addEventListener("DOMMouseScroll", mouseScroll, false); // Firefox
         } else {
+            element.detachEvent ("onmousewheel", mouseScroll); // IE 6/7/8
+            //
             element.attachEvent("onmousewheel", mouseScroll); // IE 6/7/8
         }
     }
@@ -1327,6 +1340,22 @@
             });
         }
 
+        function imsSrcChange(img, direction = 1) {
+            // https://www.porntrex.com/contents/videos_screenshots/946000/946049/timelines/timeline_mp4/200x116/218.jpg
+            // https://static-eu-cdn.eporner.com/thumbs/static4/2/29/298/2986693/11_240.jpg
+            // https://hqporner.com/imgs/17/86/00d04ff0711cf35_6.jpg
+            let regExp = (
+                img.src.match(/\b\d+_\d+\.jpg/) ? /^(.*?)(\d+)(_\d+\.jpg)$/ :
+                /^(.*?_?)(\d+)(\.jpg)$/
+            );
+            let matched = img.src.match(regExp);
+            if (matched) {
+                let num = parseInt(matched[2]), base = matched[1], ext = matched[3];
+                img.src = base + '' + Math.max(0, num + direction) + '' + ext;
+            };
+            console.log(img.src);
+        };
+
         function showSpoiler(thisButton, spoiler) {
             var active = isVisible(spoiler);
             buttonClicked(thisButton, spoilerButtonsArray);
@@ -1469,6 +1498,10 @@
                     });
                     $(spoiler).disableSelection();
                 }
+
+                for (let thumb of activeThumbnails) {
+                    addMouseWheelHandler(thumb, function(){let img = thumb.querySelector('img'); imsSrcChange(img, 1)}, function(){let img = thumb.querySelector('img'); imsSrcChange(img, -1)}, true, true);
+                };
 
                 document.querySelector('#buttons').style.display = 'block';
             };
@@ -1857,7 +1890,7 @@
                     var category = self.trim();
                     if (category.length > 0) {
                         var title = category.replace(/\s+/i, ' ').Capitalize();
-                        var id = 'category-' + category.toLowerCase().replace(/\s+/ig, '_');
+                        var id = 'category-' + category.toLowerCase().replace(/[\s.]+/ig, '_');
                         var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
                         // console.log(id);
                         if (!newSpoiler) {
@@ -1903,7 +1936,7 @@
 
             var spoilerId = self.getAttribute('id');
             if (!spoilerId) {
-                spoilerId = title ? title.toCamelCase() : null;
+                spoilerId = title ? title.toLowerCase().replace(/[\s.]+/ig, '_')/*.toCamelCase()*/ : null;
                 self.setAttribute('id', spoilerId);
             }
             var allowBackground = self.dataset.background; if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild); backgroundsArray.push(background);}
@@ -1985,7 +2018,6 @@
         addMouseWheelHandler(prevButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         addMouseWheelHandler(delButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         if (favButton) addMouseWheelHandler(favButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
-
         /*
         var me = 'complete.misc_1'; // some id
         window.addEventListener("message", function(e) {
