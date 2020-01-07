@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.42
+// @version		 2.9.44
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -43,7 +43,21 @@
     // console.log('disabledHosts: ', G_disabledHosts);
     var G_reCastHosts = (typeof G_win().reCastHosts == 'undefined' || !G_win().reCastHosts) ? [] : G_win().reCastHosts;
     // console.log('reCastHosts: ', G_reCastHosts);
-
+    Array.prototype.unique = function() {
+        var a = this.concat();
+        for(var i=0; i<a.length; ++i) {for(var j=i+1; j<a.length; ++j) {if (a[i] === a[j]) a.splice(j--, 1);}}
+        return a;
+    };
+    G_reCastHosts = G_reCastHosts.concat([
+        'vshare.io',
+        'yespornplease.com',
+        'sxyprn.com',
+        'pornhub.com',
+        'playvids.com',
+        'biqle.ru',
+        'daftsex.com'
+    ]).unique();
+    // console.log('G_reCastHosts:', G_reCastHosts);
     // G_win().closePopups = 1;
 
     // ---------------------
@@ -1340,7 +1354,7 @@
             });
         }
 
-        function imsSrcChange(img, direction = 1) {
+        function imsSrcChange(thumb, img, direction = 1) {
             // https://www.porntrex.com/contents/videos_screenshots/946000/946049/timelines/timeline_mp4/200x116/218.jpg
             // https://static-eu-cdn.eporner.com/thumbs/static4/2/29/298/2986693/11_240.jpg
             // https://hqporner.com/imgs/17/86/00d04ff0711cf35_6.jpg
@@ -1353,6 +1367,7 @@
                 let num = parseInt(matched[2]), base = matched[1], ext = matched[3];
                 img.src = base + '' + Math.max(0, num + direction) + '' + ext;
             };
+            thumb.dataset.image = img.src;
             console.log(img.src);
         };
 
@@ -1500,7 +1515,7 @@
                 }
 
                 for (let thumb of activeThumbnails) {
-                    addMouseWheelHandler(thumb, function(){let img = thumb.querySelector('img'); imsSrcChange(img, 1)}, function(){let img = thumb.querySelector('img'); imsSrcChange(img, -1)}, true, true);
+                    addMouseWheelHandler(thumb, function(){let img = thumb.querySelector('img'); imsSrcChange(thumb, img, 1)}, function(){let img = thumb.querySelector('img'); imsSrcChange(thumb, img, -1)}, true, true);
                 };
 
                 document.querySelector('#buttons').style.display = 'block';

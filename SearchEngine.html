@@ -1,741 +1,742 @@
 <!DOCTYPE HTML>
 <html lang="ru">
-	<head>
-		<meta charset="UTF-8">
-		<title>SearchEngine.html [v1.0.1]</title>
-		<link rel="icon" type="image/png" href="http://iconspot.ru/files/87916.png"/>
-		<!-- <script src=""></script> -->
-		<style>
-			.spoilertop {
-			background: black;
-			}
+    <head>
+        <meta charset="UTF-8">
+        <title>SearchEngine.html [v1.0.2]</title>
+        <link rel="icon" type="image/png" href="http://iconspot.ru/files/87916.png"/>
+        <!-- <script src=""></script> -->
+        <style>
+            .spoilertop {
+            background: black;
+            }
 
-			div {
-			-webkit-touch-callout: none;	/* iOS Safari */
-			-webkit-user-select: none;		/* Chrome/Safari/Opera */
-			-khtml-user-select: none;		/* Konqueror */
-			-moz-user-select: none;			/* Firefox */
-			-ms-user-select: none;			/* Internet Explorer/Edge */
-			user-select: none;				/* Non-prefixed version, currently not supported by any browser */
-			}
+            div {
+            -webkit-touch-callout: none;    /* iOS Safari */
+            -webkit-user-select: none;      /* Chrome/Safari/Opera */
+            -khtml-user-select: none;       /* Konqueror */
+            -moz-user-select: none;         /* Firefox */
+            -ms-user-select: none;          /* Internet Explorer/Edge */
+            user-select: none;              /* Non-prefixed version, currently not supported by any browser */
+            }
 
-			.background {
-			position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
-			}
+            .background {
+            position: fixed; top: 0; left: 0; bottom: 0; right: 0; overflow: auto; opacity: 0; z-index: 0;
+            }
 
-			.spoilertop {
-			display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
-			/* margin: 0px 4px 0px 0px; */
-			}
+            .spoilertop {
+            display: inline-block; overflow: hidden; width: 150px; height: 90px; border-color: grey; border-style: dotted; border-width: 1px; position: relative; z-index: 10; cursor: pointer;
+            /* margin: 0px 4px 0px 0px; */
+            }
 
-			.spoilertop > p {
-			margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
-			}
+            .spoilertop > p {
+            margin: 0px; color: white; text-align: center; text-shadow: 1px 1px 1px black; display: none;
+            }
 
-			.spoilertop > p.forced {
-			display: block;
-			position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-			}
+            .spoilertop > p.forced {
+            display: block;
+            position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+            }
 
-			.spoilertop:hover {
-			border-color: red; border-style: solid; opacity: 1 !important;
-			}
+            .spoilertop:hover {
+            border-color: red; border-style: solid; opacity: 1 !important;
+            }
 
-			.spoilertop > img {
-			position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
-			z-index: -1;
-			}
+            .spoilertop > img {
+            position: absolute; top: 50%; left: 50%; max-height: 100%; max-width: 100%; transform: translate(-50%, -50%);
+            z-index: -1;
+            }
 
-			.spoilerbox {
-			display: none; height: 100%;
-			}
+            .spoilerbox {
+            display: none; height: 100%;
+            }
 
-			.wallpaper {
-			position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
-			z-index: -1;
-			}
+            .wallpaper {
+            position: fixed; overflow: hidden; top: 0px; left: 0px; min-width: 100%; min-height: 100%; z-index: 0;
+            z-index: -1;
+            }
 
-			body {
-			font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
-			}
+            body {
+            font-family: "Times New Roman"; font-size: 16px; font-weight: normal; font-style: normal;
+            }
 
-			.spoilerbox > div > a:not(:hover) {
-			text-decoration: none;
-			}
-			.spoilerbox > div > a:hover {
-			font-size: 20px /* 24px */;
-			color: red;
-			}
+            .spoilerbox > div > a:not(:hover) {
+            text-decoration: none;
+            }
+            .spoilerbox > div > a:hover {
+            font-size: 20px /* 24px */;
+            color: red;
+            }
 
 .spoilerbox a {
-			color: #086081;
-			}
-
-			.spoilerbox {
-			-webkit-column-count: 3; /* Chrome, Safari, Opera */
-			-moz-column-count: 3; /* Firefox */
-			column-count: 3;
-			}
-			.siteLink {
-			-webkit-column-break-inside: avoid; /* Chrome, Safari */
-			page-break-inside: avoid;						/* Theoretically FF 20+ */
-			break-inside: avoid-column;					/* IE 11 */
-			}
-		</style>
-		<!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
-		<script>
-			// var searchField, galleries, params;
-			//GLOBAL FUNCTIONS
-			function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
-			Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
-
-			String.prototype.toTitleCase = function(lower) {
-				var string = lower ? this.toLowerCase() : this;
-				var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
-
-				return string.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
-					if (index > 0 && index + match.length !== title.length &&
-					match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
-					(title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
-					title.charAt(index - 1).search(/[^\s-]/) < 0) {
-						return match.toLowerCase();
-					}
-
-					if (match.substr(1).search(/[A-Z]|\../) > -1) {
-						return match;
-						}
-
-					return match.charAt(0).toUpperCase() + match.substr(1);
-				});
-			};
-
-			// -- GET VALUSE FROM URL [START]
-			function getParamsFromURL(searchString) {
-				var parse = function(params, pairs) {
-					var pair = pairs[0];
-					var parts = pair.split('=');
-					var key = decodeURIComponent(parts[0]).replace(/.*?\?/, '');
-					var value = decodeURIComponent(parts.slice(1).join('='));
-					// Handle multiple parameters of the same name
-					if (typeof params[key] === "undefined") params[key] = value;
-					else params[key] = [].concat(params[key], value);
-					return pairs.length == 1 ? params : parse(params, pairs.slice(1));
-				};
-				// Get rid of leading ?
-				return searchString.length === 0 ? {} : parse({}, searchString.split('&')); // .substr(1)
-			}
-			function getParams() {
-				var params = getParamsFromURL(location.search);
-				// Finally, to get the param you want
-				// params['c'];
-				if (params.q) {
-					searchField.value = params.q;
-					// Create a new 'change' event
-					var event = new Event('change');
-					// Dispatch it.
-					searchField.dispatchEvent(event);
-				}
-				return params;
-			}
-			// -- GET VALUSE FROM URL [END]
-
-			document.addEventListener('DOMContentLoaded', function() {
-				// GLOBAL VARIABLES
-				// var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
-				var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
-				var activeSpoilerButton, activeSpoiler;
-				var activeLinksList = [], activeQueriesList = [];
-
-				forEach(spoilersArray, function(index, self) {
-					var spoiler = self;
-					var text = spoiler.innerText;
-					var queriesList = text.split('\n');
-					spoiler.innerHTML = '';
-
-					var sortLinks = false;
-
-					if (sortLinks) {
-						queriesList.sort(function(a, b) {
-							a = a.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
-							b = b.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
-							return a.localeCompare(b);
-						});
-					}
-
-					forEach(queriesList, function(index, self) {
-						var query = self.trim();
-						if (query !== '') {
-							var a = document.createElement('a');
-							a.text = query.replace('<a>', '').replace('</a>', '');
-							spoiler.appendChild(a);
-						}
-					});
-
-					var createButton = function() {
-						var spoilerButton = document.createElement('div');
-						spoilerButton.setAttribute('class', 'spoilertop');
-						var image = spoilerButton.querySelector('img');
-						var text = spoilerButton.querySelector('p');
-						var imageSrc = spoiler.getAttribute('image');
-						var title = spoiler.getAttribute('title');
-						spoiler.removeAttribute('image');
-						spoiler.removeAttribute('title');
-						if (!image) {
-							if (imageSrc) {
-								image = document.createElement('img');
-								image.setAttribute('src', imageSrc);
-								spoilerButton.appendChild(image);
-							}
-							if (title) {
-								text = text || document.createElement('p');
-								text.innerHTML += title;
-								spoilerButton.appendChild(text);
-								if (!imageSrc) text.setAttribute('class', 'forced');
-							}
-						}
-						if (image && text) {
-							image.onerror = function() {
-								// this.remove();
-								text.setAttribute('class', 'forced');
-							};
-							spoilerButton.setAttribute('title', title);
-						}
-						galleries.appendChild(spoilerButton);
-						galleries.appendChild(document.createTextNode('\n'));
-						spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
-					}();
-				});
-				var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
-
-				var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
-
-				// DOCUMENT FUNCTIONS
-				function buttonClicked(button, buttonsArray, unclick) {
-					if (unclick) {
-						forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
-						} else {
-						forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
-						button.style.removeProperty('opacity');
-					}
-				}
-
-				function showSpoiler(thisButton, spoiler) {
-					var active = spoiler.isVisible();
-					buttonClicked(thisButton, spoilerButtonsArray);
-					forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
-					if (active) {
-						buttonClicked(thisButton, spoilerButtonsArray, true);
-						activeSpoiler = false;
-						activeLinksList = [];
-						activeQueriesList = [];
-						activeSpoilerButton = null;
-						} else {
-						spoiler.style.display = 'block';
-						activeLinksList = spoiler.querySelectorAll('a');
-						activeQueriesList = [];
-						forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
-						activeSpoiler = spoiler;
-						activeSpoilerButton = thisButton;
-						//
-						/*
-							var title = thisButton.querySelector('p');
-							if (title) {
-							// var params = getParams();
-							var title_text = title.innerText.trim();
-							var path = parent.location.pathname;
-							params.tab = title_text;
-							var options = "";
-							var i = 0;
-							for (var key in params) {
-							i++;
-							var val = params[key];
-							if (i == 1) options = options + "?";
-							else if (i > 1) options = options + "&";
-							options = options + (key + "=" + val);
-							console.log('key: '+key);
-							console.log('val: '+val);
-							console.log('options: '+options);
-							}
-							path = path + options;
-							console.log('path: '+path);
-							history.pushState(parent.location.pathname, "", path);
-							}
-						*/
-					}
-					updateURL();
-					lastClicked = null;
-				}
-
-				function updateURL() {
-					// var params = getParams();
-					delete params.tab;
-					// console.log('activeSpoilerButton: '+activeSpoilerButton);
-					if (activeSpoilerButton) {
-						var title = activeSpoilerButton.querySelector('p');
-						if (title) {
-							var title_text = title.innerText.trim();
-							title_text = encodeURIComponent(title_text);
-							params.tab = title_text;
-						}
-					}
-					var options = "";
-					var i = 0;
-					for (var key in params) {
-						i++;
-						var val = params[key];
-						if (i == 1) options = options + "?";
-						else if (i > 1) options = options + "&";
-						options = options + (key + "=" + val);
-						// console.log('key: '+key);
-						// console.log('val: '+val);
-						// console.log('options: '+options);
-					}
-					var path = parent.location.pathname;
-					path = path + options;
-					// console.log('path: '+path);
-					history.pushState(parent.location.pathname, "", path);
-				}
-
-				var bodyStyle = window.getComputedStyle(document.body, null);
-				var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
-				var margin = '5px 0px 0px 0px';
-				var searchField = document.querySelector('#searchField');
-				var linksList = [];
-				var queriesList = [];
-				var domainsList = [];
-
-				var shortNames = true;
-
-				var lastClicked;
-
-				searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
-				searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
-				searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
-				searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
-				// searchField.style.color = bodyStyle.getPropertyValue('color');
-
-				forEach(searchesArray, function(index, self) {
-					var spoilerbox = self.parentNode;
-					var query = self.text;
-					var domain = query;
-					domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
-					domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
-
-					var d = document.createElement('div');
-					d.setAttribute('class','siteLink');
-					d.style.margin = margin;
-					d.style.display = 'table';
-
-					// d.style['border-color'] = 'grey';
-					// d.style['border-width'] = '1px';
-					// d.style['border-style'] = 'solid';
-
-					d.style.position = 'relative';
-					d.style.height = Math.ceil(fontSize*2)+'px';
-					spoilerbox.appendChild(d);
-
-					var linkParams = query.split('|', 5),
-					linkName = linkParams[1], linkIcon = linkParams[2], linkSpace = linkParams[3], linkEncoding = linkParams[4]
-					;
-					linkURL = linkParams[0];
-					linkIcon = linkIcon ? linkIcon.trim() : linkIcon;
-					linkName = linkName ? linkName.trim() : linkName;
-					linkSpace = linkSpace ? linkSpace.trim() : linkSpace;
-					linkEncoding = linkEncoding ? linkEncoding.trim() : linkEncoding;
-					linkURL = linkURL ? linkURL.trim() : linkURL;
-					if (linkIcon) {linkIcon = linkIcon.match(/^\*/) ? 'https://www.google.com/s2/favicons?domain=' + linkIcon.substring(1) : linkIcon;}
-
-					var i = document.createElement('img');
-					i.style.position = 'absolute';
-					i.style.top = '0';
-					i.style.bottom = '0';
-					i.style.left = '0';
-					i.style.right = '0';
-					// i.style.width = '50%';
-					i.style.height = '50%';
-					i.style.margin = 'auto 0px';
-					i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
-					i.src = linkIcon ? linkIcon.trim() : i.src;
-					d.appendChild(i);
-
-					var linkURL, linkDomain;
-					var searchValue = searchField.value;
-					searchValue = linkSpace ? searchValue.replace(/\s+/g, linkSpace) : searchValue;
-					// searchValue = encodeURIComponent(searchField.value);
-
-					if (linkEncoding) searchValue = unicodeToWin1251_UrlEncoded(searchValue);
-					else searchValue = encodeURIComponent(searchValue);
-
-					linkDomain = query.replace(/%s/g, '').replace(/^(http[s]?):\/\/(.*?)\/.*/g, '$1://$2');
-					// linkURL = linkURL.replace(/[ \t]+\|.*/g, '');
-					// linkURL = (searchValue !== '') ? query.replace(/%s/g, searchValue) : linkDomain;
-					linkURL = (searchValue !== '') ? linkURL.replace(/%s/g, searchValue) : linkDomain;
-
-					// console.log(linkURL, linkDomain);
-					// console.log(linkParams, linkName, linkURL);
-
-					var a = self; //document.createElement('a');
-					a.style.display = 'table-cell';
-					a.style['vertical-align'] = 'middle';
-					a.style['padding-left'] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
-					//a.style['font-size'] = fontSize+'px'; // styles
-					//a.style.color = '#086081'; // styles
-					a.style.width = 'auto';
-					a.setAttribute('target', '_blank'); // Open in new tab
-					a.setAttribute('href', linkURL); // a.setAttribute('href', query.replace(/%s/g, searchField.value));
-					a.text = shortNames ? domain : linkURL;
-					/*
-						a.text = query.match(/.*[ \t]+\|[ \t]+/i) ?
-						a.text + ' [' + query.replace(/.*[ \t]+\|[ \t]+(.*)/i, '$1').trim() + ']':
-						a.text;
-					*/
-					a.text = (linkName ? (linkName+' ['+domain+']') : a.text)
-					d.appendChild(a);
-
-					a.addEventListener('click',function(e){lastClicked = this;},false);
-
-					linksList.push(a);
-
-					queriesList.push(query);
-					domainsList.push(linkDomain);
-				});
-
-				var enterKey = 13, escKey = 27;
-
-				var onEvent = function(e) {
-					e = e || window.event;
-
-					var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
-
-					var query = searchField.value.trim();
-
-					if (e.type == 'change') {
-						// query = query.replace(/[-_\.\+\s]+/g, ' ').replace(/^\s{2,}|\s{2,}$/g, '');
-						query = query.replace(/[^a-zA-Z0-9]+/g, ' ').replace(/^\s{2,}|\s{2,}$/g, ''); //.toTitleCase(true);
-						// searchField.value = query.toTitleCase(true);
-					}
-
-					if (e.keyCode == escKey) { // Escape
-						} else if (e.keyCode == enterKey) {
-						if (ctrlDown) {
-							activeLinksList.forEach(function(link, index) {link.click();});
-							} else {
-							if (lastClicked) lastClicked.click();
-						}
-						} else {
-						linksList.forEach(function(link, index) {
-							var linkURL, linkDomain;
-
-							var linkParams = queriesList[index].split('|', 5),
-								linkName = linkParams[1], linkIcon = linkParams[2], linkSpace = linkParams[3], linkEncoding = linkParams[4]
-							;
-							linkURL = linkParams[0];
-							linkIcon = linkIcon ? linkIcon.trim() : linkIcon;
-							linkName = linkName ? linkName.trim() : linkName;
-							linkSpace = linkSpace ? linkSpace.trim() : linkSpace;
-							linkEncoding = linkEncoding ? linkEncoding.trim() : linkEncoding;
-							linkURL = linkURL ? linkURL.trim() : linkURL;
-							if (linkIcon) {linkIcon = linkIcon.match(/^\*/) ? 'https://www.google.com/s2/favicons?domain=' + linkIcon.substring(1) : linkIcon;}
-
-							var searchValue = searchField.value;
-							searchValue = linkSpace ? searchValue.replace(/\s+/g, linkSpace) : searchValue;
-
-							if (linkEncoding) searchValue = unicodeToWin1251_UrlEncoded(searchValue);
-							else searchValue = encodeURIComponent(searchValue);
-
-							linkDomain = domainsList[index];
-							// linkURL = (searchValue !== '') ? linkURL.replace(/%s/g, encodeURIComponent(query)) : linkDomain;
-							linkURL = (searchValue !== '') ? linkURL.replace(/%s/g, searchValue) : linkDomain; // encodeURIComponent(query)
-
-							// linkURL = linkURL.replace(/[ \t]+\|.*/g, '');
-
-							var ref = linkURL; // queriesList[index].replace(/%s/g, query);
-							// var base64_ref = queriesList[index].replace('%s', encodeURIComponent(query));
-							if (!shortNames) link.text = ref;
-							link.href = ref; // base64_ref;
-						});
-					}
-					params.q = searchField.value.trim();
-					updateURL();
-				};
-
-				var eventList = ['change', 'input', 'cut', 'copy', 'paste']; // 'keydown', 'keyup',
-				var inputList = [searchField];
-
-				inputList.forEach(function(input){
-					eventList.forEach(function(event){
-						input.addEventListener(event,function(e){onEvent(e);},false);
-					});
-				});
-
-				// document.querySelector('.spoilertop').click();
-
-				if (params.tab) {
-					var tabs = document.querySelectorAll('.spoilertop');
-					forEach(tabs, function(index, self) {
-						var title = self.querySelector('p');
-						if (title) {
-							var title_text = title.innerText.trim();
-							title_text = title_text.replace(/\n/g, '');
-							// console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
-							if (title_text == params.tab.trim()) {
-								// Create a new 'change' event
-								var event = new Event('click');
-								// Dispatch it.
-								self.dispatchEvent(event);
-							}
-						}
-					});
-				}
-			});
-			//
-			//utf8 to 1251 converter (1 byte format, RU/EN support only + any other symbols) by drgluck
-			function utf8_decode (aa) {
-				var bb = '', c = 0;
-				for (var i = 0; i < aa.length; i++) {
-					c = aa.charCodeAt(i);
-					if (c > 127) {
-						if (c > 1024) {
-							if (c == 1025) {
-								c = 1016;
-							} else if (c == 1105) {
-								c = 1032;
-							}
-							bb += String.fromCharCode(c - 848);
-						}
-					} else {
-						bb += aa.charAt(i);
-					}
-				}
-				return bb;
-			}
-			///*
-			var DMap = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15, 16: 16, 17: 17, 18: 18, 19: 19, 20: 20, 21: 21, 22: 22, 23: 23, 24: 24, 25: 25, 26: 26, 27: 27, 28: 28, 29: 29, 30: 30, 31: 31, 32: 32, 33: 33, 34: 34, 35: 35, 36: 36, 37: 37, 38: 38, 39: 39, 40: 40, 41: 41, 42: 42, 43: 43, 44: 44, 45: 45, 46: 46, 47: 47, 48: 48, 49: 49, 50: 50, 51: 51, 52: 52, 53: 53, 54: 54, 55: 55, 56: 56, 57: 57, 58: 58, 59: 59, 60: 60, 61: 61, 62: 62, 63: 63, 64: 64, 65: 65, 66: 66, 67: 67, 68: 68, 69: 69, 70: 70, 71: 71, 72: 72, 73: 73, 74: 74, 75: 75, 76: 76, 77: 77, 78: 78, 79: 79, 80: 80, 81: 81, 82: 82, 83: 83, 84: 84, 85: 85, 86: 86, 87: 87, 88: 88, 89: 89, 90: 90, 91: 91, 92: 92, 93: 93, 94: 94, 95: 95, 96: 96, 97: 97, 98: 98, 99: 99, 100: 100, 101: 101, 102: 102, 103: 103, 104: 104, 105: 105, 106: 106, 107: 107, 108: 108, 109: 109, 110: 110, 111: 111, 112: 112, 113: 113, 114: 114, 115: 115, 116: 116, 117: 117, 118: 118, 119: 119, 120: 120, 121: 121, 122: 122, 123: 123, 124: 124, 125: 125, 126: 126, 127: 127, 1027: 129, 8225: 135, 1046: 198, 8222: 132, 1047: 199, 1168: 165, 1048: 200, 1113: 154, 1049: 201, 1045: 197, 1050: 202, 1028: 170, 160: 160, 1040: 192, 1051: 203, 164: 164, 166: 166, 167: 167, 169: 169, 171: 171, 172: 172, 173: 173, 174: 174, 1053: 205, 176: 176, 177: 177, 1114: 156, 181: 181, 182: 182, 183: 183, 8221: 148, 187: 187, 1029: 189, 1056: 208, 1057: 209, 1058: 210, 8364: 136, 1112: 188, 1115: 158, 1059: 211, 1060: 212, 1030: 178, 1061: 213, 1062: 214, 1063: 215, 1116: 157, 1064: 216, 1065: 217, 1031: 175, 1066: 218, 1067: 219, 1068: 220, 1069: 221, 1070: 222, 1032: 163, 8226: 149, 1071: 223, 1072: 224, 8482: 153, 1073: 225, 8240: 137, 1118: 162, 1074: 226, 1110: 179, 8230: 133, 1075: 227, 1033: 138, 1076: 228, 1077: 229, 8211: 150, 1078: 230, 1119: 159, 1079: 231, 1042: 194, 1080: 232, 1034: 140, 1025: 168, 1081: 233, 1082: 234, 8212: 151, 1083: 235, 1169: 180, 1084: 236, 1052: 204, 1085: 237, 1035: 142, 1086: 238, 1087: 239, 1088: 240, 1089: 241, 1090: 242, 1036: 141, 1041: 193, 1091: 243, 1092: 244, 8224: 134, 1093: 245, 8470: 185, 1094: 246, 1054: 206, 1095: 247, 1096: 248, 8249: 139, 1097: 249, 1098: 250, 1044: 196, 1099: 251, 1111: 191, 1055: 207, 1100: 252, 1038: 161, 8220: 147, 1101: 253, 8250: 155, 1102: 254, 8216: 145, 1103: 255, 1043: 195, 1105: 184, 1039: 143, 1026: 128, 1106: 144, 8218: 130, 1107: 131, 8217: 146, 1108: 186, 1109: 190};
-			function unicodeToWin1251_UrlEncoded(s) {
-				var L = []
-				for (var i=0; i<s.length; i++) {
-					var ord = s.charCodeAt(i)
-					if (!(ord in DMap))
-						throw "Character "+s.charAt(i)+" isn't supported by win1251!";
-					L.push('%'+DMap[ord].toString(16));
-				}
-				return L.join('').toUpperCase();
-			}
-			//*/
-		</script>
-	</head>
-	<body>
-		<!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
-		<div id="galleries">
-			<!--	<div class="spoilertop" spoiler="videos" title="Videos" image=""></div>
-				<div class="spoilertop" spoiler="images" title="Images" image=""></div>
-				<div class="spoilertop" spoiler="movies" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
-				<div class="spoilertop" spoiler="torrents" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150"></div>
-				<div class="spoilertop" spoiler="software" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png"></div>
-				<div class="spoilertop" spoiler="handbooks" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png"></div>
-				<div class="spoilertop" spoiler="global" title="Global" image="http://iconspot.ru/files/87916.png"></div>
-				<div class="spoilertop" spoiler="wow" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png"></div>
-			-->
-		</div>
-		<div id="previews">
-			<input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
-			<script>var params = getParams();</script>
-			<div class="spoilerbox" title="Movies" image="http://www.stbcrm.com/Content/img/TVLg.png">
-				<!-- http://fs.to/search.aspx?search=%s -->
-				https://my-hit.org/search/?q=%s
-			</div>
-			<div class="spoilerbox" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150">
-				http://live-rutor.org/search/%s/
-				<!-- http://www.ex.ua/search?s=%s -->
-				<!-- http://www.ex.ua/search?s=md5:%s -->
-				<!-- http://tparser.org/%s/ -->
-			</div>
-			<div class="spoilerbox" title="Software" image="http://icons.iconarchive.com/icons/dtafalonso/modern-xp/256/ModernXP-74-Software-Install-icon.png">
-				http://alternativeto.net/browse/search?q=%s
-			</div>
-			<div class="spoilerbox" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png">
-				http://npppythonscript.sourceforge.net/docs/latest/search.html?q=%s&check_keywords=yes&area=default
-				http://google.com/search?q=%s&as_sitesearch=w3schools.com
-			</div>
-			<div class="spoilerbox" title="Global" image="http://www.eduportal44.ru/koiro/DOP/DocLib/Chrome.gif">
-				https://encrypted.google.com/#q=%s
-				https://www.wikipedia.org/search-redirect.php?family=wikipedia&language=en&search=%s&language=ru&go=Go
-				http://www.imfdb.org/wiki/%s/
-				https://www.youtube.com/results?search_query=%s
-				http://www.liveleak.com/browse?q=%s&safe_mode=off
-				https://www.thefreedictionary.com/%s/
-			</div>
-			<div class="spoilerbox" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png">
-				http://wowroad.info/?search=%s
-				http://ru.wowhead.com/search?q=%s
-				http://wowhead.com/search?q=%s
-				http://google.com/search?q=%s&as_sitesearch=wowprogramming.com
-				https://www.wowace.com/search/?search=%s
-				https://mods.curse.com/search?search=%s
-			</div>
-			<div class="spoilerbox" title="Games" image="">
-				http://ru.darksouls.wikia.com/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Search?query=%s
-			</div>
-			<div class="spoilerbox" title="Videos" image="">
-				http://www.eporner.com/search/%s/
-				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=eporner.com&tbs=isz:a&safe=off | eporner.com | *eporner.com
-				
-				https://www.pornesq.com/search/videos/%s
-				https://biqle.ru/video/%s
-				https://www.pornoeggs.com/sq?q=%s
-				
-				https://hqporner.com/?q=%s
-				
-				https://pornsexer.com/search/%s/
-				
-				http://yespornplease.com/search?q=%s
-				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=yespornplease.com&tbs=isz:a&safe=off | yespornplease.com | *yespornplease.com
-
-				https://www.vporn.com/search?q=%s
-
-				http://www.veporns.com/porn/%s/
-				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=veporns.com&tbs=isz:a&safe=off | veporns.com | *veporns.com
-
-				https://www.pentasex.io/search.php?keywords=%s
-
-				https://www.porntrex.com/search/%s/ ||| -
-				https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=porntrex.com&tbs=isz:a&safe=off | porntrex.com | *porntrex.com
-
-				<!-- https://fucktat.com/videos?search=%s -->
-
-				<!-- http://pornroom.org/?s=%s -->
-
-				<!-- http://vpornex.com/?s=%s -->
-
-				<!-- http://pron.tv/stream/search?q=%s+size%3A50mb&RandomHD=Random%20HD! -->
-				<!-- http://pron.tv/stream/search?q=%s -->
-
-				<!-- http://pron.tv/stream/search?q=%s%20host%3Aopenload.co | openload.co -->
-				<!-- http://pron.tv/stream/search?q=%s%20host%3Avshare.io | vshare.io -->
-				<!-- http://pron.tv/stream/search?q=%s%20host%3Avidoza.net | vidoza.net -->
-				<!-- http://pron.tv/stream/search?q=%s%20host%3Adrive.google.com | drive.google.com -->
-				<!-- http://pron.tv/stream/search?q=%s%20host%3Abitporno.com | bitporno.com  -->
-
-				https://xfreehd.com/search?search_query=%s&search_type=videos
-
-				https://yourporn.sexy/%s.html?mode=videos
-				
-				http://fuckingsession.com/?s=%s
-				<!-- http://click4porn.me/?s=%s -->
-
-				http://xxvideoss.org/?s=%s
-				<!-- http://porntube4k.net/?s=%s -->
-
-				http://streamxxx.tv/?s=%s&cat=
-
-				http://twizporn.com/?s=%s
-				http://www.veporn.net/porn/%s/
-
-				<!-- http://pantporn.com/?s=%s -->
-
-				http://pornmovie.webcam/?s=%s
-
-				http://www.freeomovie.com/?s=%s
-
-				https://hqcollect.tv/search/?utf8=%E2%9C%93&q=%s&button=
-
-				http://sexix.net/?s=%s
-
-				http://jizzman.com/?s=%s
-
-				http://www.gameofporn.net/search.html?q=%s
-
-				http://www.pornbaze.com/search.php?s=%s
-				http://pornhdhdporn.com/?s=%s
-
-				http://18onlygirls.ru/tags/%s/
-
-				https://biqle.ru/video/%s/
-				http://porndoe.com/search?keywords=%s
-				http://www.nudeflix.com/search/%s/
-
-				http://hdporn1080.net/?s=%s
-				https://www.bitporno.sx/?q=%s
-				http://www.xmoviesforyou.com/?s=%s
-				http://hdpoz.com/?s=%s
-				http://sexiz.net/?s=%s
-				http://wixvi.cc/?s=%s
-				<!-- http://www.porntrex.com/search?search_query=%s&search_type=videos -->
-				<!-- https://www.porntrex.com/search/%s/ -->
-				<!-- http://pornmegabox.com/?s=%s -->
-				<!-- http://www.hdporncollections.com/?s=%s -->
-				http://www.pornerbros.com/search?q=%s
-				http://www.xvideos.com/?k=%s
-
-				http://www.tube8.com/searches.html?q=%s
-				<!-- http://www.pornhub.com/video/search?search=%s -->
-				https://www.pornhub.com/video/search?search=%s&hd=1&min_duration=20
-				https://www.playvids.com/sq?q=%s
-
-				http://www.nudevista.com/?q=%s+length%3E10:00&s=t
-				http://hd.xtapes.to/?s=%s
-
-				https://daftsex.com/video/%s/
-
-				https://vipergirls.to/search.php?contenttype=1&do=process&query=%s
-
-				http://www.camshooker.com/search/%s/
-
-				<!-- https://google.com/search?tbm=vid&as_q=&as_q=porn&as_epq=%s&as_oq=&as_eq=youtube+xvideos+pornhub&lr=&dur=&as_qdr=all&as_sitesearch=&safe=off&tbs=hq%3Ah -->
-				https://www.google.com/search?tbm=vid&as_q=porn&as_epq=%s&as_sitesearch=&tbs=isz:a&safe=off 
-			</div>
-			<div class="spoilerbox" title="Sites" image="">
-				https://www.indexxx.com/search/?query=%s
-				https://www.eurobabeindex.com/modules/search.py?text=%s&submit.x=0&submit.y=0
-			
-				http://www.data18.com/search/?k=%s
-
-				https://www.hardx.com/en/search/%s?query=%s
-				http://www.rk.com/tour/search/all/%s/
-				http://www.videoz.com/s/search?type=&query=%s
-
-				https://www.evilangel.com/en/search/%s?query=%s
-
-				https://www.private.com/search.php?query=%s
-
-				<!-- https://encrypted.google.com/search?q=%s&as_sitesearch=pron.tv -->
-				https://www.google.com/search?as_q=porn&as_epq=%s&as_sitesearch=pron.tv&safe=off 
-				
-				https://passion-hd.com/girls | passion-hd.com/girls
-			</div>
-			<div class="spoilerbox" title="Images" image="">
-				<!-- http://www.pornpics.com/?q=%s -->
-				https://www.jjgirls.com/pornpics/%s/
-				https://www.pornpics.com/?q=%s
-				https://www.barelist.com/search/searchMain.aspx?s=%s
-				http://pornstarnetwork.premiumarchive.com/pornstar/most-popular/keywordsearch/%s/
-				http://www.babesandstars.com/search/?t=models&q=%s
-				http://www.definebabe.com/search/?words=%s&search=&type=1
-				http://www.pichunter.com/search/%s/
-				http://www.imagefap.com/gallery.php?search=%s
-				http://webbabe.ws/search/?q=%s
-				http://www.sex.com/search/gifs?query=%s
-				http://juicygif.com/gallery/search?SearchText=%s
-				http://babesource.com/search/photos/%s/
-
-				http://namethatpornstar.com/reverse/index.php
-				
-				https://duckduckgo.com/?q=%s&iar=images&iax=images&ia=images
-
-				https://vipergirls.to/search.php?query=%s&do=process
-			</div>
-			<div class="spoilerbox" title="Hentai" image="">
-				http://konachan.com/post?tags=%s+limit%3A100
-				<!-- https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s&ms=1 -->
-				https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s+limit%3A100&ms=1
-				https://luscious.net/search/?q=%s&community=hentai
-			</div>
-			<div class="spoilerbox" title="Passwords" image="">
-				http://passwordshub.com/?s=%s
-			</div>
-			<div class="spoilerbox" title="Trackers" image="">
-				http://torrent-pirat.com/search.php?tracker_search=torrent&keywords=%s&terms=all&fp=1&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0
-			</div>
-		</div>
-	</body>
+            color: #086081;
+            }
+
+            .spoilerbox {
+            -webkit-column-count: 3; /* Chrome, Safari, Opera */
+            -moz-column-count: 3; /* Firefox */
+            column-count: 3;
+            }
+            .siteLink {
+            -webkit-column-break-inside: avoid; /* Chrome, Safari */
+            page-break-inside: avoid;                       /* Theoretically FF 20+ */
+            break-inside: avoid-column;                 /* IE 11 */
+            }
+        </style>
+        <!-- <link rel="stylesheet" type="text/css" href="searchEngine.css" media="screen"> -->
+        <script>
+            // var searchField, galleries, params;
+            //GLOBAL FUNCTIONS
+            function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
+            Element.prototype.isVisible = function() {return this.offsetWidth > 0 || this.offsetHeight > 0 || this.getClientRects().length > 0;};
+
+            String.prototype.toTitleCase = function(lower) {
+                var string = lower ? this.toLowerCase() : this;
+                var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
+
+                return string.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title) {
+                    if (index > 0 && index + match.length !== title.length &&
+                        match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
+                        (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
+                        title.charAt(index - 1).search(/[^\s-]/) < 0) {
+                        return match.toLowerCase();
+                    }
+
+                    if (match.substr(1).search(/[A-Z]|\../) > -1) {
+                        return match;
+                    }
+
+                    return match.charAt(0).toUpperCase() + match.substr(1);
+                });
+            };
+
+            // -- GET VALUSE FROM URL [START]
+            function getParamsFromURL(searchString) {
+                var parse = function(params, pairs) {
+                    var pair = pairs[0];
+                    var parts = pair.split('=');
+                    var key = decodeURIComponent(parts[0]).replace(/.*?\?/, '');
+                    var value = decodeURIComponent(parts.slice(1).join('='));
+                    // Handle multiple parameters of the same name
+                    if (typeof params[key] === "undefined") params[key] = value;
+                    else params[key] = [].concat(params[key], value);
+                    return pairs.length == 1 ? params : parse(params, pairs.slice(1));
+                };
+                // Get rid of leading ?
+                return searchString.length === 0 ? {} : parse({}, searchString.split('&')); // .substr(1)
+            }
+            function getParams() {
+                var params = getParamsFromURL(location.search);
+                // Finally, to get the param you want
+                // params['c'];
+                if (params.q) {
+                    searchField.value = params.q;
+                    // Create a new 'change' event
+                    var event = new Event('change');
+                    // Dispatch it.
+                    searchField.dispatchEvent(event);
+                }
+                return params;
+            }
+            // -- GET VALUSE FROM URL [END]
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // GLOBAL VARIABLES
+                // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+                var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+                var activeSpoilerButton, activeSpoiler;
+                var activeLinksList = [], activeQueriesList = [];
+
+                forEach(spoilersArray, function(index, self) {
+                    var spoiler = self;
+                    var text = spoiler.innerText;
+                    var queriesList = text.split('\n');
+                    spoiler.innerHTML = '';
+
+                    var sortLinks = false;
+
+                    if (sortLinks) {
+                        queriesList.sort(function(a, b) {
+                            a = a.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
+                            b = b.replace(/.*\/\/(\b.*\b[.]\b.*\b).*/, '$1').replace(/^www[.]/, '').replace(/\/.*/, '');
+                            return a.localeCompare(b);
+                        });
+                    }
+
+                    forEach(queriesList, function(index, self) {
+                        var query = self.trim();
+                        if (query !== '') {
+                            var a = document.createElement('a');
+                            a.text = query.replace('<a>', '').replace('</a>', '');
+                            spoiler.appendChild(a);
+                        }
+                    });
+
+                    var createButton = function() {
+                        var spoilerButton = document.createElement('div');
+                        spoilerButton.setAttribute('class', 'spoilertop');
+                        var image = spoilerButton.querySelector('img');
+                        var text = spoilerButton.querySelector('p');
+                        var imageSrc = spoiler.getAttribute('image');
+                        var title = spoiler.getAttribute('title');
+                        spoiler.removeAttribute('image');
+                        spoiler.removeAttribute('title');
+                        if (!image) {
+                            if (imageSrc) {
+                                image = document.createElement('img');
+                                image.setAttribute('src', imageSrc);
+                                spoilerButton.appendChild(image);
+                            }
+                            if (title) {
+                                text = text || document.createElement('p');
+                                text.innerHTML += title;
+                                spoilerButton.appendChild(text);
+                                if (!imageSrc) text.setAttribute('class', 'forced');
+                            }
+                        }
+                        if (image && text) {
+                            image.onerror = function() {
+                                // this.remove();
+                                text.setAttribute('class', 'forced');
+                            };
+                            spoilerButton.setAttribute('title', title);
+                        }
+                        galleries.appendChild(spoilerButton);
+                        galleries.appendChild(document.createTextNode('\n'));
+                        spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
+                    }();
+                });
+                var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+
+                var searchesArray = document.querySelectorAll('#previews > .spoilerbox > a');
+
+                // DOCUMENT FUNCTIONS
+                function buttonClicked(button, buttonsArray, unclick) {
+                    if (unclick) {
+                        forEach(buttonsArray, function(index, self) {self.style.removeProperty('opacity');});
+                    } else {
+                        forEach(buttonsArray, function(index, self) {self.style.opacity = '0.125';});
+                        button.style.removeProperty('opacity');
+                    }
+                }
+
+                function showSpoiler(thisButton, spoiler) {
+                    var active = spoiler.isVisible();
+                    buttonClicked(thisButton, spoilerButtonsArray);
+                    forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
+                    if (active) {
+                        buttonClicked(thisButton, spoilerButtonsArray, true);
+                        activeSpoiler = false;
+                        activeLinksList = [];
+                        activeQueriesList = [];
+                        activeSpoilerButton = null;
+                    } else {
+                        spoiler.style.display = 'block';
+                        activeLinksList = spoiler.querySelectorAll('a');
+                        activeQueriesList = [];
+                        forEach(activeLinksList, function(index, self) {activeQueriesList.push(self.text);});
+                        activeSpoiler = spoiler;
+                        activeSpoilerButton = thisButton;
+                        //
+                        /*
+                        var title = thisButton.querySelector('p');
+                        if (title) {
+                        // var params = getParams();
+                        var title_text = title.innerText.trim();
+                        var path = parent.location.pathname;
+                        params.tab = title_text;
+                        var options = "";
+                        var i = 0;
+                        for (var key in params) {
+                        i++;
+                        var val = params[key];
+                        if (i == 1) options = options + "?";
+                        else if (i > 1) options = options + "&";
+                        options = options + (key + "=" + val);
+                        console.log('key: '+key);
+                        console.log('val: '+val);
+                        console.log('options: '+options);
+                        }
+                        path = path + options;
+                        console.log('path: '+path);
+                        history.pushState(parent.location.pathname, "", path);
+                        }
+                        */
+                    }
+                    updateURL();
+                    lastClicked = null;
+                }
+
+                function updateURL() {
+                    // var params = getParams();
+                    delete params.tab;
+                    // console.log('activeSpoilerButton: '+activeSpoilerButton);
+                    if (activeSpoilerButton) {
+                        var title = activeSpoilerButton.querySelector('p');
+                        if (title) {
+                            var title_text = title.innerText.trim();
+                            title_text = encodeURIComponent(title_text);
+                            params.tab = title_text;
+                        }
+                    }
+                    var options = "";
+                    var i = 0;
+                    for (var key in params) {
+                        i++;
+                        var val = params[key];
+                        if (i == 1) options = options + "?";
+                        else if (i > 1) options = options + "&";
+                        options = options + (key + "=" + val);
+                        // console.log('key: '+key);
+                        // console.log('val: '+val);
+                        // console.log('options: '+options);
+                    }
+                    var path = parent.location.pathname;
+                    path = path + options;
+                    // console.log('path: '+path);
+                    history.pushState(parent.location.pathname, "", path);
+                }
+
+                var bodyStyle = window.getComputedStyle(document.body, null);
+                var fontSize = bodyStyle.getPropertyValue('font-size').replace('px', '') || 16;
+                var margin = '5px 0px 0px 0px';
+                var searchField = document.querySelector('#searchField');
+                var linksList = [];
+                var queriesList = [];
+                var domainsList = [];
+
+                var shortNames = true;
+
+                var lastClicked;
+
+                searchField.style['font-size'] = bodyStyle.getPropertyValue('font-size');
+                searchField.style['font-family'] = bodyStyle.getPropertyValue('font-family');
+                searchField.style['font-weight'] = bodyStyle.getPropertyValue('font-weight');
+                searchField.style['font-style'] = bodyStyle.getPropertyValue('font-style');
+                // searchField.style.color = bodyStyle.getPropertyValue('color');
+
+                forEach(searchesArray, function(index, self) {
+                    var spoilerbox = self.parentNode;
+                    var query = self.text;
+                    var domain = query;
+                    domain = domain.replace(/.*google\.com\/search\?q=.*as_sitesearch=(.+?\.\w+).*/i, '$1'); // http://google.com/search?q=&as_sitesearch=wowprogramming.com > wowprogramming.com
+                    domain = domain.replace(/^.*?\/\/(www\.)?(.+?\..+?)\/.*/i, '$2');
+
+                    var d = document.createElement('div');
+                    d.setAttribute('class','siteLink');
+                    d.style.margin = margin;
+                    d.style.display = 'table';
+
+                    // d.style['border-color'] = 'grey';
+                    // d.style['border-width'] = '1px';
+                    // d.style['border-style'] = 'solid';
+
+                    d.style.position = 'relative';
+                    d.style.height = Math.ceil(fontSize*2)+'px';
+                    spoilerbox.appendChild(d);
+
+                    var linkParams = query.split('|', 5),
+                        linkName = linkParams[1], linkIcon = linkParams[2], linkSpace = linkParams[3], linkEncoding = linkParams[4]
+                    ;
+                    linkURL = linkParams[0];
+                    linkIcon = linkIcon ? linkIcon.trim() : linkIcon;
+                    linkName = linkName ? linkName.trim() : linkName;
+                    linkSpace = linkSpace ? linkSpace.trim() : linkSpace;
+                    linkEncoding = linkEncoding ? linkEncoding.trim() : linkEncoding;
+                    linkURL = linkURL ? linkURL.trim() : linkURL;
+                    if (linkIcon) {linkIcon = linkIcon.match(/^\*/) ? 'https://www.google.com/s2/favicons?domain=' + linkIcon.substring(1) : linkIcon;}
+
+                    var i = document.createElement('img');
+                    i.style.position = 'absolute';
+                    i.style.top = '0';
+                    i.style.bottom = '0';
+                    i.style.left = '0';
+                    i.style.right = '0';
+                    // i.style.width = '50%';
+                    i.style.height = '50%';
+                    i.style.margin = 'auto 0px';
+                    i.src = 'https://www.google.com/s2/favicons?domain=' + domain;
+                    i.src = linkIcon ? linkIcon.trim() : i.src;
+                    d.appendChild(i);
+
+                    var linkURL, linkDomain;
+                    var searchValue = searchField.value;
+                    searchValue = linkSpace ? searchValue.replace(/\s+/g, linkSpace) : searchValue;
+                    // searchValue = encodeURIComponent(searchField.value);
+
+                    if (linkEncoding == 'none') {/*skip encoding*/}
+                    else if (linkEncoding && linkEncoding.match('1251')) searchValue = unicodeToWin1251_UrlEncoded(searchValue);
+                    else searchValue = encodeURIComponent(searchValue);
+
+                    linkDomain = query.replace(/%s/g, '').replace(/^(http[s]?):\/\/(.*?)\/.*/g, '$1://$2');
+                    // linkURL = linkURL.replace(/[ \t]+\|.*/g, '');
+                    // linkURL = (searchValue !== '') ? query.replace(/%s/g, searchValue) : linkDomain;
+                    linkURL = (searchValue !== '') ? linkURL.replace(/%s/g, searchValue) : linkDomain;
+
+                    // console.log(linkURL, linkDomain);
+                    // console.log(linkParams, linkName, linkURL);
+
+                    var a = self; //document.createElement('a');
+                    a.style.display = 'table-cell';
+                    a.style['vertical-align'] = 'middle';
+                    a.style['padding-left'] = Math.ceil(fontSize*1.25)+'px';//i.offsetWidth + 5;
+                    //a.style['font-size'] = fontSize+'px'; // styles
+                    //a.style.color = '#086081'; // styles
+                    a.style.width = 'auto';
+                    a.setAttribute('target', '_blank'); // Open in new tab
+                    a.setAttribute('href', linkURL); // a.setAttribute('href', query.replace(/%s/g, searchField.value));
+                    a.text = shortNames ? domain : linkURL;
+                    /*
+                                    a.text = query.match(/.*[ \t]+\|[ \t]+/i) ?
+                                    a.text + ' [' + query.replace(/.*[ \t]+\|[ \t]+(.*)/i, '$1').trim() + ']':
+                                    a.text;
+                                */
+                    a.text = (linkName ? (linkName+' ['+domain+']') : a.text)
+                    d.appendChild(a);
+
+                    a.addEventListener('click',function(e){lastClicked = this;},false);
+
+                    linksList.push(a);
+
+                    queriesList.push(query);
+                    domainsList.push(linkDomain);
+                });
+
+                var enterKey = 13, escKey = 27;
+
+                var onEvent = function(e) {
+                    e = e || window.event;
+
+                    var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
+
+                    var query = searchField.value.trim();
+
+                    if (e.type == 'change') {
+                        // query = query.replace(/[-_\.\+\s]+/g, ' ').replace(/^\s{2,}|\s{2,}$/g, '');
+                        query = query.replace(/[^a-zA-Z0-9]+/g, ' ').replace(/^\s{2,}|\s{2,}$/g, ''); //.toTitleCase(true);
+                        // searchField.value = query.toTitleCase(true);
+                    }
+
+                    if (e.keyCode == escKey) { // Escape
+                    } else if (e.keyCode == enterKey) {
+                        if (ctrlDown) {
+                            activeLinksList.forEach(function(link, index) {link.click();});
+                        } else {
+                            if (lastClicked) lastClicked.click();
+                        }
+                    } else {
+                        linksList.forEach(function(link, index) {
+                            var linkURL, linkDomain;
+
+                            var linkParams = queriesList[index].split('|', 5),
+                                linkName = linkParams[1], linkIcon = linkParams[2], linkSpace = linkParams[3], linkEncoding = linkParams[4]
+                            ;
+                            linkURL = linkParams[0];
+                            linkIcon = linkIcon ? linkIcon.trim() : linkIcon;
+                            linkName = linkName ? linkName.trim() : linkName;
+                            linkSpace = linkSpace ? linkSpace.trim() : linkSpace;
+                            linkEncoding = linkEncoding ? linkEncoding.trim() : linkEncoding;
+                            linkURL = linkURL ? linkURL.trim() : linkURL;
+                            if (linkIcon) {linkIcon = linkIcon.match(/^\*/) ? 'https://www.google.com/s2/favicons?domain=' + linkIcon.substring(1) : linkIcon;}
+
+                            var searchValue = searchField.value;
+                            searchValue = linkSpace ? searchValue.replace(/\s+/g, linkSpace) : searchValue;
+
+                            if (linkEncoding == 'none') {/*skip encoding*/}
+                            if (linkEncoding && linkEncoding.match('1251')) searchValue = unicodeToWin1251_UrlEncoded(searchValue);
+                            else searchValue = encodeURIComponent(searchValue);
+
+                            linkDomain = domainsList[index];
+                            // linkURL = (searchValue !== '') ? linkURL.replace(/%s/g, encodeURIComponent(query)) : linkDomain;
+                            linkURL = (searchValue !== '') ? linkURL.replace(/%s/g, searchValue) : linkDomain; // encodeURIComponent(query)
+
+                            // linkURL = linkURL.replace(/[ \t]+\|.*/g, '');
+
+                            var ref = linkURL; // queriesList[index].replace(/%s/g, query);
+                            // var base64_ref = queriesList[index].replace('%s', encodeURIComponent(query));
+                            if (!shortNames) link.text = ref;
+                            link.href = ref; // base64_ref;
+                        });
+                    }
+                    params.q = searchField.value.trim();
+                    updateURL();
+                };
+
+                var eventList = ['change', 'input', 'cut', 'copy', 'paste']; // 'keydown', 'keyup',
+                var inputList = [searchField];
+
+                inputList.forEach(function(input){
+                    eventList.forEach(function(event){
+                        input.addEventListener(event,function(e){onEvent(e);},false);
+                    });
+                });
+
+                // document.querySelector('.spoilertop').click();
+
+                if (params.tab) {
+                    var tabs = document.querySelectorAll('.spoilertop');
+                    forEach(tabs, function(index, self) {
+                        var title = self.querySelector('p');
+                        if (title) {
+                            var title_text = title.innerText.trim();
+                            title_text = title_text.replace(/\n/g, '');
+                            // console.log(title_text, params.tab.trim(), title_text == params.tab.trim())
+                            if (title_text == params.tab.trim()) {
+                                // Create a new 'change' event
+                                var event = new Event('click');
+                                // Dispatch it.
+                                self.dispatchEvent(event);
+                            }
+                        }
+                    });
+                }
+            });
+            //
+            //utf8 to 1251 converter (1 byte format, RU/EN support only + any other symbols) by drgluck
+            function utf8_decode (aa) {
+                var bb = '', c = 0;
+                for (var i = 0; i < aa.length; i++) {
+                    c = aa.charCodeAt(i);
+                    if (c > 127) {
+                        if (c > 1024) {
+                            if (c == 1025) {
+                                c = 1016;
+                            } else if (c == 1105) {
+                                c = 1032;
+                            }
+                            bb += String.fromCharCode(c - 848);
+                        }
+                    } else {
+                        bb += aa.charAt(i);
+                    }
+                }
+                return bb;
+            }
+            ///*
+            var DMap = {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10, 11: 11, 12: 12, 13: 13, 14: 14, 15: 15, 16: 16, 17: 17, 18: 18, 19: 19, 20: 20, 21: 21, 22: 22, 23: 23, 24: 24, 25: 25, 26: 26, 27: 27, 28: 28, 29: 29, 30: 30, 31: 31, 32: 32, 33: 33, 34: 34, 35: 35, 36: 36, 37: 37, 38: 38, 39: 39, 40: 40, 41: 41, 42: 42, 43: 43, 44: 44, 45: 45, 46: 46, 47: 47, 48: 48, 49: 49, 50: 50, 51: 51, 52: 52, 53: 53, 54: 54, 55: 55, 56: 56, 57: 57, 58: 58, 59: 59, 60: 60, 61: 61, 62: 62, 63: 63, 64: 64, 65: 65, 66: 66, 67: 67, 68: 68, 69: 69, 70: 70, 71: 71, 72: 72, 73: 73, 74: 74, 75: 75, 76: 76, 77: 77, 78: 78, 79: 79, 80: 80, 81: 81, 82: 82, 83: 83, 84: 84, 85: 85, 86: 86, 87: 87, 88: 88, 89: 89, 90: 90, 91: 91, 92: 92, 93: 93, 94: 94, 95: 95, 96: 96, 97: 97, 98: 98, 99: 99, 100: 100, 101: 101, 102: 102, 103: 103, 104: 104, 105: 105, 106: 106, 107: 107, 108: 108, 109: 109, 110: 110, 111: 111, 112: 112, 113: 113, 114: 114, 115: 115, 116: 116, 117: 117, 118: 118, 119: 119, 120: 120, 121: 121, 122: 122, 123: 123, 124: 124, 125: 125, 126: 126, 127: 127, 1027: 129, 8225: 135, 1046: 198, 8222: 132, 1047: 199, 1168: 165, 1048: 200, 1113: 154, 1049: 201, 1045: 197, 1050: 202, 1028: 170, 160: 160, 1040: 192, 1051: 203, 164: 164, 166: 166, 167: 167, 169: 169, 171: 171, 172: 172, 173: 173, 174: 174, 1053: 205, 176: 176, 177: 177, 1114: 156, 181: 181, 182: 182, 183: 183, 8221: 148, 187: 187, 1029: 189, 1056: 208, 1057: 209, 1058: 210, 8364: 136, 1112: 188, 1115: 158, 1059: 211, 1060: 212, 1030: 178, 1061: 213, 1062: 214, 1063: 215, 1116: 157, 1064: 216, 1065: 217, 1031: 175, 1066: 218, 1067: 219, 1068: 220, 1069: 221, 1070: 222, 1032: 163, 8226: 149, 1071: 223, 1072: 224, 8482: 153, 1073: 225, 8240: 137, 1118: 162, 1074: 226, 1110: 179, 8230: 133, 1075: 227, 1033: 138, 1076: 228, 1077: 229, 8211: 150, 1078: 230, 1119: 159, 1079: 231, 1042: 194, 1080: 232, 1034: 140, 1025: 168, 1081: 233, 1082: 234, 8212: 151, 1083: 235, 1169: 180, 1084: 236, 1052: 204, 1085: 237, 1035: 142, 1086: 238, 1087: 239, 1088: 240, 1089: 241, 1090: 242, 1036: 141, 1041: 193, 1091: 243, 1092: 244, 8224: 134, 1093: 245, 8470: 185, 1094: 246, 1054: 206, 1095: 247, 1096: 248, 8249: 139, 1097: 249, 1098: 250, 1044: 196, 1099: 251, 1111: 191, 1055: 207, 1100: 252, 1038: 161, 8220: 147, 1101: 253, 8250: 155, 1102: 254, 8216: 145, 1103: 255, 1043: 195, 1105: 184, 1039: 143, 1026: 128, 1106: 144, 8218: 130, 1107: 131, 8217: 146, 1108: 186, 1109: 190};
+            function unicodeToWin1251_UrlEncoded(s) {
+                var L = []
+                for (var i=0; i<s.length; i++) {
+                    var ord = s.charCodeAt(i)
+                    if (!(ord in DMap)) throw "Character "+s.charAt(i)+" isn't supported by win1251!";
+                    L.push('%'+DMap[ord].toString(16));
+                }
+                return L.join('').toUpperCase();
+            }
+            //*/
+        </script>
+    </head>
+    <body>
+        <!-- <video class="wallpaper" id="wallpapers" autoplay="" loop="" name="media"><source src="video.mp4" type="video/mp4"></video> -->
+        <div id="galleries">
+            <!--    <div class="spoilertop" spoiler="videos" title="Videos" image=""></div>
+                <div class="spoilertop" spoiler="images" title="Images" image=""></div>
+                <div class="spoilertop" spoiler="movies" title="Movies" image="http://i4.istockimg.com/file_thumbview_approve/8659296/5/stock-photo-8659296-3d-film-coming-out-of-its-reel.jpg"></div>
+                <div class="spoilertop" spoiler="torrents" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150"></div>
+                <div class="spoilertop" spoiler="software" title="Software" image="http://www.adityainfo.co.in/file/2015/01/Softwares.png"></div>
+                <div class="spoilertop" spoiler="handbooks" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png"></div>
+                <div class="spoilertop" spoiler="global" title="Global" image="http://iconspot.ru/files/87916.png"></div>
+                <div class="spoilertop" spoiler="wow" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png"></div>
+            -->
+        </div>
+        <div id="previews">
+            <input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
+            <script>var params = getParams();</script>
+            <div class="spoilerbox" title="Movies" image="http://www.stbcrm.com/Content/img/TVLg.png">
+                <!-- http://fs.to/search.aspx?search=%s -->
+                https://my-hit.org/search/?q=%s
+            </div>
+            <div class="spoilerbox" title="Torrents" image="https://lh6.ggpht.com/92wJF8bxmRhIWHFJ8VQGQCx_U49enhZiJ5nYZiv65s5kANcZwrvgquLgpumG-2XM7oc=w150">
+                http://live-rutor.org/search/%s/
+                <!-- http://www.ex.ua/search?s=%s -->
+                <!-- http://www.ex.ua/search?s=md5:%s -->
+                <!-- http://tparser.org/%s/ -->
+            </div>
+            <div class="spoilerbox" title="Software" image="http://icons.iconarchive.com/icons/dtafalonso/modern-xp/256/ModernXP-74-Software-Install-icon.png">
+                http://alternativeto.net/browse/search?q=%s
+            </div>
+            <div class="spoilerbox" title="Handbooks" image="http://izolna.net/wp-content/uploads/2015/08/user_manual.png">
+                http://npppythonscript.sourceforge.net/docs/latest/search.html?q=%s&check_keywords=yes&area=default
+                http://google.com/search?q=%s&as_sitesearch=w3schools.com
+            </div>
+            <div class="spoilerbox" title="Global" image="http://www.eduportal44.ru/koiro/DOP/DocLib/Chrome.gif">
+                https://encrypted.google.com/#q=%s
+                https://www.wikipedia.org/search-redirect.php?family=wikipedia&language=en&search=%s&language=ru&go=Go
+                http://www.imfdb.org/wiki/%s/
+                https://www.youtube.com/results?search_query=%s
+                http://www.liveleak.com/browse?q=%s&safe_mode=off
+                https://www.thefreedictionary.com/%s/
+            </div>
+            <div class="spoilerbox" title="WoW" image="http://img00.deviantart.net/0314/i/2012/166/a/c/wow_token_light_by_scrubnoob-d53nfuq.png">
+                http://wowroad.info/?search=%s
+                http://ru.wowhead.com/search?q=%s
+                http://wowhead.com/search?q=%s
+                http://google.com/search?q=%s&as_sitesearch=wowprogramming.com
+                https://www.wowace.com/search/?search=%s
+                https://mods.curse.com/search?search=%s
+            </div>
+            <div class="spoilerbox" title="Games" image="">
+                http://ru.darksouls.wikia.com/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:Search?query=%s
+            </div>
+            <div class="spoilerbox" title="Videos" image="">
+                http://www.eporner.com/search/%s/
+                https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=eporner.com&tbs=isz:a&safe=off | eporner.com | *eporner.com
+                
+                https://www.pornesq.com/search/videos/%s
+                https://biqle.ru/video/%s
+                https://www.pornoeggs.com/sq?q=%s
+                
+                https://hqporner.com/?q=%s ||| + | none
+                
+                https://pornsexer.com/search/%s/
+                
+                http://yespornplease.com/search?q=%s
+                https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=yespornplease.com&tbs=isz:a&safe=off | yespornplease.com | *yespornplease.com
+
+                https://www.vporn.com/search?q=%s
+
+                http://www.veporns.com/porn/%s/
+                https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=veporns.com&tbs=isz:a&safe=off | veporns.com | *veporns.com
+
+                https://www.pentasex.io/search.php?keywords=%s
+
+                https://www.porntrex.com/search/%s/ ||| -
+                https://www.google.com/search?tbm=isch&as_q=porn&as_epq=%s&as_sitesearch=porntrex.com&tbs=isz:a&safe=off | porntrex.com | *porntrex.com
+
+                <!-- https://fucktat.com/videos?search=%s -->
+
+                <!-- http://pornroom.org/?s=%s -->
+
+                <!-- http://vpornex.com/?s=%s -->
+
+                <!-- http://pron.tv/stream/search?q=%s+size%3A50mb&RandomHD=Random%20HD! -->
+                <!-- http://pron.tv/stream/search?q=%s -->
+
+                <!-- http://pron.tv/stream/search?q=%s%20host%3Aopenload.co | openload.co -->
+                <!-- http://pron.tv/stream/search?q=%s%20host%3Avshare.io | vshare.io -->
+                <!-- http://pron.tv/stream/search?q=%s%20host%3Avidoza.net | vidoza.net -->
+                <!-- http://pron.tv/stream/search?q=%s%20host%3Adrive.google.com | drive.google.com -->
+                <!-- http://pron.tv/stream/search?q=%s%20host%3Abitporno.com | bitporno.com  -->
+
+                https://xfreehd.com/search?search_query=%s&search_type=videos
+
+                https://yourporn.sexy/%s.html?mode=videos
+                
+                http://fuckingsession.com/?s=%s
+                <!-- http://click4porn.me/?s=%s -->
+
+                http://xxvideoss.org/?s=%s
+                <!-- http://porntube4k.net/?s=%s -->
+
+                http://streamxxx.tv/?s=%s&cat=
+
+                http://twizporn.com/?s=%s
+                http://www.veporn.net/porn/%s/
+
+                <!-- http://pantporn.com/?s=%s -->
+
+                http://pornmovie.webcam/?s=%s
+
+                http://www.freeomovie.com/?s=%s
+
+                https://hqcollect.tv/search/?utf8=%E2%9C%93&q=%s&button=
+
+                http://sexix.net/?s=%s
+
+                http://jizzman.com/?s=%s
+
+                http://www.gameofporn.net/search.html?q=%s
+
+                http://www.pornbaze.com/search.php?s=%s
+                http://pornhdhdporn.com/?s=%s
+
+                http://18onlygirls.ru/tags/%s/
+
+                https://biqle.ru/video/%s/
+                http://porndoe.com/search?keywords=%s
+                http://www.nudeflix.com/search/%s/
+
+                http://hdporn1080.net/?s=%s
+                https://www.bitporno.sx/?q=%s
+                http://www.xmoviesforyou.com/?s=%s
+                http://hdpoz.com/?s=%s
+                http://sexiz.net/?s=%s
+                http://wixvi.cc/?s=%s
+                <!-- http://www.porntrex.com/search?search_query=%s&search_type=videos -->
+                <!-- https://www.porntrex.com/search/%s/ -->
+                <!-- http://pornmegabox.com/?s=%s -->
+                <!-- http://www.hdporncollections.com/?s=%s -->
+                http://www.pornerbros.com/search?q=%s
+                http://www.xvideos.com/?k=%s
+
+                http://www.tube8.com/searches.html?q=%s
+                <!-- http://www.pornhub.com/video/search?search=%s -->
+                https://www.pornhub.com/video/search?search=%s&hd=1&min_duration=20
+                https://www.playvids.com/sq?q=%s
+
+                http://www.nudevista.com/?q=%s+length%3E10:00&s=t
+                http://hd.xtapes.to/?s=%s
+
+                https://daftsex.com/video/%s/
+
+                https://vipergirls.to/search.php?contenttype=1&do=process&query=%s
+
+                http://www.camshooker.com/search/%s/
+
+                <!-- https://google.com/search?tbm=vid&as_q=&as_q=porn&as_epq=%s&as_oq=&as_eq=youtube+xvideos+pornhub&lr=&dur=&as_qdr=all&as_sitesearch=&safe=off&tbs=hq%3Ah -->
+                https://www.google.com/search?tbm=vid&as_q=porn&as_epq=%s&as_sitesearch=&tbs=isz:a&safe=off 
+            </div>
+            <div class="spoilerbox" title="Sites" image="">
+                https://www.indexxx.com/search/?query=%s
+                https://www.eurobabeindex.com/modules/search.py?text=%s&submit.x=0&submit.y=0
+            
+                http://www.data18.com/search/?k=%s
+
+                https://www.hardx.com/en/search/%s?query=%s
+                http://www.rk.com/tour/search/all/%s/
+                http://www.videoz.com/s/search?type=&query=%s
+
+                https://www.evilangel.com/en/search/%s?query=%s
+
+                https://www.private.com/search.php?query=%s
+
+                <!-- https://encrypted.google.com/search?q=%s&as_sitesearch=pron.tv -->
+                https://www.google.com/search?as_q=porn&as_epq=%s&as_sitesearch=pron.tv&safe=off 
+                
+                https://passion-hd.com/girls | passion-hd.com/girls
+            </div>
+            <div class="spoilerbox" title="Images" image="">
+                <!-- http://www.pornpics.com/?q=%s -->
+                https://www.jjgirls.com/pornpics/%s/
+                https://www.pornpics.com/?q=%s
+                https://www.barelist.com/search/searchMain.aspx?s=%s
+                http://pornstarnetwork.premiumarchive.com/pornstar/most-popular/keywordsearch/%s/
+                http://www.babesandstars.com/search/?t=models&q=%s
+                http://www.definebabe.com/search/?words=%s&search=&type=1
+                http://www.pichunter.com/search/%s/
+                http://www.imagefap.com/gallery.php?search=%s
+                http://webbabe.ws/search/?q=%s
+                http://www.sex.com/search/gifs?query=%s
+                http://juicygif.com/gallery/search?SearchText=%s
+                http://babesource.com/search/photos/%s/
+
+                http://namethatpornstar.com/reverse/index.php
+                
+                https://duckduckgo.com/?q=%s&iar=images&iax=images&ia=images
+
+                https://vipergirls.to/search.php?query=%s&do=process
+            </div>
+            <div class="spoilerbox" title="Hentai" image="">
+                http://konachan.com/post?tags=%s+limit%3A100
+                <!-- https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s&ms=1 -->
+                https://danbooru.donmai.us/posts?utf8=%E2%9C%93&tags=%s+limit%3A100&ms=1
+                https://luscious.net/search/?q=%s&community=hentai
+            </div>
+            <div class="spoilerbox" title="Passwords" image="">
+                http://passwordshub.com/?s=%s
+            </div>
+            <div class="spoilerbox" title="Trackers" image="">
+                http://torrent-pirat.com/search.php?tracker_search=torrent&keywords=%s&terms=all&fp=1&author=&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0
+            </div>
+        </div>
+    </body>
 </html>
