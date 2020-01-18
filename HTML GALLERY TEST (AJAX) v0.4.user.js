@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.44
+// @version		 2.9.45
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -378,7 +378,8 @@
 
         var id = clone.getAttribute('id');
         var title = clone.dataset.title || clone.getAttribute('title');
-        if (id && id == title.toCamelCase()) clone.removeAttribute('id');
+        // if (id && id == title.toCamelCase()) clone.removeAttribute('id');
+        if (id && id == title.toLowerCase().replace(/[\s.]+/ig, '_')) clone.removeAttribute('id');
 
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {self.remove();});
         forEach(clone.querySelectorAll('.hostText'), function(index, self) {self.remove();});
