@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.46
+// @version		 2.9.47
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -1398,6 +1398,7 @@
                     var contentSrc = self.dataset.content;
                     var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
                     var contentSize = self.dataset.quality;
+                    var qualityLimit = parseInt(self.dataset.qualityLimit);
                     var duration = self.dataset.duration;
                     var text /*, title = self.dataset.title*/;
                     var title = self.getAttribute('title');
@@ -1482,7 +1483,12 @@
                             if (quality) {
                                 var color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
                                 if (text) text.style.color = color;
-                                addHDtext(self, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
+                                let actualQuality = parseInt(contentSize[2]);
+                                if (qualityLimit && actualQuality > qualityLimit) {
+                                    actualQuality = qualityLimit;
+                                }
+                                //                                 alert(`qualityLimit = ${qualityLimit} (${actualQuality})`);
+                                addHDtext(self, actualQuality+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                             }
                         }
                         if (contentSrc) {
