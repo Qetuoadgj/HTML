@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.45
+// @version		 2.9.46
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @grant		 unsafeWindow
@@ -1266,6 +1266,11 @@
             if (start || end) {
                 var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
                 content = content + '&#t=' + duration;
+            }
+            var qualityLimit = thisThumbnail.dataset.qualityLimit;
+            if (qualityLimit) {
+                content = content + '&qualityLimit=' + qualityLimit;
+                //                 alert(qualityLimit);
             }
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
             console.log('content: '+content);
