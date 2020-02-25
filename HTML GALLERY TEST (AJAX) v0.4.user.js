@@ -1484,7 +1484,7 @@
                                 var color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
                                 if (text) text.style.color = color;
                                 let actualQuality = parseInt(contentSize[2]);
-                                if (qualityLimit && actualQuality > qualityLimit) {
+                                if (qualityLimit && actualQuality > qualityLimit*1.1) {
                                     actualQuality = qualityLimit;
                                 }
                                 //                                 alert(`qualityLimit = ${qualityLimit} (${actualQuality})`);
