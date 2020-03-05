@@ -1,10 +1,9 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.47
+// @version		 2.9.48
 // @description	 Pure JavaScript version.
 // @author		 Ægir
-// @grant		 unsafeWindow
 // @run-at		 document-start
 // @noframes
 // @downloadURL	 https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
@@ -31,17 +30,17 @@
     'use strict';
 
     // Your code here...
-    var G_win = function(){return (typeof GM == 'undefined') ? window : unsafeWindow;};
 
     var isScripted = document.documentElement.getAttribute("isScripted");
     if (isScripted == "true") return;
     document.documentElement.setAttribute("isScripted", "true");
 
-    var $ = G_win().$ || window.$; // window.$;
-
-    var G_disabledHosts = (typeof G_win().disabledHosts == 'undefined' || !G_win().disabledHosts) ? [] : G_win().disabledHosts;
+    const $ = window.jQuery;
+    /* globals disabledHosts */
+    var G_disabledHosts = (typeof disabledHosts == 'undefined' || !disabledHosts) ? [] : disabledHosts;
     // console.log('disabledHosts: ', G_disabledHosts);
-    var G_reCastHosts = (typeof G_win().reCastHosts == 'undefined' || !G_win().reCastHosts) ? [] : G_win().reCastHosts;
+    /* globals reCastHosts */
+    var G_reCastHosts = (typeof reCastHosts == 'undefined' || !reCastHosts) ? [] : reCastHosts;
     // console.log('reCastHosts: ', G_reCastHosts);
     Array.prototype.unique = function() {
         var a = this.concat();
@@ -58,7 +57,7 @@
         'daftsex.com'
     ]).unique();
     // console.log('G_reCastHosts:', G_reCastHosts);
-    // G_win().closePopups = 1;
+    // closePopups = 1;
 
     // ---------------------
     function isOdd(x) {return x & 1;};
@@ -1050,7 +1049,7 @@
 
         forEach(spoilersArray, function(index, spoiler) {
             let splitCount = 250; // default
-            let split = G_win().split;
+            /* globals split */
             if (typeof(split) == "number") {
                 splitCount = split;
             }
