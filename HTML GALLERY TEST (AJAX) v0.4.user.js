@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
-// @icon		 http://rddnickel.com/images/HTML%20icon.png
-// @version		 2.9.48
+// @icon		 http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
+// @version		 2.9.49
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @run-at		 document-start
@@ -1466,6 +1466,8 @@
                                 // tooltip.innerText = title;
                                 let span_text = title, index = 0;
                                 for (let category of categoriesArray) {
+                                    category = category.replace(/^\s*M:/, '').trim();
+                                    // console.log(category);
                                     index++;
                                     if (index == 1) {
                                         span_text += '\n\nCategories:'
@@ -1915,6 +1917,11 @@
                 forEach(categoriesArray, function(index, self) {
                     var category = self.trim();
                     if (category.length > 0) {
+                        let model = false;
+                        if (category.match(/^\s*M:/)) {
+                            category = category.replace(/^\s*M:/, '').trim();
+                            model = true;
+                        };
                         var title = category.replace(/\s+/i, ' ').Capitalize();
                         var id = 'category-' + category.toLowerCase().replace(/[\s.]+/ig, '_');
                         var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
@@ -1927,7 +1934,11 @@
                             newSpoiler.classList.add('remove-on-copy');
                             newSpoiler.setAttribute('data-title', '*\n' + title);
                             newSpoiler.setAttribute('id', id);
-                        }
+                            if (model) {
+                                newSpoiler.setAttribute('data-special', 'model');
+                                // console.log(newSpoiler);
+                            };
+                        };
                         var thisThumbnailclone = thisThumbnail.cloneNode(false);
                         newSpoiler.appendChild(document.createTextNode('\n'));
                         newSpoiler.appendChild(thisThumbnailclone);
@@ -2020,6 +2031,11 @@
                 spoilerButton.addEventListener('click', function(){showSpoiler(this, spoiler);}, false);
                 if (image) lazyImagesArray.push(image);
                 if (!self.querySelector('.thumbnail')) spoilerButton.classList.add('empty');
+                if (self.dataset.special) {
+                    let model = self.dataset.special == 'model';
+                    if (model) spoilerButton.classList.add('model');
+                    self.removeAttribute('data-special');
+                };
             }();
             initLazyLoad(lazyImagesArray);
         });

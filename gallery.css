@@ -737,3 +737,7 @@ iframe#content_iframe
     border-style: double;
 }
 /* ---------------------- */
+.model > p {
+    color: darkorange;
+}
+/* ---------------------- */
