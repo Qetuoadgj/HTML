@@ -585,22 +585,22 @@ div#content>*
 }
 /* ---------------------- */
 /*
-.fav
-{
+    .fav
+    {
     border-color: limegreen !important;
-}
-.fav:hover
-{
+    }
+    .fav:hover
+    {
     border-color: yellow !important;
-}
+    }
 */
 /* ---------------------- */
 /*
-.fav
-{
+    .fav
+    {
     border-width: 4px;
     border-style: double !important;
-}
+    }
 */
 .spoilertop,
 .thumbnail
@@ -737,7 +737,16 @@ iframe#content_iframe
     border-style: double;
 }
 /* ---------------------- */
+.spoilertop > p {
+    font-size: 14px;
+    word-wrap: break-word;
+}
 .model > p {
+    font-size: 16px;
     color: darkorange;
+}
+.spoilertop[data-id*="★"] > p {
+    font-size: 24px;
+    color: gold;
 }
 /* ---------------------- */
