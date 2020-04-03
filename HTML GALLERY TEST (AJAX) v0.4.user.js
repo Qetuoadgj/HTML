@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
-// @version		 2.9.51
+// @version		 2.9.52
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @run-at		 document-start
@@ -317,6 +317,7 @@
 
         let removeItemsArray = clone.querySelectorAll('.removeoncopy');
         for (let item of removeItemsArray) {smartRemove(item);};
+        clone.classList.remove('removeoncopy');
 
         var spoilerButtonsArray = clone.querySelectorAll('.spoilertop');
         var spoilersArray = clone.querySelectorAll('.spoilerbox');
