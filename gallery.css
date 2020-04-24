@@ -71,7 +71,7 @@ div
 {
     border-color: red;
     border-style: solid;
-    opacity: 1 !important;
+    opacity: 1 /*!important*/;
 }
 .spoilertop>img,
 .thumbnail>img,
@@ -202,8 +202,9 @@ body
 .COMMENTED,
 .REMOVED
 {
-    visibility: hidden;
-    display: none;
+    /* visibility: hidden; */
+    /* display: none; */
+	opacity: 0.25 !important;
 }
 .disabled-host
 {

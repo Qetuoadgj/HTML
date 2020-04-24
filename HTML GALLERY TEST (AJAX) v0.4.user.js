@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
-// @version		 2.9.52
+// @version		 2.9.54
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @run-at		 document-start
@@ -256,10 +256,14 @@
             let matched = element.dataset.content == el.dataset.content;
             if (matched) {
                 if (remove) {
-                    addClass(el, 'REMOVED');
+                    if (el.classList.contains('REMOVED')) el.classList.remove('REMOVED')
+                    else el.classList.add('REMOVED')
+                    // addClass(el, 'REMOVED');
                 }
                 else {
-                    addClass(el, 'COMMENTED');
+                    if (el.classList.contains('COMMENTED')) el.classList.remove('COMMENTED')
+                    else el.classList.add('COMMENTED')
+                    // addClass(el, 'COMMENTED');
                 };
             };
         };
@@ -316,7 +320,12 @@
         var clone = node.cloneNode(true);
 
         let removeItemsArray = clone.querySelectorAll('.removeoncopy');
-        for (let item of removeItemsArray) {smartRemove(item);};
+        if (!clone.dataset.copy) {
+            for (let item of removeItemsArray) {smartRemove(item);};
+        }
+        else {
+            for (let item of removeItemsArray) {item.classList.remove('removeoncopy');};
+        };
         clone.classList.remove('removeoncopy');
 
         var spoilerButtonsArray = clone.querySelectorAll('.spoilertop');
@@ -401,7 +410,7 @@
 
         var removed = clone.querySelectorAll('.REMOVED');
         forEach(removed, function(index, self) {
-            self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */
+            // self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */
             smartRemove(self);
         });
 
@@ -427,7 +436,11 @@
         forEach(clone.querySelectorAll('.ui-sortable'), function(index, self) {self.classList.remove('ui-sortable');});
 
         var commented = clone.querySelectorAll('.COMMENTED');
-        forEach(commented, function(index, self) {removeClass(self, 'COMMENTED'); self.outerHTML = '<!-- '+self.outerHTML+' -->';});
+        forEach(commented, function(index, self) {
+            // removeClass(self, 'COMMENTED');
+            self.classList.remove('COMMENTED')
+            self.outerHTML = '<!-- '+self.outerHTML+' -->';
+        });
 
         //         clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
         //         clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
@@ -595,9 +608,12 @@
     function undoAction() {
         var num = undoElementsBuffer.length - 1; if (num > -1) {
             // undoElementsBuffer[num].outerHTML = undoChangesBuffer[num];
-            removeClass(undoElementsBuffer[num], 'REMOVED');
-            removeClass(undoElementsBuffer[num], 'COMMENTED');
-            removeClass(undoElementsBuffer[num], 'fav');
+            undoElementsBuffer[num].classList.remove('REMOVED')
+            undoElementsBuffer[num].classList.remove('COMMENTED')
+            undoElementsBuffer[num].classList.remove('fav')
+            // removeClass(undoElementsBuffer[num], 'REMOVED');
+            // removeClass(undoElementsBuffer[num], 'COMMENTED');
+            // removeClass(undoElementsBuffer[num], 'fav');
             undoElementsBuffer.splice(num, 1); // undoChangesBuffer.splice(num, 1);
         }
     }
@@ -1036,7 +1052,7 @@
                 var clone;
                 if (num == 1) {
                     clone = element.parentNode.insertBefore(element.cloneNode(false), element);
-                    clone.title += ' pt'+(iteration);
+                    clone.dataset.title += ' pt'+(iteration);
                 }
                 if (num == splitCount) {
                     num = 0; ++iteration;
@@ -1962,7 +1978,7 @@
                             matched = 'model';
                         };
                         var title = category.replace(/\s+/i, ' ').Capitalize();
-                        var id = 'category-' + category.toLowerCase().replace(/[\s.]+/ig, '_');
+                        var id = 'category-' + category.toLowerCase().replace(/[\s.()]+/ig, '_');
                         var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
                         // console.log(id);
                         if (!newSpoiler) {
