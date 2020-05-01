@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
-// @version		 2.9.54
+// @version		 2.9.55
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @run-at		 document-start
@@ -1296,6 +1296,8 @@
 
             //content = content + '#autoplay=true'; //'#autoplay=true&autoplay=true';
 
+            // alert(content);
+
             let array = content.split('#');
             if (array) {
                 if (array[1]) {
@@ -1307,13 +1309,18 @@
                         content = content + '?autoplay=true';
                     };
                 }
-                else {
-                    content = content + '#autoplay=true';
-                };
+                //                 else if (content.match(/[?]/)) {
+                content = content + '#autoplay=true';
+                //                 }
+                //                 else {
+                //                     content = content + '?autoplay=true';
+                //                 };
             }
             else {
                 content = content + '#autoplay=true';
             };
+
+            // alert(content);
 
             // console.log('content: '+content);
             var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
@@ -1326,9 +1333,13 @@
                 content = content + '&qualityLimit=' + qualityLimit;
                 //                 alert(qualityLimit);
             }
+            var reflect = thisThumbnail.dataset.reflect;
+            if (reflect) {
+                content = content + '&reflect=' + reflect;
+                //                  alert(content);
+            }
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
             console.log('content: '+content);
-
             var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
             if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
                 resetContentOutputs();
