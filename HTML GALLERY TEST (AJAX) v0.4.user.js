@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		 HTML GALLERY TEST (AJAX) v0.4
 // @icon		 http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
-// @version		 2.9.55
+// @version		 2.9.56
 // @description	 Pure JavaScript version.
 // @author		 Ægir
 // @run-at		 document-start
@@ -47,15 +47,7 @@
         for(var i=0; i<a.length; ++i) {for(var j=i+1; j<a.length; ++j) {if (a[i] === a[j]) a.splice(j--, 1);}}
         return a;
     };
-    G_reCastHosts = G_reCastHosts.concat([
-        'vshare.io',
-        'yespornplease.com',
-        'sxyprn.com',
-        'pornhub.com',
-        'playvids.com',
-        'biqle.ru',
-        'daftsex.com'
-    ]).unique();
+    G_reCastHosts = G_reCastHosts.concat([]).unique();
     // console.log('G_reCastHosts:', G_reCastHosts);
     // closePopups = 1;
 
@@ -1121,6 +1113,9 @@
         var outputs = document.getElementById('content');
         var outputsArray = [];
         var iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
+        var iframeOutputReset = {};
+        //         iframeOutputReset.width = iframeOutput.width;
+        //         iframeOutputReset.height = iframeOutput.height;
         outputsArray.push(iframeOutput, imgOutput, objectOutput);
         var objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
         var galleryList = [];
@@ -1262,6 +1257,9 @@
                 G_activePopUpWin = null;
             };
             activeOutput = null;
+            //
+            //             iframeOutput.width = iframeOutputReset.width;
+            //             iframeOutput.height = iframeOutputReset.height;
         }
 
         function showContent(thisThumbnail, thumbnailsArray) {
@@ -1323,21 +1321,40 @@
             // alert(content);
 
             // console.log('content: '+content);
-            var start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
+            let start = thisThumbnail.dataset.start, end = thisThumbnail.dataset.end;
             if (start || end) {
-                var duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
+                let duration = end ? hmsToSecondsOnly(start || 0) + ',' + hmsToSecondsOnly(end || 0) : hmsToSecondsOnly(start || 0);
                 content = content + '&#t=' + duration;
             }
-            var qualityLimit = thisThumbnail.dataset.qualityLimit;
+            let qualityLimit = parseInt(thisThumbnail.dataset.qualityLimit);
             if (qualityLimit) {
                 content = content + '&qualityLimit=' + qualityLimit;
                 //                 alert(qualityLimit);
             }
-            var reflect = thisThumbnail.dataset.reflect;
+            let reflect = thisThumbnail.dataset.reflect;
             if (reflect) {
                 content = content + '&reflect=' + reflect;
                 //                  alert(content);
             }
+            /*
+            let contentSize = thisThumbnail.dataset.quality;
+            if (contentSize) {
+                contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
+                let quality = contentSize ? contentSize[1]*contentSize[2] : null;
+                if (quality) {
+                    //                     const percent = quality/(1900*1080) * 100;
+                    //                     let actualQuality = parseInt(contentSize[2]);
+                    //                     if (qualityLimit && actualQuality > qualityLimit*1.1) {
+                    //                         actualQuality = qualityLimit;
+                    //                     };
+                    if (output == 'iframe') {
+                        let scale = Math.min(Math.max(quality/(iframeOutputReset.width*iframeOutputReset.height) * 100, 50), 100);
+                        iframeOutput.width = parseInt(iframeOutputReset.width * scale / 100);
+                        iframeOutput.height = parseInt(iframeOutputReset.height * scale / 100);
+                    };
+                };
+            };
+            */
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
             console.log('content: '+content);
             var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
@@ -2005,11 +2022,22 @@
                                 // console.log(newSpoiler);
                             };
                         };
-                        var thisThumbnailclone = thisThumbnail.cloneNode(false);
-                        thisThumbnailclone.classList.add('removeoncopy');
-                        newSpoiler.appendChild(document.createTextNode('\n'));
-                        newSpoiler.appendChild(thisThumbnailclone);
-                        // alert(category);
+                        let isDuplicate = false;
+                        let thisThumbnailContent = thisThumbnail.dataset.content || thisThumbnail.dataset.image;
+                        for (let item of newSpoiler.querySelectorAll('.thumbnail')) {
+                            let itemContent = item.dataset.content || item.dataset.image;
+                            if (itemContent == thisThumbnailContent) {
+                                isDuplicate = true;
+                                break;
+                            };
+                        };
+                        if (!isDuplicate) {
+                            let thisThumbnailclone = thisThumbnail.cloneNode(false);
+                            thisThumbnailclone.classList.add('removeoncopy');
+                            newSpoiler.appendChild(document.createTextNode('\n'));
+                            newSpoiler.appendChild(thisThumbnailclone);
+                            // alert(category);
+                        };
                     };
                 });
             };
