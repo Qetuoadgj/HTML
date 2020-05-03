@@ -3,7 +3,7 @@
 // @icon         http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
 // @version      2.9.57
 // @description  Pure JavaScript version.
-// @author       Ægir
+// @author       Aegir
 // @run-at       document-start
 // @noframes
 // @downloadURL  https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
@@ -1648,7 +1648,7 @@
             let inputWidth = promptFrame.style.width.Num()*0.8 - 5 + 'px';
 
             let label = document.createElement('label');
-            label.innerText = 'ÐÐ´ÑÐµÑ Ð¿Ð¾ÑÐ¾ÐºÐ°:';
+            label.innerText = 'Адрес потока:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1664,7 +1664,7 @@
             promptFrame.appendChild(promptFrameContent);
 
             label = document.createElement('label');
-            label.innerText = 'ÐÐ´ÑÐµÑ Ð¸ÐºÐ¾Ð½ÐºÐ¸:';
+            label.innerText = 'Адрес иконки:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1680,7 +1680,7 @@
             promptFrame.appendChild(promptFrameImage);
 
             label = document.createElement('label');
-            label.innerText = 'ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ:';
+            label.innerText = 'Название:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1696,7 +1696,7 @@
             promptFrame.appendChild(promptFrameTitle);
 
             label = document.createElement('label');
-            label.innerText = 'ÐÑÑÐ¾ÑÐ½Ð¸Ðº:';
+            label.innerText = 'Источник:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1712,7 +1712,7 @@
             promptFrame.appendChild(promptFrameSourcePage);
 
             label = document.createElement('label');
-            label.innerText = 'HTML-ÐºÐ¾Ð´:';
+            label.innerText = 'HTML-код:';
             label.style.width = labelWidth;
             label.style.float = 'left';
             label.style.margin='2px 0px';
@@ -1746,7 +1746,7 @@
             cancelButton.style.height = '20px';
             cancelButton.style.float = 'right';
             cancelButton.style.margin='15px 0px 0px 10px';
-            cancelButton.innerText = 'ÐÑÐ¼ÐµÐ½Ð°';
+            cancelButton.innerText = 'Отмена';
             promptFrame.appendChild(cancelButton);
 
             let promptFramePlayers = document.createElement('select');
@@ -1757,7 +1757,7 @@
             promptFramePlayers.style.padding='5px';
             promptFrame.appendChild(promptFramePlayers);
 
-            let options = ['ÐÑÐ¾Ð¸Ð³ÑÑÐ²Ð°ÑÐµÐ»Ñ', 'StrobeMediaPlayback.swf', 'uppod.swf'];
+            let options = ['Проигрыватель', 'StrobeMediaPlayback.swf', 'uppod.swf'];
             let num; for (num = 0; num < options.length; ++num) {
                 let selectOption = document.createElement('option');
                 selectOption.text = options[num];
