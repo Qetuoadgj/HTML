@@ -1,20 +1,20 @@
 // ==UserScript==
-// @name		 HTML GALLERY TEST (AJAX) v0.4
-// @icon		 http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
-// @version		 2.9.56
-// @description	 Pure JavaScript version.
-// @author		 Ægir
-// @run-at		 document-start
+// @name         HTML GALLERY TEST (AJAX) v0.4
+// @icon         http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
+// @version      2.9.57
+// @description  Pure JavaScript version.
+// @author       Ægir
+// @run-at       document-start
 // @noframes
-// @downloadURL	 https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
+// @downloadURL  https://github.com/Qetuoadgj/HTML/raw/master/HTML%20GALLERY%20TEST%20(AJAX)%20v0.4.user.js
 // @homepageURL  https://github.com/Qetuoadgj/HTML/tree/master
 //
-// @match		 file:///*/2.0.4.html*
-// @match		 file:///*/2.0.2.html*
-// @match		 file:///*/2.*.*.html*
-// @match		 file:///*/HTML/tmp/html/*.html*
+// @match        file:///*/2.0.4.html*
+// @match        file:///*/2.0.2.html*
+// @match        file:///*/2.*.*.html*
+// @match        file:///*/HTML/tmp/html/*.html*
 //
-// @exclude		 file:///*/HTML_Indent.html
+// @exclude      file:///*/HTML_Indent.html
 //
 // ------------- http://api.jqueryui.com/sortable/ -------------
 // @require      https://code.jquery.com/jquery-1.12.4.js
@@ -43,8 +43,8 @@
     var G_reCastHosts = (typeof reCastHosts == 'undefined' || !reCastHosts) ? [] : reCastHosts;
     // console.log('reCastHosts: ', G_reCastHosts);
     Array.prototype.unique = function() {
-        var a = this.concat();
-        for(var i=0; i<a.length; ++i) {for(var j=i+1; j<a.length; ++j) {if (a[i] === a[j]) a.splice(j--, 1);}}
+        let a = this.concat();
+        for(let i=0; i<a.length; ++i) {for(let j=i+1; j<a.length; ++j) {if (a[i] === a[j]) a.splice(j--, 1);}}
         return a;
     };
     G_reCastHosts = G_reCastHosts.concat([]).unique();
@@ -64,7 +64,7 @@
             el.fireEvent('on' + etype);
         }
         else {
-            var evObj = document.createEvent('Events');
+            let evObj = document.createEvent('Events');
             evObj.initEvent(etype, true, false);
             el.dispatchEvent(evObj);
         };
@@ -72,11 +72,11 @@
     // ---------------------
     // -- GET VALUSE FROM URL [START]
     function getParamsFromURL(searchString) {
-        var parse = function(params, pairs) {
-            var pair = pairs[0];
-            var parts = pair.split('=');
-            var key = decodeURIComponent(parts[0]).replace(/.*?\?/, '');
-            var value = decodeURIComponent(parts.slice(1).join('='));
+        let parse = function(params, pairs) {
+            let pair = pairs[0];
+            let parts = pair.split('=');
+            let key = decodeURIComponent(parts[0]).replace(/.*?\?/, '');
+            let value = decodeURIComponent(parts.slice(1).join('='));
             // Handle multiple parameters of the same name
             if (typeof params[key] === "undefined") params[key] = value;
             else params[key] = [].concat(params[key], value);
@@ -86,18 +86,18 @@
         return searchString.length === 0 ? {} : parse({}, searchString.split('&')); // .substr(1)
     }
     function getParams() {
-        var params = getParamsFromURL(location.search);
+        let params = getParamsFromURL(location.search);
         // Finally, to get the param you want
         // params['c'];
         /*
-            if (params.q) {
-                searchField.value = params.q;
-                // Create a new 'change' event
-                var event = new Event('change');
-                // Dispatch it.
-                searchField.dispatchEvent(event);
-            }
-            */
+        if (params.q) {
+            searchField.value = params.q;
+            // Create a new 'change' event
+            let event = new Event('change');
+            // Dispatch it.
+            searchField.dispatchEvent(event);
+        }
+        */
         return params;
     }
     var params = getParams();
@@ -207,7 +207,7 @@
 
     var G_activePopUpWin;
     function popItUp(url, windowName, focus) {
-        var newWindow = window.open(url, windowName, 'height=200, width=150');
+        let newWindow = window.open(url, windowName, 'height=200, width=150');
         if (focus && window.focus) {
             newWindow.focus();
         };
@@ -215,33 +215,33 @@
     }
 
     function download(text, filename, type) { // http://stackoverflow.com/a/40139881
-        var blob = new Blob([text], {type: (type || 'text/plain')}); // http://www.freeformatter.com/mime-types-list.html
-        var url = window.URL.createObjectURL(blob);
-        var a = document.createElement('a');
+        let blob = new Blob([text], {type: (type || 'text/plain')}); // http://www.freeformatter.com/mime-types-list.html
+        let url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
         a.href = url;
         a.download = filename;
         a.click();
     }
 
     Element.prototype.hasClass = function(cssClass) {
-        var re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
+        let re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
         if (re.test(this.className)) return true;
         return false;
     };
 
     Element.prototype.scrolledIntoView = function() {
-        var coords = this.getBoundingClientRect();
+        let coords = this.getBoundingClientRect();
         return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight));
     };
 
-    function forEach(array, callback, scope) {for (var i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
+    function forEach(array, callback, scope) {for (let i = 0; i < array.length; i++) {callback.call(scope, i, array[i]);}}
     function isVisible(element) {
-        var style = window.getComputedStyle(element);
+        let style = window.getComputedStyle(element);
         let isHidden = (style.display === 'none') || style.visibility === 'hidden';
         if (isHidden) return false;
         return element.offsetWidth > 0 || element.offsetHeight > 0 || element.getClientRects().length > 0;
     }
-    // function commentElement(element, text) {var code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
+    // function commentElement(element, text) {let code = text || element.outerHTML; element.outerHTML = ('<!-- '+code+' -->');}
     function disableElement(element, remove, array = []) {
         array = array ? array : [element];
         for (let el of array) {
@@ -281,7 +281,7 @@
         };
     };
 
-    function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId ? (' PUBLIC "' +	document.doctype.publicId.toUpperCase() + '"') : '') + (document.doctype.systemId ? (' "' + document.doctype.systemId.toUpperCase() + '"') : '') + '>';}
+    function getDoctype() {return '<!DOCTYPE ' + document.doctype.name.toUpperCase() + (document.doctype.publicId ? (' PUBLIC "' + document.doctype.publicId.toUpperCase() + '"') : '') + (document.doctype.systemId ? (' "' + document.doctype.systemId.toUpperCase() + '"') : '') + '>';}
 
     function unEscapeSpecialChars(str) {
         return str.
@@ -309,7 +309,7 @@
     };
 
     function resetAttributes(node) {
-        var clone = node.cloneNode(true);
+        let clone = node.cloneNode(true);
 
         let removeItemsArray = clone.querySelectorAll('.removeoncopy');
         if (!clone.dataset.copy) {
@@ -320,9 +320,9 @@
         };
         clone.classList.remove('removeoncopy');
 
-        var spoilerButtonsArray = clone.querySelectorAll('.spoilertop');
-        var spoilersArray = clone.querySelectorAll('.spoilerbox');
-        var thumbnailsArray = clone.querySelectorAll('.thumbnail');
+        let spoilerButtonsArray = clone.querySelectorAll('.spoilertop');
+        let spoilersArray = clone.querySelectorAll('.spoilerbox');
+        let thumbnailsArray = clone.querySelectorAll('.thumbnail');
 
         /*
         let replaceStringInAttribute = function(element, attribute, string, replace) {
@@ -336,21 +336,21 @@
 
         if (clone.hasClass('thumbnail')) thumbnailsArray = [clone];
 
-        var outputs = clone.querySelector('div#content');
-        var iframeOutput, imgOutput, outputsArray = [];
+        let outputs = clone.querySelector('div#content');
+        let iframeOutput, imgOutput, outputsArray = [];
         if (outputs) {
             iframeOutput = outputs.querySelector('#content_iframe');
             imgOutput = outputs.querySelector('#content_img');
             outputsArray.push(iframeOutput, imgOutput);
         }
-        var backgroundsArray = clone.querySelectorAll('.background');
-        var temporary = clone.querySelectorAll('.temporary');
+        let backgroundsArray = clone.querySelectorAll('.background');
+        let temporary = clone.querySelectorAll('.temporary');
 
-        var closeButton = clone.querySelector('#closeButton');
-        var nextButton = clone.querySelector('#nextButton');
-        var delButton = clone.querySelector('#delButton');
-        var prevButton = clone.querySelector('#prevButton');
-        var favButton = clone.querySelector('#favButton');
+        let closeButton = clone.querySelector('#closeButton');
+        let nextButton = clone.querySelector('#nextButton');
+        let delButton = clone.querySelector('#delButton');
+        let prevButton = clone.querySelector('#prevButton');
+        let favButton = clone.querySelector('#favButton');
 
         for (let button of [nextButton, delButton, prevButton, favButton, closeButton]) {
             if (button) {
@@ -369,9 +369,9 @@
         clone.removeAttribute('style');
         forEach(spoilerButtonsArray, function(index, self) {
             // self.removeAttribute('style');
-            // var image = self.querySelector('img'); if (image) image.remove();
-            // var text = self.querySelector('p'); if (text) text.remove();
-            //             self.outerHTML = '<!-- DELETED -->';
+            // let image = self.querySelector('img'); if (image) image.remove();
+            // let text = self.querySelector('p'); if (text) text.remove();
+            // self.outerHTML = '<!-- DELETED -->';
             smartRemove(self)
         });
         forEach(spoilersArray, function(index, self) {
@@ -380,10 +380,10 @@
         });
         forEach(thumbnailsArray, function(index, self) {
             self.removeAttribute('style');
-            var image = self.querySelector('img'); smartRemove(image); // if (image) image.remove();
-            var video = self.querySelector('video'); smartRemove(video); // if (video) video.remove();
+            let image = self.querySelector('img'); smartRemove(image); // if (image) image.remove();
+            let video = self.querySelector('video'); smartRemove(video); // if (video) video.remove();
             self.removeAttribute('onmouseover'); self.removeAttribute('onmouseout');
-            var text = self.querySelector('p'); smartRemove(text); // if (text) text.remove();
+            let text = self.querySelector('p'); smartRemove(text); // if (text) text.remove();
             removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');
             // replaceStringInAttribute(self, 'title', /\ncategories: \[.*\]/i, '')
             //
@@ -400,17 +400,17 @@
 
         if (outputs) {iframeOutput.src = ''; imgOutput.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';};
 
-        var removed = clone.querySelectorAll('.REMOVED');
+        let removed = clone.querySelectorAll('.REMOVED');
         forEach(removed, function(index, self) {
             // self.outerHTML = '<!-- DELETED -->'; /* self.remove(); */
             smartRemove(self);
         });
 
-        var linkText = clone.querySelector('#linkText');
+        let linkText = clone.querySelector('#linkText');
         smartRemove(linkText); // if (linkText) linkText.remove();
 
-        var id = clone.getAttribute('id');
-        var title = clone.dataset.title || clone.getAttribute('title');
+        let id = clone.getAttribute('id');
+        let title = clone.dataset.title || clone.getAttribute('title');
         // if (id && id == title.toCamelCase()) clone.removeAttribute('id');
         if (id && id == title.toLowerCase().replace(/[\s.]+/ig, '_')) clone.removeAttribute('id');
 
@@ -427,18 +427,18 @@
 
         forEach(clone.querySelectorAll('.ui-sortable'), function(index, self) {self.classList.remove('ui-sortable');});
 
-        var commented = clone.querySelectorAll('.COMMENTED');
+        let commented = clone.querySelectorAll('.COMMENTED');
         forEach(commented, function(index, self) {
             // removeClass(self, 'COMMENTED');
             self.classList.remove('COMMENTED')
             self.outerHTML = '<!-- '+self.outerHTML+' -->';
         });
 
-        //         clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
-        //         clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
+        // clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->[\r\n]|<!-- DELETED -->[\r\n]/g, '');
+        // clone.innerHTML = clone.innerHTML.replace(/[ \t]+<!-- DELETED -->|<!-- DELETED -->/g, '\n');
 
-        var whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi')) || '';
-        var spaces; if (whitespace) {var last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
+        let whitespace = clone.outerHTML.match(new RegExp('[ \t]+<\/'+clone.tagName+'>', 'gi')) || '';
+        let spaces; if (whitespace) {let last = whitespace.length-1; spaces = whitespace[last]; spaces = spaces.replace(new RegExp('<\/'+clone.tagName+'>', 'gi'),'');}
 
         clone.innerHTML = clone.innerHTML.replace(/(<\/div\>)(<div )/g, '$1\n'+whitespace+'\t$2');
         clone.innerHTML = clone.innerHTML.replace(/([\r\n]+[\t ]+){3,}/g, '$1$1');
@@ -466,19 +466,19 @@
     }
 
     function copyToClipboard(element) {
-        var timeLimit = 250;
-        var variables = resetAttributes(element);
-        var clone = variables[0], spaces = variables[1] || '';
-        var code = spaces + clone.outerHTML;
+        let timeLimit = 250;
+        let variables = resetAttributes(element);
+        let clone = variables[0], spaces = variables[1] || '';
+        let code = spaces + clone.outerHTML;
         code = unEscapeSpecialChars(code);
-        var clipboard = document.createElement('textarea');
+        let clipboard = document.createElement('textarea');
         clipboard.style.position = 'fixed'; clipboard.style.top = '50%'; clipboard.style.left = '50%'; clipboard.style.transform = 'translate(-50%, -50%)'; clipboard.style['z-index'] = 10;
         clipboard.style.width = '90%'; clipboard.style.height = '90%';
         document.body.appendChild(clipboard);
         function removeTextarea(){setTimeout(function(){clipboard.remove(); clone.remove();}, timeLimit);}
         function onKeyDown(e) {
             e = e || window.event;
-            var escKey = 27;
+            let escKey = 27;
             if (e.keyCode == escKey) { // Escape
                 removeTextarea();
                 e.preventDefault();
@@ -488,7 +488,7 @@
         clipboard.addEventListener('keydown', function(e){onKeyDown(e);}, false);
         code = code.replace(/#~NL~#/g, '&#10;');
         clipboard.value = code; clipboard.select(); // document.execCommand('copy');
-        var successful, msg;
+        let successful, msg;
         try {
             successful = document.execCommand('copy');
             // msg = successful ? 'successful' : 'unsuccessful';
@@ -500,15 +500,15 @@
     }
 
     function downloadCurrentDocument() {
-        var pageURL = location.href;
-        var pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1');
+        let pageURL = location.href;
+        let pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1');
         pageTitle = pageTitle.replace(/.html[?]?.*/, '') + '.html';
-        var documentClone = document.documentElement.cloneNode(true);
+        let documentClone = document.documentElement.cloneNode(true);
         documentClone = resetAttributes(documentClone)[0];
-        var documentString = getDoctype()+'\n'+documentClone.outerHTML+'\n';
+        let documentString = getDoctype()+'\n'+documentClone.outerHTML+'\n';
 
         //noinspection JSDeprecatedSymbols
-        // var base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent('HTMLEvents');
+        // let base64doc = btoa(unescape(encodeURIComponent(documentString))), a = document.createElement('a'), e = document.createEvent('HTMLEvents');
         // a.download = pageTitle; a.href = 'data:text/html;base64,' + base64doc; e.initEvent('click', false, false); a.dispatchEvent(e);
 
         documentString = documentString.replace(/<html(.*?)><head>/i, '<html$1>\n  <head>').replace(/[\s]+<\/body><\/html>/i, '\n  </body>\n</html>');
@@ -524,25 +524,25 @@
     function asArray(list) {return Array.prototype.slice.call(list);}
 
     function addGlobalStyle(css, cssClass) {
-        var head = document.getElementsByTagName('head')[0]; if (!head) {return;}
-        var style = document.createElement('style'); style.type = 'text/css'; style.innerHTML = css;
+        let head = document.getElementsByTagName('head')[0]; if (!head) {return;}
+        let style = document.createElement('style'); style.type = 'text/css'; style.innerHTML = css;
         if (cssClass) style.setAttribute('class', cssClass);
         head.appendChild(style);
     }
 
     function addClass(element, cssClass){
-        var re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
+        let re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
         if (re.test(element.className)) return;
         element.className = (element.className + ' ' + cssClass).replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
     }
 
     function removeClass(element, cssClass){
-        var re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
+        let re = new RegExp('(^|\\s)' + cssClass + '(\\s|$)', 'g');
         element.className = element.className.replace(re, '$1').replace(/\s+/g, ' ').replace(/(^ | $)/g, '');
     }
 
     function datasetAdd(element, param, value) {
-        var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
+        let re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
         if (re.test(element.dataset[param])) return;
         element.dataset[param] = element.dataset[param] ? (element.dataset[param] + ', ' + value).
         // replace(/\s+/g, ' ').
@@ -564,7 +564,7 @@
             element.removeAttribute('data-'+param);
             return;
         };
-        var re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
+        let re = new RegExp('(^|\\s)' + value + '(\\s|$)', 'g');
         element.dataset[param] = element.dataset[param].replace(re, '$1').
         // replace(/\s+/g, ' ').
         // replace(/(^ | $)/g, '').
@@ -589,16 +589,16 @@
     };
 
     String.prototype.replaceAll = function (find, replace) {
-        var str = this; while( str.indexOf(find) > -1) {str = str.replace(find, replace);}
+        let str = this; while( str.indexOf(find) > -1) {str = str.replace(find, replace);}
         return str;
     };
 
-    var undoElementsBuffer = []; // var undoChangesBuffer = [];
+    var undoElementsBuffer = []; // let undoChangesBuffer = [];
     function regUndoAction(element) {
         undoElementsBuffer.push(element); // undoChangesBuffer.push(element.outerHTML);
     }
     function undoAction() {
-        var num = undoElementsBuffer.length - 1; if (num > -1) {
+        let num = undoElementsBuffer.length - 1; if (num > -1) {
             // undoElementsBuffer[num].outerHTML = undoChangesBuffer[num];
             undoElementsBuffer[num].classList.remove('REMOVED')
             undoElementsBuffer[num].classList.remove('COMMENTED')
@@ -610,13 +610,13 @@
         }
     }
 
-    Array.prototype.contains = function(obj) {var i = this.length; while (i--) {if (this[i] === obj) {return true;}} return false;};
+    Array.prototype.contains = function(obj) {let i = this.length; while (i--) {if (this[i] === obj) {return true;}} return false;};
 
     function drawCloseButton(element, width, height, lineGaps, color) {
-        var getRealDimensions = function(element) {
-            var realWidth, realHeight;
-            var realDimensions = [];
-            var clone = element.cloneNode(true);
+        let getRealDimensions = function(element) {
+            let realWidth, realHeight;
+            let realDimensions = [];
+            let clone = element.cloneNode(true);
             clone.style.visibility = 'hidden';
             clone.style.display = 'inline';
             document.body.appendChild(clone);
@@ -628,19 +628,19 @@
             return realDimensions;
         };
 
-        var real = getRealDimensions(element);
+        let real = getRealDimensions(element);
 
         width = width || real.width || 64;
         height = height || width || real.height || 64;
 
         if (width || height) element.setAttribute('width', width || height);
         if (height || width) element.setAttribute('height', height || width);
-        var context = element.getContext('2d');
+        let context = element.getContext('2d');
         context.beginPath();
         context.lineWidth = width / 10;
 
         lineGaps = lineGaps || 0.15;
-        var lineLength = 1 - lineGaps;
+        let lineLength = 1 - lineGaps;
 
         context.moveTo(width * lineGaps, height * lineGaps);
         context.lineTo(width * lineLength, height * lineLength);
@@ -652,10 +652,10 @@
     }
 
     function drawArrow(element, width, height, lineGaps, color, angle) {
-        var getRealDimensions = function(element) {
-            var realWidth, realHeight;
-            var realDimensions = [];
-            var clone = element.cloneNode(true);
+        let getRealDimensions = function(element) {
+            let realWidth, realHeight;
+            let realDimensions = [];
+            let clone = element.cloneNode(true);
             clone.style.visibility = 'hidden';
             clone.style.display = 'inline';
             document.body.appendChild(clone);
@@ -667,19 +667,19 @@
             return realDimensions;
         };
 
-        var real = getRealDimensions(element);
+        let real = getRealDimensions(element);
 
         width = width || real.width || 64;
         height = height || width || real.height || 64;
 
         if (width || height) element.setAttribute('width', width || height);
         if (height || width) element.setAttribute('height', height || width);
-        var context = element.getContext('2d');
+        let context = element.getContext('2d');
         context.beginPath();
         context.lineWidth = width / 10;
 
         lineGaps = lineGaps || 0.15;
-        var lineLength = 1 - lineGaps;
+        let lineLength = 1 - lineGaps;
 
         context.moveTo(width*2 * lineGaps, height * lineGaps);
         context.lineTo(width*1.5 * 0.5, height * 0.5 + 3);
@@ -719,10 +719,10 @@
     // expected saturation range: [0, 1]
     // expected lightness range: [0, 1]
     function hslToRgb(hue, saturation, lightness) { // SOURCE: https://stackoverflow.com/questions/27653757/how-to-use-hsl-to-rgb-conversion-function/27663212#27663212
-        var red, green, blue;
+        let red, green, blue;
         // based on algorithm from http://en.wikipedia.org/wiki/HSL_and_HSV#Converting_to_RGB
         if (hue == undefined) return [0, 0, 0];
-        var chroma = (1 - Math.abs((2 * lightness) - 1)) * saturation,
+        let chroma = (1 - Math.abs((2 * lightness) - 1)) * saturation,
             huePrime = hue / 60,
             secondComponent = chroma * (1 - Math.abs((huePrime % 2) - 1))
         ;
@@ -733,7 +733,7 @@
         else if (huePrime === 3) {red = 0; green = secondComponent; blue = chroma;}
         else if (huePrime === 4) {red = secondComponent; green = 0; blue = chroma;}
         else if (huePrime === 5) {red = chroma; green = 0; blue = secondComponent;}
-        var lightnessAdjustment = lightness - (chroma / 2);
+        let lightnessAdjustment = lightness - (chroma / 2);
         red += lightnessAdjustment;
         green += lightnessAdjustment;
         blue += lightnessAdjustment;
@@ -742,12 +742,12 @@
     // --------------------------------------------------------------------------------
     function valToColor(percent = 100, clip = 0, saturation = 1.0, start = 0, end = 100, toRGB = 0) {
         percent = Math.min(percent, 160); end = Math.min(end, 100);
-        var a = (percent <= clip) ? 0 : (((percent - clip) / (100 - clip))),
+        let a = (percent <= clip) ? 0 : (((percent - clip) / (100 - clip))),
             b = Math.abs(end - start) * a,
             c = (end > start) ? (start + b) : (start - b);
-        var h = c, s = saturation, l = 0.5;
+        let h = c, s = saturation, l = 0.5;
         if (toRGB) {
-            var rgb = hslToRgb(h, s, l);
+            let rgb = hslToRgb(h, s, l);
             return 'rgb(' + rgb[0] + ', ' + rgb[1] + ', ' + rgb[2] + ')';
         }
         else {
@@ -757,7 +757,7 @@
     // ================================================================================
     function addHDtext(parentElement, qualityText, backGroundColor, textColor, backGroundAlpha, opactity) {
         backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
-        var mainDiv = document.createElement('div');
+        let mainDiv = document.createElement('div');
         mainDiv.setAttribute('class', 'qualityText');
         mainDiv.style.background = backGroundColor;
         mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
@@ -778,7 +778,7 @@
 
     function addHostText(parentElement, hostText, backGroundColor, textColor, backGroundAlpha, opactity) {
         backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
-        var mainDiv = document.createElement('div');
+        let mainDiv = document.createElement('div');
         mainDiv.setAttribute('class', 'hostText');
         mainDiv.style.background = backGroundColor;
         mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
@@ -804,7 +804,7 @@
 
     function addTimeText(parentElement, timeText, backGroundColor, textColor, backGroundAlpha, opactity) {
         backGroundAlpha = backGroundAlpha === 0 ? 0 : backGroundAlpha ? backGroundAlpha : 0.4;
-        var mainDiv = document.createElement('div');
+        let mainDiv = document.createElement('div');
         mainDiv.setAttribute('class', 'hostText');
         mainDiv.style.background = backGroundColor;
         mainDiv.style.background = mainDiv.style.background.replace(/rgb\((.*)\)/, 'rgba($1, '+backGroundAlpha+')');
@@ -838,7 +838,7 @@
     }
 
     function hmsToSecondsOnly(str) {
-        var p = str.split(':'),
+        let p = str.split(':'),
             s = 0, m = 1;
 
         while (p.length > 0) {
@@ -856,8 +856,8 @@
         //  option to preserve duplicate keys (e.g. 'sort=name&sort=age')
         preserveDuplicates = preserveDuplicates || false; //  disabled by default
 
-        var outputNoDupes = {};
-        var outputWithDupes = []; //  optional output array to preserve duplicate keys
+        let outputNoDupes = {};
+        let outputWithDupes = []; //  optional output array to preserve duplicate keys
 
         //  sanity check
         if(!search) throw new Error('processSearchParams: expecting "search" input parameter');
@@ -871,7 +871,7 @@
         //  separate keys from values (['foo=1', 'bar=2'] -> [{foo:1}, {bar:2}])
         //  also construct simplified outputObj
         outputWithDupes = search.map(function(keyval){
-            var out = {};
+            let out = {};
             keyval = keyval.split('=');
             out[keyval[0]] = keyval[1];
             outputNoDupes[keyval[0]] = keyval[1]; //  might as well do the no-dupe work too while we're in the loop
@@ -883,19 +883,19 @@
 
     // Break apart any path into parts
     // 'http://example.com:12345/blog/foo/bar?startIndex=1&pageSize=10' ->
-    // 	{
-    // 	"host": "example.com",
-    // 	"port": "12345",
-    // 	"search": {
-    // 		"startIndex": "1",
-    // 		"pageSize": "10"
-    // 	},
-    // 	"path": "/blog/foo/bar",
-    // 	"protocol": "http:"
+    // {
+    //   "host": "example.com",
+    //   "port": "12345",
+    //   "search": {
+    //     "startIndex": "1",
+    //     "pageSize": "10"
+    //   },
+    //   "path": "/blog/foo/bar",
+    //   "protocol": "http:"
     // }
     function getPathInfo(path) {
         //  create a link in the DOM and set its href
-        var link = document.createElement('a');
+        let link = document.createElement('a');
         link.setAttribute('href', path);
 
         //  return an easy-to-use object that breaks apart the path
@@ -917,7 +917,7 @@
     // 'use strict';
 
     /* Constructor function */
-    var Echo = function (elem) {
+    function Echo(elem) {
         this.elem = elem;
         this.render();
         this.listen();
@@ -927,14 +927,14 @@
     var echoStore = [];
 
     /* Element in viewport logic */
-    var scrolledIntoView = function (element) {
-        var coords = element.getBoundingClientRect();
+    function scrolledIntoView(element) {
+        let coords = element.getBoundingClientRect();
         return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight));
     };
 
     /* Changing src attr logic */
-    var echoSrc = function (img, callback) {
-        var imgSrc = img.dataset.echo;
+    function echoSrc(img, callback) {
+        let imgSrc = img.dataset.echo;
         if (imgSrc) {
             img.src = imgSrc;
             img.removeAttribute('data-echo');
@@ -942,10 +942,10 @@
         if (typeof callback == 'function') callback();
     };
 
-    var setThumbnailImage = function (self) {
-        var image = self.querySelector('img');
+    function setThumbnailImage(self) {
+        let image = self.querySelector('img');
         if (image) {
-            var src = image.dataset.echo;
+            let src = image.dataset.echo;
             if (src) {
                 image.setAttribute('src', src);
                 image.removeAttribute('data-echo');
@@ -954,7 +954,7 @@
     };
 
     /* Remove loaded item from array */
-    var removeEcho = function (element, index) {
+    function removeEcho(element, index) {
         if (!element.src) return;
         if (echoStore.indexOf(element) !== -1) {
             echoStore.splice(index, 1);
@@ -962,9 +962,9 @@
     };
 
     /* Echo the images and callbacks */
-    var echoImages = function () {
-        for (var i = 0; i < echoStore.length; i++) {
-            var self = echoStore[i];
+    function echoImages() {
+        for (let i = 0; i < echoStore.length; i++) {
+            let self = echoStore[i];
             if (scrolledIntoView(self)) {
                 echoSrc(self, removeEcho(self, i));
                 self.parentNode.classList.add('ui-handle');
@@ -977,14 +977,14 @@
         init : function () {
             echoStore.push(this.elem);
         },
-        render : function () {
+        render: function () {
             if (document.addEventListener) {
                 document.addEventListener('DOMContentLoaded', echoImages, false);
             } else {
                 window.onload = echoImages;
             }
         },
-        listen : function () {
+        listen: function () {
             window.onscroll = echoImages;
         }
     };
@@ -993,7 +993,7 @@
     function initLazyLoad(lazyImgs) {
         echoStore = [];
         lazyImgs = lazyImgs || document.querySelectorAll('img[data-echo]');
-        for (var i = 0; i < lazyImgs.length; i++) {
+        for (let i = 0; i < lazyImgs.length; i++) {
             new Echo(lazyImgs[i]).init();
         }
         echoImages();
@@ -1006,7 +1006,7 @@
         function mouseScroll(e) {
             // cross-browser wheel delta
             e = window.event || e; // old IE support
-            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+            let delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
             // console.log(e);
             if (delta > 0) {
                 onF();
@@ -1035,63 +1035,63 @@
     }
 
     function splitOnParts(element, childrenSelector, splitCount) {
-        var children = element.querySelectorAll(childrenSelector);
-        var childrenCount = children.length;
-        var iterations = Math.ceil(childrenCount / splitCount);
+        let children = element.querySelectorAll(childrenSelector);
+        let childrenCount = children.length;
+        let iterations = Math.ceil(childrenCount / splitCount);
         if (iterations > 1) {
-            var iteration = 1, num = 1;
-            for (var i = 0; i < children.length; ++i) {
-                var clone;
+            let clone;
+            let iteration = 1, num = 1;
+            for (let child of children) {
                 if (num == 1) {
                     clone = element.parentNode.insertBefore(element.cloneNode(false), element);
                     clone.dataset.title += ' pt'+(iteration);
                 }
                 if (num == splitCount) {
-                    num = 0; ++iteration;
+                    num = 0;
+                    ++iteration;
                 }
-                var child = children[i];
                 clone.appendChild(child);
-                num = num+1;
+                ++num;
             }
             element.remove();
         }
     }
 
     /*
-	function joinParts(spoilersArray) {
-		var storage = {};
-		forEach(spoilersArray, function(index, spoiler) {
-			var title = spoiler.title;
-			var match = title.match(/(.*) pt\d+/);
-			if (match) {
-				var name = match[1];
-				if (!storage[name]) {
-					spoiler.title = name;
-					storage[name] = spoiler;
-				}
-				else {
-					var children = spoiler.childNodes;
-					for (var i = 0; i < children.length; ++i) {
-						var child = children[i];
-						storage[name].appendChild(child);
-					}
-					spoiler.remove();
-					var spoilerButton = document.querySelector('.spoilertop[title="'+title+'"');
-					if (spoilerButton) spoilerButton.remove();
-					console.log('.spoilertop[title="'+title+'"');
-				}
-				console.log(children);
-			}
-		});
-		console.log(storage);
-	}
-	*/
+    function joinParts(spoilersArray) {
+        let storage = {};
+        forEach(spoilersArray, function(index, spoiler) {
+            let title = spoiler.title;
+            let match = title.match(/(.*) pt\d+/);
+            if (match) {
+                let name = match[1];
+                if (!storage[name]) {
+                    spoiler.title = name;
+                    storage[name] = spoiler;
+                }
+                else {
+                    let children = spoiler.childNodes;
+                    for (let i = 0; i < children.length; ++i) {
+                        let child = children[i];
+                        storage[name].appendChild(child);
+                    }
+                    spoiler.remove();
+                    let spoilerButton = document.querySelector('.spoilertop[title="'+title+'"');
+                    if (spoilerButton) spoilerButton.remove();
+                    console.log('.spoilertop[title="'+title+'"');
+                }
+                console.log(children);
+            }
+        });
+        console.log(storage);
+    }
+    */
 
     function documentOnReady() {
         // GLOBAL VARIABLES
-        var wallpaperVideo = document.querySelector('video#wallpapers');
-        // var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop'); // moved down
-        var spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
+        let wallpaperVideo = document.querySelector('video#wallpapers');
+        // let spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop'); // moved down
+        let spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
 
         forEach(spoilersArray, function(index, spoiler) {
             let splitCount = 250; // default
@@ -1109,37 +1109,37 @@
 
         spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
 
-        var thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
-        var outputs = document.getElementById('content');
-        var outputsArray = [];
-        var iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
-        var iframeOutputReset = {};
-        //         iframeOutputReset.width = iframeOutput.width;
-        //         iframeOutputReset.height = iframeOutput.height;
+        let thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
+        let outputs = document.getElementById('content');
+        let outputsArray = [];
+        let iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
+        let iframeOutputReset = {};
+        // iframeOutputReset.width = iframeOutput.width;
+        // iframeOutputReset.height = iframeOutput.height;
         outputsArray.push(iframeOutput, imgOutput, objectOutput);
-        var objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
-        var galleryList = [];
-        var activeSpoilerButton, activeSpoiler, activeThumbnail, activeOutput;
-        var backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
-        var outputsMinimized;
-        // var activeContent;
-        var changeContentOffset;
+        let objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
+        let galleryList = [];
+        let activeSpoilerButton, activeSpoiler, activeThumbnail, activeOutput;
+        let backgroundsArray = document.querySelectorAll('.background'); backgroundsArray = asArray(backgroundsArray);
+        let outputsMinimized;
+        // let activeContent;
+        let changeContentOffset;
 
-        var galleries = document.querySelector('#galleries');
+        let galleries = document.querySelector('#galleries');
 
-        var closeButton = document.querySelector('#closeButton');
+        let closeButton = document.querySelector('#closeButton');
         drawCloseButton(closeButton, null, null, null, 'rgba(16, 16, 16, 0.75)', null);
 
-        var nextButton = document.querySelector('#nextButton');
+        let nextButton = document.querySelector('#nextButton');
         drawArrow(nextButton, null, null, null, 'white', null);
-        var delButton = document.querySelector('#delButton');
+        let delButton = document.querySelector('#delButton');
         drawCloseButton(delButton, null, null, null, 'rgba(255, 0, 0, 0.75)', null);
-        var prevButton = document.querySelector('#prevButton');
+        let prevButton = document.querySelector('#prevButton');
         drawArrow(prevButton, null, null, null, 'white', null);
-        var favButton = document.querySelector('#favButton');
+        let favButton = document.querySelector('#favButton');
         if (favButton) drawArrow(favButton, null, null, null, 'rgba(64, 255, 64, 0.75)', null);
 
-        var linkText = document.querySelector('#linkText');
+        let linkText = document.querySelector('#linkText');
         if (!linkText) {
             linkText = document.createElement('p');
             linkText.setAttribute('id', 'linkText');
@@ -1148,22 +1148,22 @@
 
         // DOCUMENT FUNCTIONS
         function updateURL() {
-            // var params = getParams();
+            // let params = getParams();
             delete params.tab;
             // console.log('activeSpoilerButton: '+activeSpoilerButton);
             if (activeSpoilerButton) {
-                var title = activeSpoilerButton.querySelector('p');
+                let title = activeSpoilerButton.querySelector('p');
                 if (title) {
-                    var titleText = title.innerText.trim();
+                    let titleText = title.innerText.trim();
                     titleText = encodeURIComponent(titleText);
                     params.tab = titleText;
                 }
             }
-            var options = "";
-            var i = 0;
-            for (var key in params) {
+            let options = "";
+            let i = 0;
+            for (let key in params) {
                 i++;
-                var val = params[key];
+                let val = params[key];
                 if (i == 1) options = options + "?";
                 else if (i > 1) options = options + "&";
                 options = options + (key + "=" + val);
@@ -1171,7 +1171,7 @@
                 // console.log('val: '+val);
                 // console.log('options: '+options);
             }
-            var path = parent.location.pathname + options;
+            let path = parent.location.pathname + options;
             // console.log('path: '+path);
             history.pushState(parent.location.pathname, "", path);
         }
@@ -1199,12 +1199,15 @@
         }
 
         function appendFlashVars(source, info) {
-            var i, flashvars, existingVars;
+            let i, flashvars, existingVars;
             if (source.match('https://www.youtube.com/embed/')) {
                 flashvars = [
-                    'autoplay=1',		// Enable Autoplay
-                    'hd=1',				// Watch in HD
-                    'iv_load_policy=3'	// Disable Annotations
+                    // Enable Autoplay
+                    'autoplay=1',
+                    // Watch in HD
+                    'hd=1',
+                    // Disable Annotations
+                    'iv_load_policy=3'
                 ];
                 existingVars = '';
                 if (source.match(/[?].*/i)) {
@@ -1258,20 +1261,20 @@
             };
             activeOutput = null;
             //
-            //             iframeOutput.width = iframeOutputReset.width;
-            //             iframeOutput.height = iframeOutputReset.height;
+            // iframeOutput.width = iframeOutputReset.width;
+            // iframeOutput.height = iframeOutputReset.height;
         }
 
         function showContent(thisThumbnail, thumbnailsArray) {
             if (wallpaperVideo) wallpaperVideo.pause();
-            var output = thisThumbnail.dataset.output;
+            let output = thisThumbnail.dataset.output;
 
-            var player = thisThumbnail.dataset.player;
-            var outputAttr = thisThumbnail.dataset.attribute || 'src';
-            var flashvars = thisThumbnail.dataset.flashvars || '';
+            let player = thisThumbnail.dataset.player;
+            let outputAttr = thisThumbnail.dataset.attribute || 'src';
+            let flashvars = thisThumbnail.dataset.flashvars || '';
 
-            var content = thisThumbnail.dataset.content || thisThumbnail.dataset.image;
-            var contentHost = getPathInfo(content).host.replace(/^www\./, '');
+            let content = thisThumbnail.dataset.content || thisThumbnail.dataset.image;
+            let contentHost = getPathInfo(content).host.replace(/^www\./, '');
             if (G_reCastHosts.includes(contentHost)) {
                 content = thisThumbnail.dataset.url;
                 if (!content.match(/#ReCast\b/)) {
@@ -1288,7 +1291,7 @@
             }
 
             buttonClicked(thisThumbnail, thumbnailsArray);
-            var outputFrame = outputs.querySelector(output);
+            let outputFrame = outputs.querySelector(output);
 
             content = appendFlashVars(content, player);
 
@@ -1307,12 +1310,12 @@
                         content = content + '?autoplay=true';
                     };
                 }
-                //                 else if (content.match(/[?]/)) {
+                // else if (content.match(/[?]/)) {
                 content = content + '#autoplay=true';
-                //                 }
-                //                 else {
-                //                     content = content + '?autoplay=true';
-                //                 };
+                // }
+                // else {
+                // content = content + '?autoplay=true';
+                // };
             }
             else {
                 content = content + '#autoplay=true';
@@ -1329,12 +1332,12 @@
             let qualityLimit = parseInt(thisThumbnail.dataset.qualityLimit);
             if (qualityLimit) {
                 content = content + '&qualityLimit=' + qualityLimit;
-                //                 alert(qualityLimit);
+                // alert(qualityLimit);
             }
             let reflect = thisThumbnail.dataset.reflect;
             if (reflect) {
                 content = content + '&reflect=' + reflect;
-                //                  alert(content);
+                // alert(content);
             }
             /*
             let contentSize = thisThumbnail.dataset.quality;
@@ -1342,11 +1345,11 @@
                 contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
                 let quality = contentSize ? contentSize[1]*contentSize[2] : null;
                 if (quality) {
-                    //                     const percent = quality/(1900*1080) * 100;
-                    //                     let actualQuality = parseInt(contentSize[2]);
-                    //                     if (qualityLimit && actualQuality > qualityLimit*1.1) {
-                    //                         actualQuality = qualityLimit;
-                    //                     };
+                    // const percent = quality/(1900*1080) * 100;
+                    // let actualQuality = parseInt(contentSize[2]);
+                    // if (qualityLimit && actualQuality > qualityLimit*1.1) {
+                    // actualQuality = qualityLimit;
+                    // };
                     if (output == 'iframe') {
                         let scale = Math.min(Math.max(quality/(iframeOutputReset.width*iframeOutputReset.height) * 100, 50), 100);
                         iframeOutput.width = parseInt(iframeOutputReset.width * scale / 100);
@@ -1357,7 +1360,7 @@
             */
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
             console.log('content: '+content);
-            var active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
+            let active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
             if (active) {buttonClicked(thisThumbnail, thumbnailsArray, true); resetContentOutputs();} else {
                 resetContentOutputs();
                 setTimeout(function(){
@@ -1366,7 +1369,7 @@
                         objectFlashvars.value = flashvars + content;
                     } else {
                         if (content.match(/\b#ReCast\b.*/)) {
-                            /* var popUpWin */ G_activePopUpWin = popItUp(content, 'PopUpWin', 0);
+                            /* let popUpWin */ G_activePopUpWin = popItUp(content, 'PopUpWin', 0);
                             // G_activePopUpWin = popUpWin;
                         }
                         else {
@@ -1392,51 +1395,51 @@
         }
 
         function createGalleryList(gallery) {
-            var galleryList = [];
-            var thumbnails = gallery.querySelectorAll('.thumbnail');
-            // forEach(thumbnails, function(index, self) {if (isVisible(self)) {var content = self.dataset.content; content = appendFlashVars(content); galleryList.push(content);}});
+            let galleryList = [];
+            let thumbnails = gallery.querySelectorAll('.thumbnail');
+            // forEach(thumbnails, function(index, self) {if (isVisible(self)) {let content = self.dataset.content; content = appendFlashVars(content); galleryList.push(content);}});
             forEach(thumbnails, function(index, self) {if (isVisible(self)) galleryList.push(self);});
             return galleryList;
         }
 
         function changeContent(galleryList, delta) {
             /*
-			if (activeOutput) {
-				// global activeContent
-				var galleryContent = galleryList[galleryList.indexOf(activeContent) + (delta || 1)] || galleryList[delta ? galleryList.length - 1 : 0];
-				var activeThumbnailsArray = activeSpoiler.querySelectorAll('.thumbnail');
-				var matched;
-				forEach(activeThumbnailsArray, function(index, self) {
-					if (!matched) {
-						var content = self.dataset.content;
-						content = appendFlashVars(content);
-						matched = (content == galleryContent && self !== activeThumbnail);
-						if (matched) self.click();
-					}
-				});
-			}
-			*/
             if (activeOutput) {
-                var galleryThumbnail = galleryList[galleryList.indexOf(activeThumbnail) + (delta || 1)] || galleryList[delta ? galleryList.length - 1 : 0];
+                // global activeContent
+                let galleryContent = galleryList[galleryList.indexOf(activeContent) + (delta || 1)] || galleryList[delta ? galleryList.length - 1 : 0];
+                let activeThumbnailsArray = activeSpoiler.querySelectorAll('.thumbnail');
+                let matched;
+                forEach(activeThumbnailsArray, function(index, self) {
+                    if (!matched) {
+                        let content = self.dataset.content;
+                        content = appendFlashVars(content);
+                        matched = (content == galleryContent && self !== activeThumbnail);
+                        if (matched) self.click();
+                    }
+                });
+            }
+            */
+            if (activeOutput) {
+                let galleryThumbnail = galleryList[galleryList.indexOf(activeThumbnail) + (delta || 1)] || galleryList[delta ? galleryList.length - 1 : 0];
                 galleryThumbnail.click();
                 activeThumbnail = galleryThumbnail; // double-check
             }
         }
 
         function findDuplicates(activeThumbnails) {
-            var contentsList = [];
-            var duplicatesList = [];
+            let contentsList = [];
+            let duplicatesList = [];
             forEach(activeThumbnails, function(index, self) {removeClass(self, 'duplicate_1'); removeClass(self, 'duplicate_2');});
             forEach(activeThumbnails, function(index, self) {
                 if (isVisible(self)) {
-                    var imageSrc = self.dataset.image; var contentSrc = self.dataset.content; var img = contentSrc || imageSrc;
+                    let imageSrc = self.dataset.image; let contentSrc = self.dataset.content; let img = contentSrc || imageSrc;
                     if (contentsList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_2'); duplicatesList.push(img);}
                     if (contentSrc) contentsList.push(img); // to find duplicates
                 }
             });
             forEach(activeThumbnails, function(index, self) {
                 if (isVisible(self)) {
-                    var imageSrc = self.dataset.image; var contentSrc = self.dataset.content; var img = contentSrc || imageSrc;
+                    let imageSrc = self.dataset.image; let contentSrc = self.dataset.content; let img = contentSrc || imageSrc;
                     if (duplicatesList.indexOf(contentSrc) != -1) {addClass(self, 'duplicate_1');}
                 }
             });
@@ -1460,7 +1463,7 @@
         };
 
         function showSpoiler(thisButton, spoiler) {
-            var active = isVisible(spoiler);
+            let active = isVisible(spoiler);
             buttonClicked(thisButton, spoilerButtonsArray);
             forEach(spoilersArray, function(index, self) {self.style.removeProperty('display');});
             if (active) {
@@ -1471,19 +1474,19 @@
             }
             else {
                 spoiler.style.display = 'block';
-                var lazyImagesArray = [];
-                var activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
-                    var image = self.querySelector('img');
-                    var imageSrc = self.dataset.image;
-                    var video = self.querySelector('video');
-                    var videoSrc = self.dataset.video;
-                    var contentSrc = self.dataset.content;
-                    var contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
-                    var contentSize = self.dataset.quality;
-                    var qualityLimit = parseInt(self.dataset.qualityLimit);
-                    var duration = self.dataset.duration;
-                    var text /*, title = self.dataset.title*/;
-                    var title = self.getAttribute('title');
+                let lazyImagesArray = [];
+                let activeThumbnails = spoiler.querySelectorAll('.thumbnail'); forEach(activeThumbnails, function(index, self) {
+                    let image = self.querySelector('img');
+                    let imageSrc = self.dataset.image;
+                    let video = self.querySelector('video');
+                    let videoSrc = self.dataset.video;
+                    let contentSrc = self.dataset.content;
+                    let contentHost = getPathInfo(self.dataset.content).host.replace(/^www\./, '');
+                    let contentSize = self.dataset.quality;
+                    let qualityLimit = parseInt(self.dataset.qualityLimit);
+                    let duration = self.dataset.duration;
+                    let text /*, title = self.dataset.title*/;
+                    let title = self.getAttribute('title');
                     if (title) {
                         self.setAttribute('data-title', title);
                     };
@@ -1491,7 +1494,7 @@
                     title = self.dataset.title;
                     let categories = self.dataset.categories;
                     let categoriesArray = categories ? categories.split(',') : [];
-                    var tooltip = self.querySelector('.tooltip');
+                    let tooltip = self.querySelector('.tooltip');
                     if (!image) {
                         if (imageSrc || contentSrc) {
                             image = document.createElement('img');
@@ -1563,15 +1566,15 @@
                         }
                         if (contentSize) {
                             contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
-                            var quality = contentSize ? contentSize[1]*contentSize[2] : null;
+                            let quality = contentSize ? contentSize[1]*contentSize[2] : null;
                             if (quality) {
-                                var color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
+                                let color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
                                 if (text) text.style.color = color;
                                 let actualQuality = parseInt(contentSize[2]);
                                 if (qualityLimit && actualQuality > qualityLimit*1.1) {
                                     actualQuality = qualityLimit;
                                 }
-                                //                                 alert(`qualityLimit = ${qualityLimit} (${actualQuality})`);
+                                // alert(`qualityLimit = ${qualityLimit} (${actualQuality})`);
                                 addHDtext(self, actualQuality+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                             }
                         }
@@ -1621,7 +1624,7 @@
         String.prototype.Num = function(){return this.match(/\d+/);};
 
         function initPromptFrame(reset) {
-            var promptFrame = document.getElementById('promptFrame');
+            let promptFrame = document.getElementById('promptFrame');
             if (promptFrame) promptFrame.remove();
 
             promptFrame = document.createElement('div');
@@ -1641,10 +1644,10 @@
             promptFrame.setAttribute('id', 'promptFrame');
             document.body.appendChild(promptFrame);
 
-            var labelWidth = '20%';
-            var inputWidth = promptFrame.style.width.Num()*0.8 - 5 + 'px';
+            let labelWidth = '20%';
+            let inputWidth = promptFrame.style.width.Num()*0.8 - 5 + 'px';
 
-            var label = document.createElement('label');
+            let label = document.createElement('label');
             label.innerText = 'ÐÐ´ÑÐµÑ Ð¿Ð¾ÑÐ¾ÐºÐ°:';
             label.style.width = labelWidth;
             label.style.float = 'left';
@@ -1652,7 +1655,7 @@
             label.style.color='black';
             promptFrame.appendChild(label);
 
-            var promptFrameContent = document.createElement('input');
+            let promptFrameContent = document.createElement('input');
             promptFrameContent.style.width = inputWidth;
             promptFrameContent.style.float = 'right';
             promptFrameContent.style.margin='2px 0px';
@@ -1668,7 +1671,7 @@
             label.style.color='#BFBFBF';
             promptFrame.appendChild(label);
 
-            var promptFrameImage = document.createElement('input');
+            let promptFrameImage = document.createElement('input');
             promptFrameImage.style.width = inputWidth;
             promptFrameImage.style.float = 'right';
             promptFrameImage.style.margin='2px 0px';
@@ -1684,7 +1687,7 @@
             label.style.color='#BFBFBF';
             promptFrame.appendChild(label);
 
-            var promptFrameTitle = document.createElement('input');
+            let promptFrameTitle = document.createElement('input');
             promptFrameTitle.style.width = inputWidth;
             promptFrameTitle.style.float = 'right';
             promptFrameTitle.style.margin='2px 0px';
@@ -1700,7 +1703,7 @@
             label.style.color='#BFBFBF';
             promptFrame.appendChild(label);
 
-            var promptFrameSourcePage = document.createElement('input');
+            let promptFrameSourcePage = document.createElement('input');
             promptFrameSourcePage.style.width = inputWidth;
             promptFrameSourcePage.style.float = 'right';
             promptFrameSourcePage.style.margin='2px 0px';
@@ -1717,7 +1720,7 @@
             label.style.display='block';
             promptFrame.appendChild(label);
 
-            var promptFrameCode = document.createElement('textarea');
+            let promptFrameCode = document.createElement('textarea');
             promptFrameCode.style.display='block';
             promptFrameCode.style.width = '500px';
             // promptFrameCode.style.maxHeight = '100px';
@@ -1728,7 +1731,7 @@
             promptFrameCode.rows = '7';
             promptFrame.appendChild(promptFrameCode);
 
-            var okButton = document.createElement('button');
+            let okButton = document.createElement('button');
             okButton.style.display='block';
             okButton.style.width = '80px';
             okButton.style.height = '20px';
@@ -1737,7 +1740,7 @@
             okButton.innerText = 'OK';
             promptFrame.appendChild(okButton);
 
-            var cancelButton = document.createElement('button');
+            let cancelButton = document.createElement('button');
             cancelButton.style.display='block';
             cancelButton.style.width = '80px';
             cancelButton.style.height = '20px';
@@ -1746,7 +1749,7 @@
             cancelButton.innerText = 'ÐÑÐ¼ÐµÐ½Ð°';
             promptFrame.appendChild(cancelButton);
 
-            var promptFramePlayers = document.createElement('select');
+            let promptFramePlayers = document.createElement('select');
             promptFramePlayers.style.width = '200px';
             promptFramePlayers.style.height = '30px';
             promptFramePlayers.style.float = 'left';
@@ -1754,24 +1757,24 @@
             promptFramePlayers.style.padding='5px';
             promptFrame.appendChild(promptFramePlayers);
 
-            var options = ['ÐÑÐ¾Ð¸Ð³ÑÑÐ²Ð°ÑÐµÐ»Ñ', 'StrobeMediaPlayback.swf', 'uppod.swf'];
-            var num; for (num = 0; num < options.length; ++num) {
-                var selectOption = document.createElement('option');
+            let options = ['ÐÑÐ¾Ð¸Ð³ÑÑÐ²Ð°ÑÐµÐ»Ñ', 'StrobeMediaPlayback.swf', 'uppod.swf'];
+            let num; for (num = 0; num < options.length; ++num) {
+                let selectOption = document.createElement('option');
                 selectOption.text = options[num];
                 if (num === 0) {selectOption.value = '';} else {selectOption.value = options[num];}
                 promptFramePlayers.appendChild(selectOption);
             }
 
-            var content, thumbnail, pageURL, title, code;
+            let content, thumbnail, pageURL, title, code;
 
-            var resetInputs = function() {
+            let resetInputs = function() {
                 promptFrameContent.value = ''; promptFrameImage.value = ''; promptFrameTitle.value = ''; promptFrameSourcePage.value = '';
                 promptFrameCode.value = '<div class="thumbnail" title="" image="" content="" url=""></div>';
             };
 
             resetInputs();
 
-            var getEmbedCode = function() {
+            let getEmbedCode = function() {
                 content = promptFrameContent.value.trim();
                 thumbnail = (promptFrameImage.value || '').trim();
                 pageURL = (promptFrameSourcePage.value || '').trim();
@@ -1780,9 +1783,9 @@
 
                 title = title.Capitalize();
 
-                var player = promptFramePlayers.value;
+                let player = promptFramePlayers.value;
 
-                var embedCode = '<div class="thumbnail"';
+                let embedCode = '<div class="thumbnail"';
                 if (content !== pageURL) embedCode += ' title="'+title+'"';
                 if (thumbnail && thumbnail !== content) embedCode += ' image="'+thumbnail+'"';
                 embedCode += ' content="'+content+'"';
@@ -1793,7 +1796,7 @@
                 return embedCode;
             };
 
-            var fillFields = function() {
+            let fillFields = function() {
                 // <div class="thumbnail" title="" image="" content="" url=""></div>
                 promptFrameContent.value = promptFrameCode.value.replace(/.*content="(.*?)".*/i, '$1');
                 promptFrameImage.value = promptFrameCode.value.replace(/.*image="(.*?)".*/i, '$1');
@@ -1801,11 +1804,11 @@
                 promptFrameTitle.value = promptFrameCode.value.replace(/.*title="(.*?)".*/i, '$1');
             };
 
-            var timesClicked = 0;
-            var promptFrameSubmit = function() {
+            let timesClicked = 0;
+            let promptFrameSubmit = function() {
                 if (!activeSpoiler || timesClicked > 0) return false;
 
-                var refreshSpoiler = function() {
+                let refreshSpoiler = function() {
                     thumbnailsArray = document.querySelectorAll('#previews > .spoilerbox > .thumbnail');
                     forEach(thumbnailsArray, function(index, self) {
                         self.addEventListener('click', function(){showContent(self, thumbnailsArray);}, false);
@@ -1813,9 +1816,9 @@
                     activeSpoilerButton.click(); activeSpoilerButton.click();
                 };
 
-                var embedCode = getEmbedCode();
+                let embedCode = getEmbedCode();
                 if (content && content.match(/:\/\//i) && code.match(/^<div.*<\/div>$/i)) {
-                    var newElement = document.createElement('div');
+                    let newElement = document.createElement('div');
                     activeSpoiler.appendChild(document.createTextNode('\n'));
                     activeSpoiler.appendChild(newElement);
                     newElement.outerHTML = embedCode;
@@ -1825,15 +1828,15 @@
                 }
             };
 
-            var promptFrameCancel = function() {
+            let promptFrameCancel = function() {
                 promptFrame.remove();
             };
 
-            var onKeyPress = function(target, e) {
+            let onKeyPress = function(target, e) {
                 e = e || window.event;
 
-                var enterKey = 13, escKey = 27;
-                // var ctrlDown = e.ctrlKey||e.metaKey; // Mac support
+                let enterKey = 13, escKey = 27;
+                // let ctrlDown = e.ctrlKey||e.metaKey; // Mac support
 
                 if (e.keyCode == escKey) { // Escape
                     promptFrameCancel();
@@ -1852,8 +1855,8 @@
                 }
             };
 
-            var eventList = ['keydown', 'keyup'];
-            var inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFramePlayers, okButton];
+            let eventList = ['keydown', 'keyup'];
+            let inputList = [promptFrameContent, promptFrameImage, promptFrameSourcePage, promptFrameTitle, promptFrameCode, promptFramePlayers, okButton];
 
             inputList.forEach(function(input){
                 eventList.forEach(function(event){
@@ -1862,8 +1865,8 @@
             });
 
             // inputList.forEach(function(input){
-            //	 input.onkeydown = function(e){onKeyPress(input, e);};
-            //	 input.onkeyup = function(e){onKeyPress(input, e);};
+            //   input.onkeydown = function(e){onKeyPress(input, e);};
+            //   input.onkeyup = function(e){onKeyPress(input, e);};
             // });
 
             promptFramePlayers.addEventListener('click', function(){promptFrameCode.value = getEmbedCode();}, false);
@@ -1877,15 +1880,15 @@
         function onKeyDown(e, code) {
             e = e || window.event;
 
-            var ctrlDown = e.ctrlKey || e.metaKey; // Mac support
-            var shiftDown = !!window.event.shiftKey;
+            let ctrlDown = e.ctrlKey || e.metaKey; // Mac support
+            let shiftDown = !!window.event.shiftKey;
 
-            var targetType = e.target.tagName.toLowerCase();
+            let targetType = e.target.tagName.toLowerCase();
 
             if (code) e.keyCode = code;
 
             if (!(targetType == 'input' || targetType == 'textarea')) {
-                var hovered = (activeSpoiler && activeThumbnail) ? activeThumbnail : (activeSpoiler ? activeSpoiler.querySelector('.thumbnail:hover') : null);
+                let hovered = (activeSpoiler && activeThumbnail) ? activeThumbnail : (activeSpoiler ? activeSpoiler.querySelector('.thumbnail:hover') : null);
 
                 if (e.keyCode == KEY_ESCAPE) { // Escape
                     hideContent();
@@ -1928,7 +1931,7 @@
                     e.preventDefault();
                 }
                 else if (e.keyCode == KEY_Q) {
-                    var buttonTextShow = document.head.querySelector('style.buttonTextShow');
+                    let buttonTextShow = document.head.querySelector('style.buttonTextShow');
                     if (buttonTextShow) {buttonTextShow.remove();}
                     else {addGlobalStyle('.spoilertop > p, .thumbnail > p, #linkText {display: block;}', 'temporary buttonTextShow');}
                     e.preventDefault();
@@ -1939,7 +1942,7 @@
                     // } else if (activeSpoiler && hovered && ctrlDown && e.keyCode == eKey) {
                 }
                 else if (activeSpoiler && hovered && e.keyCode == KEY_O) {
-                    var url = hovered.dataset.url;
+                    let url = hovered.dataset.url;
                     if (url) window.open(url,'_blank');
                     e.preventDefault();
                 }
@@ -1958,7 +1961,7 @@
                     e.preventDefault();
                 }
                 else if (hovered && (ctrlDown && e.keyCode == KEY_F)) { // Control + F
-                    var title = hovered.getAttribute('title') || hovered.getAttribute('alt');
+                    let title = hovered.getAttribute('title') || hovered.getAttribute('alt');
                     if (title) window.open('https://encrypted.google.com/webhp#q='+title,'_blank');
                     e.preventDefault();
                 }
@@ -1978,11 +1981,11 @@
         window.addEventListener('keydown', function(e){onKeyDown(e);}, false);
 
         // /*
-        var previews = document.querySelector('#previews');
+        let previews = document.querySelector('#previews');
         thumbnailsArray = document.querySelectorAll('.thumbnail');
         forEach(thumbnailsArray, function(index, self) {
-            var thisThumbnail = self;
-            var categories = self.dataset.categories;
+            let thisThumbnail = self;
+            let categories = self.dataset.categories;
             if (categories) {
                 categories = categories.trim().
                 replace(/\s+,/g, ',').
@@ -1995,19 +1998,19 @@
                 self.dataset.categories = categories;
                 // alert(categories);
                 // self.title = self.title + '\nCategories: [' + self.dataset.categories /*.toTitleCase()*/ + ']';
-                // var categoriesArray = categories.split(',')
+                // let categoriesArray = categories.split(',')
                 let categoriesArray = categories ? categories.split(',') : [];
                 forEach(categoriesArray, function(index, self) {
-                    var category = self.trim();
+                    let category = self.trim();
                     if (category.length > 0) {
                         let matched = false;
                         if (category.match(/^\s*M:/)) {
                             category = category.replace(/^\s*M:/, '').trim();
                             matched = 'model';
                         };
-                        var title = category.replace(/\s+/i, ' ').Capitalize();
-                        var id = 'category-' + category.toLowerCase().replace(/[\s.()]+/ig, '_');
-                        var newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
+                        let title = category.replace(/\s+/i, ' ').Capitalize();
+                        let id = 'category-' + category.toLowerCase().replace(/[\s.()]+/ig, '_');
+                        let newSpoiler = document.querySelector('#previews > .spoilerbox#' + id);
                         // console.log(id);
                         if (!newSpoiler) {
                             newSpoiler = document.createElement('div');
@@ -2056,31 +2059,31 @@
         // joinParts(spoilersArray); spoilersArray = document.querySelectorAll('#previews > .spoilerbox');
 
         forEach(spoilersArray, function(index, self) {
-            var imageSrc = self.dataset.image;
-            var title = self.getAttribute('title');
+            let imageSrc = self.dataset.image;
+            let title = self.getAttribute('title');
             if (title) {
                 self.setAttribute('data-title', title);
             };
             self.removeAttribute('title');
             title = self.dataset.title;
 
-            var style = self.getAttribute('style');
+            let style = self.getAttribute('style');
 
-            var spoilerId = self.getAttribute('id');
+            let spoilerId = self.getAttribute('id');
             if (!spoilerId) {
                 spoilerId = title ? title.toLowerCase().replace(/[\s.]+/ig, '_')/*.toCamelCase()*/ : null;
                 self.setAttribute('id', spoilerId);
             }
-            var allowBackground = self.dataset.background; if (allowBackground && allowBackground == 'yes') {var background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild); backgroundsArray.push(background);}
-            var thumbnailsStyle = self.dataset.css; if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoilerId+' > .thumbnail {'+thumbnailsStyle+'}', 'temporary');}
-            var lazyImagesArray = [];
-            var createButton = function() {
-                var spoiler = self;
-                var spoilerButton = document.createElement('div');
+            let allowBackground = self.dataset.background; if (allowBackground && allowBackground == 'yes') {let background = document.createElement('div'); background.setAttribute('class', 'background'); self.insertBefore(background, self.firstChild); backgroundsArray.push(background);}
+            let thumbnailsStyle = self.dataset.css; if (thumbnailsStyle && thumbnailsStyle !== '') {addGlobalStyle('#'+spoilerId+' > .thumbnail {'+thumbnailsStyle+'}', 'temporary');}
+            let lazyImagesArray = [];
+            let createButton = function() {
+                let spoiler = self;
+                let spoilerButton = document.createElement('div');
                 spoilerButton.setAttribute('class', 'spoilertop');
-                var image = spoilerButton.querySelector('img');
-                var text = spoilerButton.querySelector('p');
-                var tooltip = spoilerButton.querySelector('.tooltip');
+                let image = spoilerButton.querySelector('img');
+                let text = spoilerButton.querySelector('p');
+                let tooltip = spoilerButton.querySelector('.tooltip');
                 if (!image) {
                     if (imageSrc) {
                         image = document.createElement('img');
@@ -2100,13 +2103,13 @@
                             spoilerButton.appendChild(tooltip);
                         };
                     }
-                    var contentSize = spoilerButton.dataset.quality;
+                    let contentSize = spoilerButton.dataset.quality;
                     if (title) contentSize = contentSize || title;
                     if (contentSize) {
                         contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
-                        var quality = contentSize ? contentSize[1]*contentSize[2] : null;
+                        let quality = contentSize ? contentSize[1]*contentSize[2] : null;
                         if (quality) {
-                            var color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
+                            let color = valToColor(quality/(1900*1080) * 100, 1, 1.0, 0, 100, 1);
                             if (text) text.style.color = color;
                             addHDtext(spoilerButton, contentSize[2]+'p', color, 'rgba(255, 255, 255, 1)', 0.4, 0.5);
                         }
@@ -2135,7 +2138,7 @@
             initLazyLoad(lazyImagesArray);
         });
 
-        var spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
+        let spoilerButtonsArray = document.querySelectorAll('#galleries > .spoilertop');
 
         forEach(thumbnailsArray, function(index, self) {
             self.addEventListener('click', function(){showContent(self, thumbnailsArray);}, false);
@@ -2156,7 +2159,7 @@
         addMouseWheelHandler(delButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         if (favButton) addMouseWheelHandler(favButton, function(e){onKeyDown(e, KEY_RIGHT_ARROW);}, function(e){onKeyDown(e, KEY_LEFT_ARROW);}, true, true);
         /*
-        var me = 'complete.misc_1'; // some id
+        let me = 'complete.misc_1'; // some id
         window.addEventListener("message", function(e) {
             if(e.origin === location.origin && typeof e.data === 'object' && e.data.sender !== me) {
                 console.log('received in script ' + me +': ', e.data.data);
@@ -2166,11 +2169,11 @@
         //
         console.log(params);
         if (params.tab) {
-            var tabs = document.querySelectorAll('.spoilertop');
+            let tabs = document.querySelectorAll('.spoilertop');
             forEach(tabs, function(index, self) {
-                var title = self.querySelector('p');
+                let title = self.querySelector('p');
                 if (title) {
-                    var titleText = title.innerText.trim();
+                    let titleText = title.innerText.trim();
                     // titleText = titleText.replace(/\n/g, '');
                     /*
                     console.log(titleText);
@@ -2179,7 +2182,7 @@
                     */
                     if (titleText == params.tab.trim()) {
                         // Create a new 'change' event
-                        var event = new Event('click');
+                        let event = new Event('click');
                         // Dispatch it.
                         self.dispatchEvent(event);
                     }
@@ -2191,11 +2194,11 @@
     document.addEventListener('DOMContentLoaded', documentOnReady);
 
     /*
-	if (typeof jQuery == 'undefined') {
-		var script = document.createElement('script');
-		script.type = "text/javascript";
-		script.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js";
-		document.getElementsByTagName('head')[0].appendChild(script);
-	}
-	*/
+    if (typeof jQuery == 'undefined') {
+        let script = document.createElement('script');
+        script.type = "text/javascript";
+        script.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js";
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }
+    */
 })();
