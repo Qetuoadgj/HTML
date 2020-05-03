@@ -311,7 +311,7 @@
     function resetAttributes(node) {
         let clone = node.cloneNode(true);
 
-        let removeItemsArray = clone.querySelectorAll('.removeoncopy');
+        let removeItemsArray = clone.querySelectorAll('body .removeoncopy');
         if (!clone.dataset.copy) {
             for (let item of removeItemsArray) {smartRemove(item);};
         }
@@ -417,6 +417,20 @@
         forEach(clone.querySelectorAll('.qualityText'), function(index, self) {smartRemove(self); /*self.remove();*/});
         forEach(clone.querySelectorAll('.hostText'), function(index, self) {smartRemove(self); /*self.remove();*/});
         forEach(clone.querySelectorAll('.remove-on-copy'), function(index, self) {smartRemove(self); /*self.remove();*/});
+
+        clone.classList.remove('remove-on-copy');
+        forEach(clone.querySelectorAll('.removeoncopy'), function(index, self) {self.classList.remove('removeoncopy');});
+        //         for (let item of clone.querySelectorAll('*[data-title]')) {
+        //             let title = item.dataset.title;
+        //         };
+        if (clone.dataset) {
+            let title = clone.dataset.title;
+            if (title && title.match(/\n/)) {
+                let newTitle = title.replace(/\n/g, '&#10;')
+                clone.dataset.title = newTitle;
+                console.log(title, newTitle, clone.dataset.title);
+            };
+        };
 
         forEach(clone.querySelectorAll('.ui-sortable-handle'), function(index, self) {self.classList.remove('ui-sortable-handle');});
         forEach(clone.querySelectorAll('.ui-handle'), function(index, self) {self.classList.remove('ui-handle');});
