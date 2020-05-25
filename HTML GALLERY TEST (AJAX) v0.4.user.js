@@ -513,6 +513,35 @@
         if (successful) removeTextarea();
     }
 
+    function textToClipboard(text) {
+        let timeLimit = 250;
+        let clipboard = document.createElement('textarea');
+        clipboard.style.position = 'fixed'; clipboard.style.top = '50%'; clipboard.style.left = '50%'; clipboard.style.transform = 'translate(-50%, -50%)'; clipboard.style['z-index'] = 10;
+        clipboard.style.width = '90%'; clipboard.style.height = '90%';
+        document.body.appendChild(clipboard);
+        function removeTextarea(){setTimeout(function(){clipboard.remove();}, timeLimit);}
+        function onKeyDown(e) {
+            e = e || window.event;
+            let escKey = 27;
+            if (e.keyCode == escKey) { // Escape
+                removeTextarea();
+                e.preventDefault();
+            }
+            // e.preventDefault();
+        }
+        clipboard.addEventListener('keydown', function(e){onKeyDown(e);}, false);
+        clipboard.value = text; clipboard.select(); // document.execCommand('copy');
+        let successful, msg;
+        try {
+            successful = document.execCommand('copy');
+            // msg = successful ? 'successful' : 'unsuccessful';
+            // console.log('Copy text command was ' + msg);
+        } catch(err) {
+            console.log('Oops, unable to cut');
+        }
+        if (successful) removeTextarea();
+    }
+
     function downloadCurrentDocument() {
         let pageURL = location.href;
         let pageTitle = pageURL.replace(/.*\/(.*)$/i, '$1');
@@ -1128,8 +1157,8 @@
         let outputsArray = [];
         let iframeOutput = outputs.querySelector('#content_iframe'), imgOutput = outputs.querySelector('#content_img'), objectOutput = outputs.querySelector('#content_object');
         let iframeOutputReset = {};
-        // iframeOutputReset.width = iframeOutput.width;
-        // iframeOutputReset.height = iframeOutput.height;
+        iframeOutputReset.width = iframeOutput.width;
+        iframeOutputReset.height = iframeOutput.height;
         outputsArray.push(iframeOutput, imgOutput, objectOutput);
         let objectFlashvars = objectOutput.querySelector('param[name="flashvars"]');
         let galleryList = [];
@@ -1275,8 +1304,8 @@
             };
             activeOutput = null;
             //
-            // iframeOutput.width = iframeOutputReset.width;
-            // iframeOutput.height = iframeOutputReset.height;
+            iframeOutput.width = iframeOutputReset.width;
+            iframeOutput.height = iframeOutputReset.height;
         }
 
         function showContent(thisThumbnail, thumbnailsArray) {
@@ -1353,7 +1382,7 @@
                 content = content + '&reflect=' + reflect;
                 // alert(content);
             }
-            /*
+            ///*
             let contentSize = thisThumbnail.dataset.quality;
             if (contentSize) {
                 contentSize = contentSize.match(/.*?\[?(\d+)x(\d+)\]?$/i);
@@ -1365,13 +1394,15 @@
                     // actualQuality = qualityLimit;
                     // };
                     if (output == 'iframe') {
-                        let scale = Math.min(Math.max(quality/(iframeOutputReset.width*iframeOutputReset.height) * 100, 50), 100);
+                        // let scale = Math.min(Math.max(quality/(iframeOutputReset.width*iframeOutputReset.height) * 100, 25), 100);
+                        const percent = 100; // quality/(640*480*3) * 100;
+                        const scale = Math.min(Math.max(percent, 25), 100);
                         iframeOutput.width = parseInt(iframeOutputReset.width * scale / 100);
                         iframeOutput.height = parseInt(iframeOutputReset.height * scale / 100);
                     };
                 };
             };
-            */
+            //*/
             // content = content.replace(/(^http:\/\/vshare.io\/.*\/)#autoplay=true.*/i, '$1');
             console.log('content: '+content);
             let active = (thisThumbnail == activeThumbnail); // (content == activeContent); // global
@@ -1942,6 +1973,13 @@
                 }
                 else if (activeOutput && e.keyCode == KEY_Z && !ctrlDown) {
                     minimizeContentOutputs();
+                    e.preventDefault();
+                }
+                else if (activeSpoiler && e.keyCode == KEY_P) { // P
+                    parent.focus();
+                    let target = activeThumbnail ? activeThumbnail : hovered;
+                    let match = target.innerText.match(/(.*)[\r\n]{2}Categories:.*/);
+                    if (match) textToClipboard(match[1].trim());
                     e.preventDefault();
                 }
                 else if (e.keyCode == KEY_Q) {
