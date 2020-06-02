@@ -21,6 +21,7 @@
 // @require      https://code.jquery.com/ui/1.12.1/jquery-ui.js
 // -------------------------------------------------------------
 //
+// @grant        GM_registerMenuCommand
 // ==/UserScript==
 
 // Require chrome extension:
@@ -1658,9 +1659,11 @@
                     $(spoiler).disableSelection();
                 }
 
+                /*
                 for (let thumb of activeThumbnails) {
                     addMouseWheelHandler(thumb, function(){let img = thumb.querySelector('img'); imsSrcChange(thumb, img, 1)}, function(){let img = thumb.querySelector('img'); imsSrcChange(thumb, img, -1)}, true, true);
                 };
+                */
 
                 document.querySelector('#buttons').style.display = 'block';
             };
@@ -2194,6 +2197,13 @@
 
         forEach(thumbnailsArray, function(index, self) {
             self.addEventListener('click', function(){showContent(self, thumbnailsArray);}, false);
+            addMouseWheelHandler(self, function(){
+                let img = self.querySelector('img');
+                imsSrcChange(self, img, 1)
+            }, function(){
+                let img = self.querySelector('img');
+                imsSrcChange(self, img, -1)
+            }, true, true);
         });
         forEach(backgroundsArray, function(index, self) {
             self.addEventListener('click', function(){
@@ -2241,6 +2251,39 @@
                 }
             });
         };
+        // var lastSpoilerState;
+        const menuCommandSortByDuration = GM_registerMenuCommand('Sort By Duration', function() {
+            // alert(1);
+            if (activeSpoiler) {
+                // lastSpoilerState = lastSpoilerState ? lastSpoilerState : activeSpoiler.querySelectorAll('.thumbnail');
+                let lastSpoilerState = activeSpoiler.querySelectorAll('.thumbnail');
+                // console.log(lastSpoilerState);
+                let newSpoilerState = []; // lastSpoilerState.sort();
+                for (let element of lastSpoilerState) {
+                    newSpoilerState.push(element);
+                };
+                function sortFunc (a, b) {
+                    let seconds = (time) => {
+                        let duration = time.split(':');
+                        for (let v of duration) {
+                            return (
+                                duration.length == 3 ? Number(duration[0]) * 60 * 60 + Number(duration[1]) * 60 + Number(duration[2]) :
+                                duration.length == 2 ? Number(duration[0]) * 60 + Number(duration[1]) : Number(duration[0])
+                            );
+                        };
+                    };
+                    let ta = 0, tb = 0;
+                    if (a.dataset && a.dataset.duration) ta = seconds(a.dataset.duration);
+                    if (a.dataset && a.dataset.duration) tb = seconds(b.dataset.duration);
+                    console.log(a.dataset.duration, b.dataset.duration, ta, tb, ta-tb);
+                    return tb - ta; // ta - tb;
+                }
+                newSpoilerState.sort(sortFunc);
+                for (let element of newSpoilerState) {
+                    activeSpoiler.appendChild(element);
+                };
+            };
+        }, "");
     };
 
     document.addEventListener('DOMContentLoaded', documentOnReady);
