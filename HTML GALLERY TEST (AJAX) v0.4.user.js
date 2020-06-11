@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         HTML GALLERY TEST (AJAX) v0.4
 // @icon         http://findicons.com/files/icons/1185/flurry_ramp_champ/128/star_struck.png
-// @version      2.9.57
+// @version      2.9.58
 // @description  Pure JavaScript version.
 // @author       Aegir
 // @run-at       document-start
@@ -2263,6 +2263,7 @@
                     newSpoilerState.push(element);
                 };
                 function sortFunc (a, b) {
+                    // console.log(a, b);
                     let seconds = (time) => {
                         let duration = time.split(':');
                         for (let v of duration) {
@@ -2274,7 +2275,7 @@
                     };
                     let ta = 0, tb = 0;
                     if (a.dataset && a.dataset.duration) ta = seconds(a.dataset.duration);
-                    if (a.dataset && a.dataset.duration) tb = seconds(b.dataset.duration);
+                    if (b.dataset && b.dataset.duration) tb = seconds(b.dataset.duration);
                     console.log(a.dataset.duration, b.dataset.duration, ta, tb, ta-tb);
                     return tb - ta; // ta - tb;
                 }
