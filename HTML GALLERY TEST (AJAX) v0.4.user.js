@@ -1190,6 +1190,34 @@
             outputs.appendChild(linkText);
         }
 
+        // <input id="searchField" type="search" style="font-size: 16px; height: auto; width: 100%; max-width: 99.5%; margin: 5px 0px 0px;" placeholder="Поиск">
+        let search = document.createElement('input');
+        search.type = 'search';
+        search.style = 'font-size: 16px; height: auto; width: 100%; max-width: 96%; margin: 5px 0px 0px;z-index: 10; position: fixed; display: /*block*/ none; top: -5px; left: 9px; background: rgb(255 255 255 / 0%);';
+        search.id = 'search';
+        document.body.appendChild(search);
+        search.onchange = () => {
+            if (activeSpoiler) {
+                let query = search.value;
+                let activeThumbnails = activeSpoiler.querySelectorAll('.thumbnail');
+                for (let item of activeThumbnails) {
+                    item.removeAttribute('style');
+                    let title = ((item.dataset.title || '') + ' ' + (item.dataset.categories || '')).toLowerCase();
+                    if (title) {
+                        let match = title.match(query);
+                        if (match) {
+                            item.removeAttribute('style');
+                        }
+                        else {
+                            item.style.display = 'none';
+                        };
+                    }
+                    else {
+                        item.style.display = 'none';
+                    };
+                };
+            };
+        };
         // DOCUMENT FUNCTIONS
         function updateURL() {
             // let params = getParams();
@@ -1291,6 +1319,7 @@
                 buttonClicked(false, spoilerButtonsArray, true);
                 history.pushState(parent.location.pathname, "", parent.location.pathname);
                 document.querySelector('#buttons').style.removeProperty('display');
+                search.style.display = 'none';
             }
             // closeButton.style.removeProperty('display');
             nextButton.style.removeProperty('display');
@@ -1307,6 +1336,8 @@
             //
             iframeOutput.width = iframeOutputReset.width;
             iframeOutput.height = iframeOutputReset.height;
+            //
+            // search.style.display = 'none';
         }
 
         function showContent(thisThumbnail, thumbnailsArray) {
@@ -1517,6 +1548,7 @@
                 activeSpoiler = false;
                 history.pushState(parent.location.pathname, "", parent.location.pathname);
                 document.querySelector('#buttons').style.removeProperty('display');
+                search.style.display = 'none';
             }
             else {
                 spoiler.style.display = 'block';
@@ -1541,6 +1573,21 @@
                     let categories = self.dataset.categories;
                     let categoriesArray = categories ? categories.split(',') : [];
                     let tooltip = self.querySelector('.tooltip');
+                    /*
+                    let group;
+                    if (self.dataset.hash) {
+                        group = spoiler.querySelector('.group[data-hash="'+self.dataset.hash+'"]');
+                        if (!group) {
+                            group = document.createElement('div');
+                            group.setAttribute('class', 'group');
+                            group.setAttribute('data-hash', self.dataset.hash);
+                            spoiler.appendChild(group);
+                        };
+                        if (self.parentNode !== group) {
+                            group.appendChild(self);
+                        };
+                    };
+                    */
                     if (!image) {
                         if (imageSrc || contentSrc) {
                             image = document.createElement('img');
@@ -1666,6 +1713,8 @@
                 */
 
                 document.querySelector('#buttons').style.display = 'block';
+
+                search.style.display = 'block';
             };
         };
 
