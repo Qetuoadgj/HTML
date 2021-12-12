@@ -1,0 +1,176 @@
+<html>
+	<head>
+		<script>
+			var activeThumbnail = null;
+			var lastImgSrc = null;
+			var timer;
+			function cycleImages() {
+				const img = activeThumbnail.querySelector('img');
+				if (img) {
+					if (!lastImgSrc) lastImgSrc = img.src;
+					let min = img.dataset.min || 1, max = img.dataset.max || 10, cur = min;
+					let match = (
+						img.src.match(/(.*hqporner\.com\/imgs\/.*_)(.*)(\.jpg.*)/) ||
+						img.src.match(/(.*cdntrex\.com\/contents\/videos_screenshots\/.*\/)(.*)(.jpg)/) ||
+						img.src.match(/(.*eporner\.com\/thumbs\/.*\/)(.*)(_240\.jpg)/) ||
+						img.src.match(/(.*phncdn\.com\/videos\/.*\))(.*)(\.jpg)/)
+					);
+					if (match) {
+						timer = setInterval(()=> {
+							const num = cur > max ? min : cur < min ? min : cur;
+							const url = `${match[1]}${num}${match[3]}`;
+							img.src = url;
+							cur = num + 1;
+						}, 700);
+					};
+				};
+			};
+			function thumbnail_onMouseEnter(e) {
+				activeThumbnail = e.target;
+				const video = activeThumbnail.querySelector('video');
+				if (video && video.currentSrc) {
+					video.currentTime = 0;
+					if (video.paused) {
+						video.play();
+					};
+					return;
+				};
+				cycleImages();
+			};
+			function thumbnail_onMouseLeave(e) {
+				const video = activeThumbnail.querySelector('video');
+				if (video && video.currentSrc) {
+					if (!video.paused) {
+						video.pause();
+					};
+					// video.currentTime = 0;
+					activeThumbnail = null;
+					return;
+				};
+				const img = activeThumbnail.querySelector('img');
+				if (img) {
+					img.src = lastImgSrc;
+					clearInterval(timer);
+					lastImgSrc = null;
+				};
+			};
+			//
+			document.addEventListener("DOMContentLoaded", function() {
+				for (const a of document.querySelectorAll('a.link')) {
+					a.addEventListener('mouseenter', thumbnail_onMouseEnter);
+					a.addEventListener('mouseleave', thumbnail_onMouseLeave);
+				};
+				// alert('OK');
+			});
+		</script>
+		<style>
+			body {
+				background-color: black;
+				font-size: 10px;
+			}
+			.link {
+				position: relative;
+				display: inline-block;
+				/* background-color: transparent; */
+				width: 160px;
+				height: 120px;
+				/* overflow: hidden; */
+				border: 1px solid wheat;
+				padding: 5px;
+			}
+			.link > img, .link > video {
+				display: block;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 100%;
+				height: auto;
+				transform: translate(-50%, -50%);
+				width: 100%;
+				height: auto;
+			}
+			.link:hover {
+				/* box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5); */
+				border: 1px solid red;
+			}
+			.link > video {
+				display: none;
+			}
+			.link:hover > video {
+				display: block;
+			}
+			.link:has(> video):hover > img {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<a class="link" href="https://www.eporner.com/hd-porn/5azzyV5tgpp/Sex-Queen-And-Her-Prince-Kiera/" title="Kiera Winters - Sex Queen And Her Prince -- EPORNER">
+			<img src="https://static-eu-cdn.eporner.com/thumbs/static4/1/15/155/155291/7_240.jpg" data-max="15"></img>
+			<video loop preload="none" muted src="https://static-eu-cdn.eporner.com/thumbs/static4/1/15/155/155291/155291-preview.mp4"></video>
+		</a>
+		
+		<a class="link" href="https://spankbang.com/5vfw4/video/lily+rader+wants+daddy+to+cum+in+her+pussy" title="Lily Rader - Wants Daddy To Cum In Her Pussy - SpankBang">
+			<img src="https://tb.sb-cd.com/t/9865012/9/8/w:300/t6-enh/lily-rader-wants-daddy-to-cum.jpg"></img>
+			<video loop preload="none" muted src="https://tbv.sb-cd.com/t/9865012/9/8/td.mp4"></video>
+		</a>
+		
+		<a class="link" href="https://www.porntrex.com/video/1290987/liza-rowe-tfsn-cheerleaders-3-1080p" title="Liza Rowe - TFSN Cheerleaders 3 - PornTrex">
+			<img src="https://statics.cdntrex.com/contents/videos_screenshots/1290000/1290987/300x168/6.jpg"></img>
+			<video loop preload="none" muted src=""></video>
+		</a>
+
+		<a class="link" href="https://www.eporner.com/hd-porn/LLL5lCexUlR/Fantastic-Girl-Emily-Willis-Fucked-Gently/" title="Emily Willis - Fantastic Girl Emily Willis Fucked Gently - EPORNER">
+			<img src="https://static-eu-cdn.eporner.com/thumbs/static4/2/23/237/2378767/5_240.jpg" data-max="15"></img>
+			<video loop preload="none" muted src="https://static-eu-cdn.eporner.com/thumbs/static4/2/23/237/2378767/2378767-preview.mp4"></video>
+		</a>
+		
+		<a class="link" href="https://www.porntrex.com/video/1646258/emily-willis-oil-drenched-anal" title="Emily Willis - Oil-Drenched Anal - PornTrex">
+			<img src="https://statics.cdntrex.com/contents/videos_screenshots/1646000/1646258/300x168/6.jpg"></img>
+			<video loop preload="none" muted src=""></video>
+		</a>
+
+		<a class="link" href="https://m.hqporner.com/hdporn/94820-the_controller.html" title="Gabbie Carter - The Controller - HQporner">
+			<img src="https://fastporndelivery.hqporner.com/imgs/75/76/ffffd3056276ebc_5.jpg"></img>
+			<video loop preload="none" muted src=""></video>
+		</a>
+		
+		<a class="link" href="https://www.porntrex.com/video/341833/gina-valentina-teencreeper-e06" title="Gina Valentina - [TeenCreeper] - E06 - PornTrex">
+			<img src="https://statics.cdntrex.com/contents/videos_screenshots/341000/341833/300x168/5.jpg"></img>
+			<video loop preload="none" muted src=""></video>
+		</a>
+		
+		<a class="link" href="https://m.hqporner.com/hdporn/80269-sex_after_work-out_for_young_lady.html" title="Ariana Marie - Sex After Work-out For Young Lady - HQporner">
+			<img src="https://fastporndelivery.hqporner.com/imgs/3/84/eb743f72f72d69e_1.jpg"></img>
+			<video loop preload="none" muted src=""></video>
+		</a>
+		
+		<a class="link" href="https://pornez.net/video314151/tiny4k-16-02-25-lily-rader-just-for-kicks/" title="Lily Rader - Tiny4K - Just For Kicks - HQporner">
+			<img src="https://img.pornez.net/img/Jr1JCp8V8DT_2.jpg"></img>
+			<video loop preload="none" muted src="https://img.pornez.net/img/Jr1JCp8V8DT_0.mp4"></video>
+		</a>
+		
+		<a class="link" href="https://www.eporner.com/hd-porn/GFqok8DE4io/Lily-Rader-Miami-Treatment/" title="Lily Rader - Miami Treatment - EPORNER">
+			<img src="https://static-eu-cdn.eporner.com/thumbs/static4/1/14/143/1434495/10_240.jpg" data-max="15"></img>
+			<video loop preload="none" muted src="https://static-eu-cdn.eporner.com/thumbs/static4/1/14/143/1434495/1434495-preview.mp4"></video>
+		</a>
+		
+		<!-- <a class="link" href="https://www.pornhub.com/view_video.php?viewkey=ph58e4ddb2b88e9" title="Danika Mori - College Fuck with Older Stud in Morning after a Saturday Night Party - PornHub"> -->
+			<!-- <img src="https://ci.phncdn.com/videos/201704/05/112159831/thumbs_10/(m=eafTGgaaaa)(mh=ydWO9JbzfeB6Qep6)10.jpg" data-max="16"></img> -->
+			<!-- <video loop preload="none" muted src=""></video> -->
+		<!-- </a> -->
+		
+		<a class="link" href="https://www.eporner.com/video-cFyQ7cMXz0w/irresistible-silvie-1997/" title="Silvia Saint - Irresistible Silvie 1997 - EPORNER">
+			<img src="https://static-eu-cdn.eporner.com/thumbs/static4/4/47/471/4710538/13_240.jpg" data-max="15"></img>
+			<video loop preload="none" muted src="https://static-eu-cdn.eporner.com/thumbs/static4/4/47/471/4710538/4710538-preview.mp4"></video>
+		</a>
+		
+		<a class="link" href="https://www.eporner.com/video-cGnu9MNAcIN/academy-2000/" title="Silvia Saint, Monica Sweetheart, Lea De Mae - Academy (2000) - EPORNER">
+			<img src="https://static-eu-cdn.eporner.com/thumbs/static4/4/46/466/4665881/15_240.jpg" data-max="15"></img>
+			<video loop preload="none" muted src="https://static-eu-cdn.eporner.com/thumbs/static4/4/46/466/4665881/4665881-preview.mp4"></video>
+		</a>
+		
+	</body>
+</html>
+ 
+
